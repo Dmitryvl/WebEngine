@@ -21,6 +21,10 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class Role
 	{
-		// Empty.
+		public int Id { get; set; }
+
+		public string Name { get; set; }
+
+		public virtual ICollection<User> Users { get; set; }
 	}
 }

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WebEngine.Web.Services;
+using WebEngine.Data;
 
 namespace WebEngine.Web
 {
@@ -16,18 +17,14 @@ namespace WebEngine.Web
 	{
 		public Startup(IHostingEnvironment env)
 		{
-			// Set up configuration sources.
-
 			var builder = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json")
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
 			if (env.IsDevelopment())
 			{
-				// For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
 				builder.AddUserSecrets();
 
-				// This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
 				builder.AddApplicationInsightsSettings(developerMode: true);
 			}
 
@@ -37,27 +34,23 @@ namespace WebEngine.Web
 
 		public IConfigurationRoot Configuration { get; set; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
+		
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Add framework services.
 			services.AddApplicationInsightsTelemetry(Configuration);
 
-			//services.AddEntityFramework()
-			//	.AddSqlServer()
-			//	.AddDbContext<ApplicationDbContext>(options =>
-			//		options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-
-			
+			services.AddEntityFramework()
+				.AddSqlServer()
+				.AddDbContext<WebEngineContext>(options =>
+					options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
 			services.AddMvc();
 
-			// Add application services.
 			//services.AddTransient<IEmailSender, AuthMessageSender>();
 			//services.AddTransient<ISmsSender, AuthMessageSender>();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -71,6 +64,7 @@ namespace WebEngine.Web
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
 			}
+			
 
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
@@ -78,19 +72,26 @@ namespace WebEngine.Web
 
 			app.UseStaticFiles();
 
-			//app.UseIdentity();
-
-			// To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
-
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
+					name: "areaRoute",
+					template: "{area:exists}/{controller}/{action}",
+					defaults: new { action = "Index" });
+
+				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					template: "{controller}/{action}/{id?}",
+					defaults: new { controller = "Home", action = "Index" });
+
+				routes.MapRoute(
+					name: "api",
+					template: "{controller}/{id?}");
 			});
+
+			InitData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 		}
 
-		// Entry point for the application.
 		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 	}
 }
