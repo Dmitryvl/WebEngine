@@ -10,6 +10,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 
 using WebEngine.Web.ViewModels.Account;
+using WebEngine.Data;
 
 namespace WebEngine.Web.Controllers
 {
@@ -17,12 +18,14 @@ namespace WebEngine.Web.Controllers
 	public class AccountController : Controller
 	{
 		private readonly ILogger _logger;
-
+		WebEngineContext _context;
 
 		public AccountController(
-		   ILoggerFactory loggerFactory)
+			ILoggerFactory loggerFactory,
+			WebEngineContext context)
 		{
 			_logger = loggerFactory.CreateLogger<AccountController>();
+			_context = context;
 		}
 
 		//
@@ -43,14 +46,38 @@ namespace WebEngine.Web.Controllers
 		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
-			if (ModelState.IsValid)
+			//if (ModelState.IsValid)
+			//{
+
+			//}
+
+			var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+			if (user != null)
 			{
-				
+				await Authenticate(model.Email); // аутентификация
+
+				return RedirectToAction("Index", "Home");
+
 			}
+				
 
 			// If we got this far, something failed, redisplay form
 			return View(model);
 		}
+
+		private async Task Authenticate(string userName)
+		{
+			// создаем один claim
+			var claims = new List<Claim>
+			{
+				new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+			};
+			// создаем объект ClaimsIdentity
+			ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+			// авторизаци пользователя
+			await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(id));
+		}
+
 
 		//
 		// GET: /Account/Register
@@ -70,8 +97,8 @@ namespace WebEngine.Web.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				
-				
+
+
 			}
 
 			// If we got this far, something failed, redisplay form
@@ -88,7 +115,7 @@ namespace WebEngine.Web.Controllers
 			return RedirectToAction(nameof(HomeController.Index), "Home");
 		}
 
-		
+
 
 		// GET: /Account/ConfirmEmail
 		[HttpGet]
@@ -99,13 +126,13 @@ namespace WebEngine.Web.Controllers
 			{
 				return View("Error");
 			}
-			
-			
-			
+
+
+
 			return View();
 		}
 
-		
+
 
 		#region Helpers
 

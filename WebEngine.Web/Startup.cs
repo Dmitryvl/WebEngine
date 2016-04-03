@@ -64,7 +64,15 @@ namespace WebEngine.Web
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
 			}
-			
+
+			app.UseCookieAuthentication(options =>
+			{
+				options.AuthenticationScheme = "Cookies";
+				options.LoginPath = new Microsoft.AspNet.Http.PathString("/Account/Login");
+				options.AutomaticAuthenticate = true;
+				options.AutomaticChallenge = true;
+				options.CookieName = "websettings";
+			});
 
 			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
