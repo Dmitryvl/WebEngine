@@ -30,8 +30,8 @@ namespace WebEngine.Data
 				{
 					Role[] roles = new Role[]
 					{
-						new Role() { Name = "admin" },
-						new Role() { Name = "user" }
+						new Role() { Name = "admin", IsDeleted = false },
+						new Role() { Name = "user", IsDeleted = false }
 					};
 
 					User[] users = new User[]
@@ -43,7 +43,10 @@ namespace WebEngine.Data
 							IsActive = true,
 							Password = "123",
 							PasswordSalt = "",
-							Role = roles[0]
+							Role = roles[0],
+							IsDeleted = false,
+							EmailKey = Guid.NewGuid(),
+							RegisterDate = DateTime.Now.Date
 						},
 						new User()
 						{
@@ -52,7 +55,10 @@ namespace WebEngine.Data
 							IsActive = true,
 							Password = "123",
 							PasswordSalt = "",
-							Role = roles[1]
+							Role = roles[1],
+							IsDeleted = false,
+							EmailKey = Guid.NewGuid(),
+							RegisterDate = DateTime.Now.Date
 						},
 					};
 

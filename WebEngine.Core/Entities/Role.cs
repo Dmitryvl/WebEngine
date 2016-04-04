@@ -7,14 +7,10 @@
 namespace WebEngine.Core.Entities
 {
 	#region Usings
-	
-	using System;
+
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	
-	#endregion 
+
+	#endregion
 
 	/// <summary>
 	/// <see cref="Role"/> class.
@@ -24,6 +20,8 @@ namespace WebEngine.Core.Entities
 		public int Id { get; set; }
 
 		public string Name { get; set; }
+
+		public bool IsDeleted { get; set; }
 
 		public virtual ICollection<User> Users { get; set; }
 	}

@@ -8,13 +8,10 @@ namespace WebEngine.Data
 {
 	#region Usings
 
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 	using Microsoft.Data.Entity;
-	using Core.Entities;
+	using Microsoft.Data.Entity.Metadata;
+	using WebEngine.Core.Entities;
+
 	#endregion
 
 	/// <summary>
@@ -22,23 +19,43 @@ namespace WebEngine.Data
 	/// </summary>
 	public class WebEngineContext : DbContext
 	{
+		/// <summary>
+		/// Gets or sets users.
+		/// </summary>
 		public DbSet<User> Users { get; set; }
 
+		/// <summary>
+		/// Gets or sets roles.
+		/// </summary>
 		public DbSet<Role> Roles { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
+			
+			#region Properties
 
 			builder.Entity<User>().HasKey(u => u.Id);
 			builder.Entity<User>().Property(u => u.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(240);
+			builder.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(64);
+			builder.Entity<User>().Property(u => u.PasswordSalt).IsRequired().HasMaxLength(10);
 
 			builder.Entity<Role>().HasKey(r => r.Id);
 			builder.Entity<Role>().Property(r => r.Name).IsRequired().HasMaxLength(120);
 
-			// Refs
-			builder.Entity<User>().HasOne(u => u.Role)
-				.WithMany(r => r.Users).HasForeignKey(u => u.RoleId).IsRequired();
+			#endregion
+			
+			#region Relations
+
+			builder.Entity<User>()
+				.HasOne(u => u.Role)
+				.WithMany(r => r.Users)
+				.HasForeignKey(u => u.RoleId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			#endregion
 		}
 	}
 }

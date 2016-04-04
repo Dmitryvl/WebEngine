@@ -35,7 +35,13 @@ namespace WebEngine.Core.Entities
 
 		public string Email { get; set; }
 
+		public Guid? EmailKey { get; set; }
+
+		public DateTime RegisterDate { get; set; }
+
 		public bool IsActive { get; set; }
+
+		public bool IsDeleted { get; set; }
 
 		#endregion
 
