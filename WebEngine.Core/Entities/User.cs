@@ -37,7 +37,7 @@ namespace WebEngine.Core.Entities
 
 		public Guid? EmailKey { get; set; }
 
-		public DateTime RegisterDate { get; set; }
+		public DateTimeOffset RegisterDate { get; set; }
 
 		public bool IsActive { get; set; }
 

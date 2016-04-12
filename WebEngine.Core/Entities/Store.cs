@@ -27,7 +27,7 @@ namespace WebEngine.Core.Entities
 
 		public string Name { get; set; }
 
-		public DateTime CreationDate { get; set; }
+		public DateTimeOffset CreationDate { get; set; }
 
 		public bool IsActive { get; set; }
 
