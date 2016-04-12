@@ -32,7 +32,7 @@ namespace WebEngine.Data
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-			
+
 			#region Properties
 
 			builder.Entity<User>().HasKey(u => u.Id);
@@ -44,14 +44,24 @@ namespace WebEngine.Data
 			builder.Entity<Role>().HasKey(r => r.Id);
 			builder.Entity<Role>().Property(r => r.Name).IsRequired().HasMaxLength(120);
 
+			builder.Entity<Store>().HasKey(s => s.Id);
+			builder.Entity<Store>().Property(s => s.Name).IsRequired().HasMaxLength(240);
+
 			#endregion
-			
+
 			#region Relations
 
 			builder.Entity<User>()
 				.HasOne(u => u.Role)
 				.WithMany(r => r.Users)
 				.HasForeignKey(u => u.RoleId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<Store>()
+				.HasOne(s => s.User)
+				.WithMany(u => u.Stores)
+				.HasForeignKey(s => s.UserId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 

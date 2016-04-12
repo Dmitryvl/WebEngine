@@ -11,21 +11,24 @@ using Microsoft.Extensions.Logging;
 
 using WebEngine.Web.ViewModels.Account;
 using WebEngine.Data;
+using WebEngine.Core.Entities;
+using WebEngine.Core.Interfaces;
 
 namespace WebEngine.Web.Controllers
 {
 	[Authorize]
 	public class AccountController : Controller
 	{
-		private readonly ILogger _logger;
-		WebEngineContext _context;
+		//private readonly ILogger _logger;
+
+		private readonly IUserRepository _userRepository;
 
 		public AccountController(
 			ILoggerFactory loggerFactory,
-			WebEngineContext context)
+			IUserRepository userRepository)
 		{
-			_logger = loggerFactory.CreateLogger<AccountController>();
-			_context = context;
+			//_logger = loggerFactory.CreateLogger<AccountController>();
+			_userRepository = userRepository;
 		}
 
 		//
@@ -46,20 +49,20 @@ namespace WebEngine.Web.Controllers
 		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
-			//if (ModelState.IsValid)
+			if (ModelState.IsValid)
+			{
+
+			}
+
+			//var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+			//if (user != null)
 			//{
+			//	await Authenticate(model.Email); // аутентификация
+
+			//	return RedirectToAction("Index", "Home");
 
 			//}
 
-			var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-			if (user != null)
-			{
-				await Authenticate(model.Email); // аутентификация
-
-				return RedirectToAction("Index", "Home");
-
-			}
-				
 
 			// If we got this far, something failed, redisplay form
 			return View(model);
@@ -70,10 +73,14 @@ namespace WebEngine.Web.Controllers
 			// создаем один claim
 			var claims = new List<Claim>
 			{
-				new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+				new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+				new Claim(ClaimsIdentity.DefaultRoleClaimType, "admin")
 			};
 			// создаем объект ClaimsIdentity
-			ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+			ClaimsIdentity id = new ClaimsIdentity(claims,
+				"ApplicationCookie",
+				ClaimsIdentity.DefaultNameClaimType,
+				ClaimsIdentity.DefaultRoleClaimType);
 			// авторизаци пользователя
 			await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(id));
 		}
@@ -97,8 +104,19 @@ namespace WebEngine.Web.Controllers
 		{
 			if (ModelState.IsValid)
 			{
+				User user = new User()
+				{
+					Name = model.Name,
+					Email = model.Email,
+					Password = model.Password
+				};
 
+				bool isSuccess = await _userRepository.AddUser(user);
 
+				if (isSuccess)
+				{
+					return RedirectToAction("Index", "Home");
+				}
 			}
 
 			// If we got this far, something failed, redisplay form
@@ -132,7 +150,15 @@ namespace WebEngine.Web.Controllers
 			return View();
 		}
 
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				_userRepository.Dispose();
+			}
 
+			base.Dispose(disposing);
+		}
 
 		#region Helpers
 

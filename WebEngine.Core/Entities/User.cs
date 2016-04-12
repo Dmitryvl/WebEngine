@@ -49,6 +49,8 @@ namespace WebEngine.Core.Entities
 
 		public virtual Role Role { get; set; } 
 		
+		public virtual ICollection<Store> Stores { get; set; }
+
 		#endregion
 	}
 }

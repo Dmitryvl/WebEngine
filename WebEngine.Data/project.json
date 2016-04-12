@@ -8,8 +8,9 @@
 	"frameworks": {
 		"net451": { }
 	},
-	"dependencies": {
-		"EntityFramework.Core": "7.0.0-rc1-final",
-		"WebEngine.Core": "1.0.0-*"
-	}
+    "dependencies": {
+        "EntityFramework.Core": "7.0.0-rc1-final",
+        "Microsoft.AspNet.Cryptography.KeyDerivation": "1.0.0-rc1-final",
+        "WebEngine.Core": "1.0.0-*"
+    }
 }

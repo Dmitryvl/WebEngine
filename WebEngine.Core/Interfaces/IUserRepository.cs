@@ -32,14 +32,14 @@ namespace WebEngine.Core.Interfaces
 		/// </summary>
 		/// <param name="user">User entity.</param>
 		/// <returns>Return result.</returns>
-		Task<bool> Update(User user);
+		Task<bool> UpdateUser(User user);
 
 		/// <summary>
 		/// Delete user
 		/// </summary>
 		/// <param name="userId">User identifier.</param>
 		/// <returns>Return result.</returns>
-		Task<bool> Delete(int userId);
+		Task<bool> DeleteUser(int userId);
 
 		/// <summary>
 		/// Get user by identifier.
@@ -47,5 +47,9 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="userId">User identifier.</param>
 		/// <returns>Return result.</returns>
 		Task<User> GetUserById(int userId);
+
+		Task<User> GetUserByName(string userName);
+
+		Task<User> GetUserByEmail(string userEmail);
 	}
 }

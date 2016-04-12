@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Authorization;
 
 namespace WebEngine.Web.Controllers
 {
@@ -30,6 +31,12 @@ namespace WebEngine.Web.Controllers
 		public IActionResult Error()
 		{
 			return View();
+		}
+
+		[Authorize(Roles ="admin")]
+		public string Test()
+		{
+			return "ok";
 		}
 	}
 }

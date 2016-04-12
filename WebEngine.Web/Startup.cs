@@ -10,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WebEngine.Web.Services;
 using WebEngine.Data;
+using WebEngine.Core.Interfaces;
+using WebEngine.Data.Repositories;
 
 namespace WebEngine.Web
 {
@@ -46,7 +48,7 @@ namespace WebEngine.Web
 
 			services.AddMvc();
 
-			//services.AddTransient<IEmailSender, AuthMessageSender>();
+			services.AddTransient<IUserRepository, UserRepository>();
 			//services.AddTransient<ISmsSender, AuthMessageSender>();
 		}
 

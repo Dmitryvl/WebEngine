@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RegisterViewModel.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace WebEngine.Web.ViewModels.Account
 {
+	#region Usings
+
+	using System.ComponentModel.DataAnnotations;
+
+	#endregion
+
 	public class LoginViewModel
 	{
 		[Required]

@@ -14,6 +14,7 @@ namespace WebEngine.Data.Repositories
 	using System.Text;
 	using System.Threading.Tasks;
 	using Microsoft.Extensions.Logging;
+	using Microsoft.Extensions.DependencyInjection;
 
 	#endregion
 
@@ -43,9 +44,9 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="context">Database context.</param>
 		/// <param name="loggerFactory">Logger factory</param>
-		public BaseRepository(WebEngineContext context, ILoggerFactory loggerFactory)
+		public BaseRepository(IServiceProvider services)
 		{
-			_context = context;
+			_context = services.GetService<WebEngineContext>();
 		}
 
 		/// <summary>
