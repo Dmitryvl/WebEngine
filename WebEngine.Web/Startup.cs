@@ -67,7 +67,7 @@ namespace WebEngine.Web
 			services.AddMvc();
 
 			services.AddTransient<IUserRepository, UserRepository>();
-			//services.AddTransient<ISmsSender, AuthMessageSender>();
+			services.AddTransient<IStoreRepository, StoreRepository>();
 		}
 
 

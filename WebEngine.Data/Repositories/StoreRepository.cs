@@ -10,12 +10,12 @@ namespace WebEngine.Data.Repositories
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
 	using System.Threading.Tasks;
-	using WebEngine.Core.Interfaces;
+
+	using Microsoft.Data.Entity;
+
 	using WebEngine.Core.Entities;
+	using WebEngine.Core.Interfaces;
 
 	#endregion
 
@@ -36,27 +36,93 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<bool> AddStore(Store store)
 		{
-			throw new NotImplementedException();
+			if (store != null)
+			{
+				Store dbStore = await _context.Stores
+					.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId);
+
+				if (store == null)
+				{
+					_context.Stores.Add(store);
+
+					await _context.SaveChangesAsync();
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public async Task<bool> DeleteStore(int storeId)
 		{
-			throw new NotImplementedException();
+			if (storeId > DEFAULT_ID)
+			{
+				Store store = await _context.Stores
+					.FirstOrDefaultAsync(s => s.Id == storeId);
+
+				if (store != null)
+				{
+					store.IsActive = false;
+					store.IsDeleted = true;
+
+					_context.Entry(store).State = EntityState.Modified;
+
+					await _context.SaveChangesAsync();
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public async Task<Store> GetStoreById(int storeId)
 		{
-			throw new NotImplementedException();
+			if (storeId > DEFAULT_ID)
+			{
+				Store store = await _context.Stores
+					.FirstOrDefaultAsync(s=>s.Id == storeId);
+
+				return store;
+			}
+
+			return null;
 		}
 
 		public async Task<Store> GetStoreByName(string storeName)
 		{
-			throw new NotImplementedException();
+			if (!string.IsNullOrEmpty(storeName))
+			{
+				Store store = await _context.Stores
+					.FirstOrDefaultAsync(s => s.Name == storeName);
+
+				return store;
+			}
+
+			return null;
 		}
 
 		public async Task<bool> UpdateStore(Store store)
 		{
-			throw new NotImplementedException();
+			if (store != null)
+			{
+				Store dbStore = await _context.Stores
+					.FirstOrDefaultAsync(s => s.Id == store.Id);
+
+				if (dbStore != null)
+				{
+					dbStore.Name = store.Name;
+
+					_context.Entry(store).State = EntityState.Modified;
+
+					await _context.SaveChangesAsync();
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		#endregion

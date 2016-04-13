@@ -32,6 +32,11 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<Role> Roles { get; set; }
 
+		/// <summary>
+		/// Gets or sets stores.
+		/// </summary>
+		public DbSet<Store> Stores { get; set; }
+
 		#endregion
 
 		#region Override
