@@ -15,14 +15,37 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class City
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets city identifier.
+		/// </summary>
 		public int Id { get; set; }
 
+		/// <summary>
+		/// Gets or sets city name.
+		/// </summary>
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether city is deleted.
+		/// </summary>
 		public bool IsDeleted { get; set; }
 
+		/// <summary>
+		/// Gets or sets region identifier.
+		/// </summary>
 		public int RegionId { get; set; }
 
-		public virtual Region Region { get; set; }
+		#endregion
+
+		#region Navigation properties
+
+		/// <summary>
+		/// Gets or sets region.
+		/// </summary>
+		public virtual Region Region { get; set; }	
+		
+		#endregion
 	}
 }

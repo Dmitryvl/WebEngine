@@ -37,10 +37,19 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<Store> Stores { get; set; }
 
+		/// <summary>
+		/// Gets or sets countries.
+		/// </summary>
 		public DbSet<Country> Countries { get; set; }
 
+		/// <summary>
+		/// Gets or sets regions.
+		/// </summary>
 		public DbSet<Region> Regions { get; set; }
 
+		/// <summary>
+		/// Gets or sets cities.
+		/// </summary>
 		public DbSet<City> Cities { get; set; }
 
 		#endregion

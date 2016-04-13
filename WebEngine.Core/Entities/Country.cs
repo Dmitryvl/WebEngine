@@ -17,13 +17,33 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class Country
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets country identifier.
+		/// </summary>
 		public int Id { get; set; }
 
+		/// <summary>
+		/// Gets or sets country name.
+		/// </summary>
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether country is deleted.
+		/// </summary>
 		public bool IsDeleted { get; set; }
 
+		#endregion
+
+		#region Navigation properties
+
+		/// <summary>
+		/// Gets or sets regions.
+		/// </summary>
 		public virtual ICollection<Region> Regions { get; set; }
+
+		#endregion
 
 	}
 }
