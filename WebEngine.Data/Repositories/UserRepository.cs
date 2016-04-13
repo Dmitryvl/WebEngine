@@ -8,16 +8,16 @@ namespace WebEngine.Data.Repositories
 {
 	#region Usings
 
+	using System;
+	using System.Linq;
 	using System.Threading.Tasks;
 
 	using Microsoft.Data.Entity;
-	using Microsoft.Extensions.Logging;
 
+	using WebEngine.Core.Crypto;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
-	using System;
-	using System.Security.Cryptography;
-	using Microsoft.AspNet.Cryptography.KeyDerivation;
+	using System.Collections.Generic;
 	#endregion
 
 	/// <summary>
@@ -30,8 +30,7 @@ namespace WebEngine.Data.Repositories
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserRepository" /> class.
 		/// </summary>
-		/// <param name="context">Database context.</param>
-		/// <param name="loggerFactory">Logger factory</param>
+		/// <param name="services">Service provider.</param>
 		public UserRepository(IServiceProvider services) : base(services)
 		{
 		}
@@ -59,8 +58,7 @@ namespace WebEngine.Data.Repositories
 					if (defaultRoleId > DEFAULT_ID)
 					{
 						user.PasswordSalt = GetPasswordSalt();
-						user.Password = Convert.ToBase64String(
-							UserRepository.GetPasswordHash(user.Password, user.PasswordSalt));
+						user.Password = PasswordHash.GetSha256Hash(user.Password, user.PasswordSalt);
 						user.RegisterDate = DateTime.Now;
 						user.IsActive = false;
 						user.IsDeleted = false;
@@ -108,7 +106,7 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<User> GetUserByEmail(string userEmail)
 		{
-			if(!string.IsNullOrEmpty(userEmail))
+			if (!string.IsNullOrEmpty(userEmail))
 			{
 				return await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
 			}
@@ -183,53 +181,44 @@ namespace WebEngine.Data.Repositories
 			return salt;
 		}
 
-		private static byte[] GetPasswordHash(string password, string passwordSalt)
-		{
-			string p = password;//string.Concat(password, passwordSalt);
-			int iterCount = 10000;
-			int saltSize = 128 / 8;
-			int numBytesRequested = 256 / 8;
-			KeyDerivationPrf prf = KeyDerivationPrf.HMACSHA256;
-
-			RandomNumberGenerator rng = RandomNumberGenerator.Create();
-
-			byte[] salt = new byte[saltSize];
-			rng.GetBytes(salt);
-			byte[] subkey = KeyDerivation.Pbkdf2(p, salt, prf, iterCount, numBytesRequested);
-
-			var outputBytes = new byte[13 + salt.Length + subkey.Length];
-			outputBytes[0] = 0x01; // format marker
-			WriteNetworkByteOrder(outputBytes, 1, (uint)prf);
-			WriteNetworkByteOrder(outputBytes, 5, (uint)iterCount);
-			WriteNetworkByteOrder(outputBytes, 9, (uint)saltSize);
-			Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length);
-			Buffer.BlockCopy(subkey, 0, outputBytes, 13 + saltSize, subkey.Length);
-
-			rng.Dispose();
-
-			return outputBytes;
-		}
-
-		private static void WriteNetworkByteOrder(byte[] buffer, int offset, uint value)
-		{
-			buffer[offset + 0] = (byte)(value >> 24);
-			buffer[offset + 1] = (byte)(value >> 16);
-			buffer[offset + 2] = (byte)(value >> 8);
-			buffer[offset + 3] = (byte)(value >> 0);
-		}
-
 		private async Task<int> GetDefaultRoleId()
 		{
-			string defaultRoleName = "user";
+			const string defaultRoleName = "user";
 
 			Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
 
-			if(role != null)
+			if (role != null)
 			{
 				return role.Id;
 			}
 
 			return DEFAULT_ID;
+		}
+
+		public async Task<User> GetValidUser(string userEmail, string password)
+		{
+			if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(password))
+			{
+				User user = await _context.Users
+					.Where(u => u.Email == userEmail && u.IsActive == true && u.IsDeleted == false)
+					.Select(u => new User()
+					{
+						Id = u.Id,
+						Name = u.Name,
+						Email = u.Email,
+						Password = u.Password,
+						PasswordSalt = u.PasswordSalt,
+						Role = u.Role
+					}).FirstOrDefaultAsync();
+
+				if (user != null && user.Password == PasswordHash.GetSha256Hash(password, user.PasswordSalt))
+				{
+					return user;
+				}
+			}
+
+
+			return null;
 		}
 
 		#endregion

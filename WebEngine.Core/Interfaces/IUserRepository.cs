@@ -51,5 +51,7 @@ namespace WebEngine.Core.Interfaces
 		Task<User> GetUserByName(string userName);
 
 		Task<User> GetUserByEmail(string userEmail);
+
+		Task<User> GetValidUser(string userEmail, string password);
 	}
 }

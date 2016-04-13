@@ -49,32 +49,29 @@ namespace WebEngine.Web.Controllers
 		public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
+
 			if (ModelState.IsValid)
 			{
+				User user = await _userRepository.GetValidUser(model.Email, model.Password);
 
+				if (user != null)
+				{
+					await Authenticate(user.Name, user.Role.Name);
+
+					return RedirectToAction("Index", "Home");
+				}
 			}
 
-			//var user = _context.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
-			//if (user != null)
-			//{
-			//	await Authenticate(model.Email); // аутентификация
-
-			//	return RedirectToAction("Index", "Home");
-
-			//}
-
-
-			// If we got this far, something failed, redisplay form
 			return View(model);
 		}
 
-		private async Task Authenticate(string userName)
+		private async Task Authenticate(string userName, string roleName)
 		{
 			// создаем один claim
 			var claims = new List<Claim>
 			{
 				new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-				new Claim(ClaimsIdentity.DefaultRoleClaimType, "admin")
+				new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
 			};
 			// создаем объект ClaimsIdentity
 			ClaimsIdentity id = new ClaimsIdentity(claims,
