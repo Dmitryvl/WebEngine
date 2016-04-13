@@ -1,14 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Authorization;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RegisterViewModel.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace WebEngine.Web.Controllers
 {
+	#region Usings
+
+	using Microsoft.AspNet.Mvc;
+	using Microsoft.AspNet.Authorization;
+
+	#endregion
+
+	/// <summary>
+	/// <see cref="HomeController"/> class.
+	/// </summary>
 	public class HomeController : Controller
 	{
+		#region Private fields
+
+		#endregion
+
+		#region Constructors
+
+		#endregion
+
+		#region Public methods
+
 		public IActionResult Index()
 		{
 			return View();
@@ -38,5 +57,20 @@ namespace WebEngine.Web.Controllers
 		{
 			return "ok";
 		}
+
+		#endregion
+
+		#region Override methods
+
+		/// <summary>
+		/// Override <see cref="Dispose"/> method.
+		/// </summary>
+		/// <param name="disposing">is disposing.</param>
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+		}
+
+		#endregion
 	}
 }

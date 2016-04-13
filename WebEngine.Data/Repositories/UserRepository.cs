@@ -209,6 +209,36 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// User activation by email key.
+		/// </summary>
+		/// <param name="userId">User identifier.</param>
+		/// <param name="emailKey">Email key.</param>
+		/// <returns>Return result.</returns>
+		public async Task<bool> UserActivation(int userId, Guid emailKey)
+		{
+			if (userId > DEFAULT_ID && emailKey != Guid.Empty)
+			{
+				User user = await _context.Users
+					.FirstOrDefaultAsync(u => u.Id == userId && u.EmailKey == emailKey);
+
+				if (user != null)
+				{
+					user.IsActive = true;
+					user.EmailKey = null;
+
+					_context.Entry(user).State = EntityState.Modified;
+
+					await _context.SaveChangesAsync();
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
 		#endregion
 
 		#region Private methods

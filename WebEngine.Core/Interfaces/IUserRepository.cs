@@ -69,5 +69,13 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="password">Password value.</param>
 		/// <returns>Return user.</returns>
 		Task<User> GetValidUser(string userEmail, string password);
+
+		/// <summary>
+		/// User activation.
+		/// </summary>
+		/// <param name="userId">User identifier.</param>
+		/// <param name="emailKey">Email key.</param>
+		/// <returns>Return result.</returns>
+		Task<bool> UserActivation(int userId, Guid emailKey);
 	}
 }
