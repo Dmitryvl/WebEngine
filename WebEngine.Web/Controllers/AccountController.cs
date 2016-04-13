@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterViewModel.cs" author="Dzmitry Prakapenka">
+// <copyright file="AccountController.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------

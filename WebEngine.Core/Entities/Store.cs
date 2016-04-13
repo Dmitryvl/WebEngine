@@ -40,6 +40,11 @@ namespace WebEngine.Core.Entities
 		public DateTimeOffset CreationDate { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether store is deleted.
+		/// </summary>
+		public bool IsDeleted { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether store is active.
 		/// </summary>
 		public bool IsActive { get; set; }
