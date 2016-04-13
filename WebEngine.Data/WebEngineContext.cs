@@ -37,6 +37,12 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<Store> Stores { get; set; }
 
+		public DbSet<Country> Countries { get; set; }
+
+		public DbSet<Region> Regions { get; set; }
+
+		public DbSet<City> Cities { get; set; }
+
 		#endregion
 
 		#region Override
@@ -63,6 +69,15 @@ namespace WebEngine.Data
 			builder.Entity<Store>().HasKey(s => s.Id);
 			builder.Entity<Store>().Property(s => s.Name).IsRequired().HasMaxLength(240);
 
+			builder.Entity<Country>().HasKey(c => c.Id);
+			builder.Entity<Country>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+
+			builder.Entity<Region>().HasKey(c => c.Id);
+			builder.Entity<Region>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+
+			builder.Entity<City>().HasKey(c => c.Id);
+			builder.Entity<City>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+
 			#endregion
 
 			#region Relations
@@ -78,6 +93,20 @@ namespace WebEngine.Data
 				.HasOne(s => s.User)
 				.WithMany(u => u.Stores)
 				.HasForeignKey(s => s.UserId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<Region>()
+				.HasOne(r => r.Country)
+				.WithMany(c => c.Regions)
+				.HasForeignKey(r => r.CountryId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<City>()
+				.HasOne(c => c.Region)
+				.WithMany(r => r.Cities)
+				.HasForeignKey(c => c.RegionId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
