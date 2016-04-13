@@ -18,6 +18,11 @@ namespace WebEngine.Core.Crypto
 	/// </summary>
 	public static class PasswordHash
 	{
+		/// <summary>
+		/// Get SHA256 hash.
+		/// </summary>
+		/// <param name="value">Input string value.</param>
+		/// <returns>Return hash.</returns>
 		public static string GetSha256Hash(string value)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -45,6 +50,12 @@ namespace WebEngine.Core.Crypto
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Get SHA256 hash.
+		/// </summary>
+		/// <param name="password">Password value.</param>
+		/// <param name="passwordSalt">Password salt value.</param>
+		/// <returns>Return hash.</returns>
 		public static string GetSha256Hash(string password, string passwordSalt)
 		{
 			string value = string.Concat(password, passwordSalt);

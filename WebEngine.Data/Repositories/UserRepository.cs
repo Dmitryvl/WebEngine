@@ -17,7 +17,7 @@ namespace WebEngine.Data.Repositories
 	using WebEngine.Core.Crypto;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
-	using System.Collections.Generic;
+
 	#endregion
 
 	/// <summary>
@@ -104,6 +104,11 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
+		/// <summary>
+		/// Get user by email.
+		/// </summary>
+		/// <param name="userEmail">User email.</param>
+		/// <returns>Return user.</returns>
 		public async Task<User> GetUserByEmail(string userEmail)
 		{
 			if (!string.IsNullOrEmpty(userEmail))
@@ -132,6 +137,11 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// Get user by name.
+		/// </summary>
+		/// <param name="userName">User name.</param>
+		/// <returns>Return user.</returns>
 		public async Task<User> GetUserByName(string userName)
 		{
 			if (!string.IsNullOrEmpty(userName))
@@ -168,33 +178,12 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
-		#endregion
-
-		#region Private methods
-
-		private string GetPasswordSalt()
-		{
-			Random rand = new Random();
-
-			string salt = rand.Next(0, 9999).ToString();
-
-			return salt;
-		}
-
-		private async Task<int> GetDefaultRoleId()
-		{
-			const string defaultRoleName = "user";
-
-			Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
-
-			if (role != null)
-			{
-				return role.Id;
-			}
-
-			return DEFAULT_ID;
-		}
-
+		/// <summary>
+		/// Get valid user if exist.
+		/// </summary>
+		/// <param name="userEmail">User email</param>
+		/// <param name="password">Password value.</param>
+		/// <returns>Return user.</returns>
 		public async Task<User> GetValidUser(string userEmail, string password)
 		{
 			if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(password))
@@ -217,8 +206,42 @@ namespace WebEngine.Data.Repositories
 				}
 			}
 
-
 			return null;
+		}
+
+		#endregion
+
+		#region Private methods
+
+		/// <summary>
+		/// Get new password salt.
+		/// </summary>
+		/// <returns>Return password salt.</returns>
+		private string GetPasswordSalt()
+		{
+			Random rand = new Random();
+
+			string salt = rand.Next(0, 9999).ToString();
+
+			return salt;
+		}
+
+		/// <summary>
+		/// Get default role id.
+		/// </summary>
+		/// <returns>Return role id.</returns>
+		private async Task<int> GetDefaultRoleId()
+		{
+			const string defaultRoleName = "user";
+
+			Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
+
+			if (role != null)
+			{
+				return role.Id;
+			}
+
+			return DEFAULT_ID;
 		}
 
 		#endregion

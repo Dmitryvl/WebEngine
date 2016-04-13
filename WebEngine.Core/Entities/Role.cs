@@ -17,12 +17,32 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class Role
 	{
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets role identifier.
+		/// </summary>
 		public int Id { get; set; }
 
+		/// <summary>
+		/// Gets or sets role name.
+		/// </summary>
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether role is deleted.
+		/// </summary>
 		public bool IsDeleted { get; set; }
 
+		#endregion
+
+		#region Navigation properties
+
+		/// <summary>
+		/// Gets or sets users.
+		/// </summary>
 		public virtual ICollection<User> Users { get; set; }
+
+		#endregion
 	}
 }

@@ -9,11 +9,7 @@ namespace WebEngine.Data.Repositories
 	#region Usings
 
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	using Microsoft.Extensions.Logging;
+
 	using Microsoft.Extensions.DependencyInjection;
 
 	#endregion
@@ -42,8 +38,7 @@ namespace WebEngine.Data.Repositories
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseRepository" /> class.
 		/// </summary>
-		/// <param name="context">Database context.</param>
-		/// <param name="loggerFactory">Logger factory</param>
+		/// <param name="services">Service provider.</param>
 		public BaseRepository(IServiceProvider services)
 		{
 			_context = services.GetService<WebEngineContext>();

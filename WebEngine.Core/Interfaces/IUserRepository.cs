@@ -48,10 +48,26 @@ namespace WebEngine.Core.Interfaces
 		/// <returns>Return result.</returns>
 		Task<User> GetUserById(int userId);
 
+		/// <summary>
+		/// Get user by name.
+		/// </summary>
+		/// <param name="userName">User name.</param>
+		/// <returns>Return user.</returns>
 		Task<User> GetUserByName(string userName);
 
+		/// <summary>
+		/// Get user by email.
+		/// </summary>
+		/// <param name="userEmail">User email.</param>
+		/// <returns>Return user.</returns>
 		Task<User> GetUserByEmail(string userEmail);
 
+		/// <summary>
+		/// Get valid user if exist.
+		/// </summary>
+		/// <param name="userEmail">User email</param>
+		/// <param name="password">Password value.</param>
+		/// <returns>Return user.</returns>
 		Task<User> GetValidUser(string userEmail, string password);
 	}
 }

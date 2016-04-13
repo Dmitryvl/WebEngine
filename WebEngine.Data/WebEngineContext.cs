@@ -10,6 +10,7 @@ namespace WebEngine.Data
 
 	using Microsoft.Data.Entity;
 	using Microsoft.Data.Entity.Metadata;
+
 	using WebEngine.Core.Entities;
 
 	#endregion
@@ -19,6 +20,8 @@ namespace WebEngine.Data
 	/// </summary>
 	public class WebEngineContext : DbContext
 	{
+		#region Public properties
+
 		/// <summary>
 		/// Gets or sets users.
 		/// </summary>
@@ -29,6 +32,14 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<Role> Roles { get; set; }
 
+		#endregion
+
+		#region Override
+
+		/// <summary>
+		/// Create entities map.
+		/// </summary>
+		/// <param name="builder">Model builder.</param>
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
@@ -67,5 +78,7 @@ namespace WebEngine.Data
 
 			#endregion
 		}
+
+		#endregion
 	}
 }

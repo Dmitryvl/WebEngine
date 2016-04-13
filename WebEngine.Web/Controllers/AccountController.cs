@@ -31,8 +31,6 @@ namespace WebEngine.Web.Controllers
 			_userRepository = userRepository;
 		}
 
-		//
-		// GET: /Account/Login
 		[HttpGet]
 		[AllowAnonymous]
 		public IActionResult Login(string returnUrl = null)
@@ -41,8 +39,6 @@ namespace WebEngine.Web.Controllers
 			return View();
 		}
 
-		//
-		// POST: /Account/Login
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -67,24 +63,18 @@ namespace WebEngine.Web.Controllers
 
 		private async Task Authenticate(string userName, string roleName)
 		{
-			// создаем один claim
-			var claims = new List<Claim>
+			Claim[] claims = new Claim[]
 			{
 				new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
 				new Claim(ClaimsIdentity.DefaultRoleClaimType, roleName)
 			};
-			// создаем объект ClaimsIdentity
-			ClaimsIdentity id = new ClaimsIdentity(claims,
-				"ApplicationCookie",
-				ClaimsIdentity.DefaultNameClaimType,
-				ClaimsIdentity.DefaultRoleClaimType);
-			// авторизаци пользователя
+
+			ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
 			await HttpContext.Authentication.SignInAsync("Cookies", new ClaimsPrincipal(id));
 		}
 
 
-		//
-		// GET: /Account/Register
 		[HttpGet]
 		[AllowAnonymous]
 		public IActionResult Register()
@@ -92,8 +82,6 @@ namespace WebEngine.Web.Controllers
 			return View();
 		}
 
-		//
-		// POST: /Account/Register
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -116,12 +104,9 @@ namespace WebEngine.Web.Controllers
 				}
 			}
 
-			// If we got this far, something failed, redisplay form
 			return View(model);
 		}
 
-		//
-		// POST: /Account/LogOff
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> LogOff()
@@ -131,8 +116,6 @@ namespace WebEngine.Web.Controllers
 		}
 
 
-
-		// GET: /Account/ConfirmEmail
 		[HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> ConfirmEmail(string userId, string code)
@@ -141,8 +124,6 @@ namespace WebEngine.Web.Controllers
 			{
 				return View("Error");
 			}
-
-
 
 			return View();
 		}

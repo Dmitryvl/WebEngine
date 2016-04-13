@@ -6,13 +6,15 @@
 
 namespace WebEngine.Data
 {
-
 	#region Usings
 
 	using System;
 	using System.Threading.Tasks;
-	using Core.Entities;
+
 	using Microsoft.Extensions.DependencyInjection;
+
+	using WebEngine.Core.Entities;
+
 	#endregion
 
 	/// <summary>
@@ -20,6 +22,11 @@ namespace WebEngine.Data
 	/// </summary>
 	public static class InitData
 	{
+		/// <summary>
+		/// Initialize database.
+		/// </summary>
+		/// <param name="serviceProvider">Service provider.</param>
+		/// <returns>Return result.</returns>
 		public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
 		{
 			using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
@@ -39,7 +46,7 @@ namespace WebEngine.Data
 						new User()
 						{
 							Name = "admin",
-							Email ="admin@test.ru",
+							Email = "admin@test.ru",
 							IsActive = true,
 							Password = "ada9c31f4cf484113b7fdddbae539ad9295415b92b8b7f95c05649f57c648596",
 							PasswordSalt = "9297",
@@ -51,7 +58,7 @@ namespace WebEngine.Data
 						new User()
 						{
 							Name = "test",
-							Email ="test@test.ru",
+							Email = "test@test.ru",
 							IsActive = true,
 							Password = "ada9c31f4cf484113b7fdddbae539ad9295415b92b8b7f95c05649f57c648596",
 							PasswordSalt = "9297",

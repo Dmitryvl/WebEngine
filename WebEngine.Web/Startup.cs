@@ -1,22 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.Data.Entity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using WebEngine.Web.Services;
-using WebEngine.Data;
-using WebEngine.Core.Interfaces;
-using WebEngine.Data.Repositories;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Startup.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace WebEngine.Web
 {
+	#region Usings
+
+	using Microsoft.AspNet.Builder;
+	using Microsoft.AspNet.Hosting;
+	using Microsoft.Data.Entity;
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Logging;
+
+	using WebEngine.Data;
+	using WebEngine.Core.Interfaces;
+	using WebEngine.Data.Repositories;
+
+	#endregion
+
+	/// <summary>
+	/// <see cref="Startup"/> class.
+	/// </summary>
 	public class Startup
 	{
+		#region Constructors
+
 		public Startup(IHostingEnvironment env)
 		{
 			var builder = new ConfigurationBuilder()
@@ -34,9 +45,16 @@ namespace WebEngine.Web
 			Configuration = builder.Build();
 		}
 
+		#endregion
+
+		#region Properties
+
 		public IConfigurationRoot Configuration { get; set; }
 
-		
+		#endregion
+
+		#region Public methods
+
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddApplicationInsightsTelemetry(Configuration);
@@ -52,7 +70,7 @@ namespace WebEngine.Web
 			//services.AddTransient<ISmsSender, AuthMessageSender>();
 		}
 
-		
+
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -103,5 +121,7 @@ namespace WebEngine.Web
 		}
 
 		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+		#endregion
 	}
 }
