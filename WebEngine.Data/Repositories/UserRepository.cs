@@ -146,7 +146,18 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
-				return await _context.Users.FirstOrDefaultAsync(u => u.Name == userName);
+				return await _context.Users
+					.Where(u => u.Name == userName && u.IsActive == true && u.IsDeleted == false)
+					.Select(u => new User()
+					{
+						Id = u.Id,
+						Name = u.Name,
+						Email = u.Email,
+						Password = u.Password,
+						PasswordSalt = u.PasswordSalt,
+						RegisterDate = u.RegisterDate,
+						Role = u.Role
+					}).FirstOrDefaultAsync();
 			}
 
 			return null;

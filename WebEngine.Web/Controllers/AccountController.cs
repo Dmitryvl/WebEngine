@@ -52,6 +52,26 @@ namespace WebEngine.Web.Controllers
 
 		#region Public methods
 
+		public async Task<IActionResult> Profile()
+		{
+			User user = await _userRepository.GetUserByName(User.Identity.Name);
+
+			if (user != null)
+			{
+				Profile profile = new Profile();
+
+				profile.UserId = user.Id;
+				profile.UserName = user.Name;
+				profile.RoleId = user.RoleId;
+				profile.RoleName = user.Role.Name;
+				profile.RegisterDate = user.RegisterDate;
+
+				return View(profile);
+			}
+
+			return View("Error");
+		}
+
 		/// <summary>
 		/// User login.
 		/// </summary>
