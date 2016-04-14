@@ -1,0 +1,18 @@
+﻿@model WebEngine.Web.ViewModels.Store.StoreView
+@{
+	ViewData["Title"] = Model.StoreName;
+}
+<table>
+	<tr>
+		<td>Store Id</td>
+		<td>@Model.StoreId</td>
+	</tr>
+	<tr>
+		<td>Store name</td>
+		<td>@Model.StoreName</td>
+	</tr>
+	<tr>
+		<td>Creation Date</td>
+		<td>@Model.CreationDate</td>
+	</tr>
+</table>

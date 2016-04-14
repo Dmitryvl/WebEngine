@@ -113,7 +113,9 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userEmail))
 			{
-				return await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+				return await _context.Users
+					.AsNoTracking()
+					.FirstOrDefaultAsync(u => u.Email == userEmail);
 			}
 
 			return null;
@@ -129,6 +131,7 @@ namespace WebEngine.Data.Repositories
 			if (userId > DEFAULT_ID)
 			{
 				User user = await _context.Users
+					.AsNoTracking()
 					.FirstOrDefaultAsync(u => u.Id == userId);
 
 				return user;
@@ -147,6 +150,7 @@ namespace WebEngine.Data.Repositories
 			if (!string.IsNullOrEmpty(userName))
 			{
 				return await _context.Users
+					.AsNoTracking()
 					.Where(u => u.Name == userName && u.IsActive == true && u.IsDeleted == false)
 					.Select(u => new User()
 					{
@@ -172,7 +176,8 @@ namespace WebEngine.Data.Repositories
 		{
 			if (user != null)
 			{
-				User dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+				User dbUser = await _context.Users
+					.FirstOrDefaultAsync(u => u.Id == user.Id);
 
 				if (dbUser != null)
 				{
@@ -200,6 +205,7 @@ namespace WebEngine.Data.Repositories
 			if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(password))
 			{
 				User user = await _context.Users
+					.AsNoTracking()
 					.Where(u => u.Email == userEmail && u.IsActive == true && u.IsDeleted == false)
 					.Select(u => new User()
 					{
@@ -259,6 +265,7 @@ namespace WebEngine.Data.Repositories
 			if (!string.IsNullOrEmpty(userName))
 			{
 				User user = await _context.Users
+					.AsNoTracking()
 					.FirstOrDefaultAsync(u => u.Name == userName);
 
 				if (user != null)
@@ -295,7 +302,9 @@ namespace WebEngine.Data.Repositories
 		{
 			const string defaultRoleName = "user";
 
-			Role role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
+			Role role = await _context.Roles
+				.AsNoTracking()
+				.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
 
 			if (role != null)
 			{

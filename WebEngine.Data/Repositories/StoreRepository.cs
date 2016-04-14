@@ -86,6 +86,7 @@ namespace WebEngine.Data.Repositories
 			if (storeId > DEFAULT_ID)
 			{
 				Store store = await _context.Stores
+					.AsNoTracking()
 					.FirstOrDefaultAsync(s=>s.Id == storeId);
 
 				return store;
@@ -99,6 +100,7 @@ namespace WebEngine.Data.Repositories
 			if (!string.IsNullOrEmpty(storeName))
 			{
 				Store store = await _context.Stores
+					.AsNoTracking()
 					.FirstOrDefaultAsync(s => s.Name == storeName);
 
 				return store;

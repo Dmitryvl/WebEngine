@@ -61,6 +61,50 @@ namespace WebEngine.Web.Controllers
 			return View();
 		}
 
+		[HttpGet, Route("[controller]{storeId:int}")]
+		public async Task<IActionResult> Index(int storeId)
+		{
+			if (storeId > 0)
+			{
+				Store store = await _storeRepository.GetStoreById(storeId);
+
+				if (store != null)
+				{
+					StoreView model = new StoreView();
+
+					model.StoreId = store.Id;
+					model.StoreName = store.Name;
+					model.CreationDate = store.CreationDate;
+
+					return View("Store", model);
+				}
+			}
+
+			return View("Error");
+		}
+
+		[HttpGet, Route("[controller]/{storeName}")]
+		public async Task<IActionResult> Index(string storeName)
+		{
+			if (!string.IsNullOrEmpty(storeName))
+			{
+				Store store = await _storeRepository.GetStoreByName(storeName);
+
+				if (store != null)
+				{
+					StoreView model = new StoreView();
+
+					model.StoreId = store.Id;
+					model.StoreName = store.Name;
+					model.CreationDate = store.CreationDate;
+
+					return View("Store", model);
+				}
+			}
+
+			return View("Error");
+		}
+
 		[HttpGet, Authorize]
 		public IActionResult CreateStore()
 		{
