@@ -77,5 +77,7 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="emailKey">Email key.</param>
 		/// <returns>Return result.</returns>
 		Task<bool> UserActivation(int userId, Guid emailKey);
+
+		Task<int> GetUserIdByUserName(string userName);
 	}
 }

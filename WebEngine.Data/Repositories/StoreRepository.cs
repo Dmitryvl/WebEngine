@@ -36,13 +36,17 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<bool> AddStore(Store store)
 		{
-			if (store != null)
+			if (store != null && store.UserId > DEFAULT_ID)
 			{
 				Store dbStore = await _context.Stores
 					.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId);
 
-				if (store == null)
+				if (dbStore == null)
 				{
+					store.IsActive = false;
+					store.IsDeleted = false;
+					store.CreationDate = DateTimeOffset.Now;
+
 					_context.Stores.Add(store);
 
 					await _context.SaveChangesAsync();

@@ -53,7 +53,7 @@ namespace WebEngine.Data
 							Role = roles[0],
 							IsDeleted = false,
 							EmailKey = Guid.NewGuid(),
-							RegisterDate = DateTime.Now.Date
+							RegisterDate = DateTimeOffset.Now
 						},
 						new User()
 						{
@@ -65,7 +65,7 @@ namespace WebEngine.Data
 							Role = roles[1],
 							IsDeleted = false,
 							EmailKey = Guid.NewGuid(),
-							RegisterDate = DateTime.Now.Date
+							RegisterDate = DateTimeOffset.Now
 						},
 					};
 

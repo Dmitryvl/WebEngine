@@ -14,7 +14,9 @@ namespace WebEngine.Web.Controllers
 	using System.Threading.Tasks;
 	using Microsoft.AspNet.Mvc;
 	using WebEngine.Core.Interfaces;
-
+	using Microsoft.AspNet.Authorization;
+	using ViewModels.Store;
+	using Core.Entities;
 	#endregion
 
 	/// <summary>
@@ -29,6 +31,11 @@ namespace WebEngine.Web.Controllers
 		/// </summary>
 		private readonly IStoreRepository _storeRepository;
 
+		/// <summary>
+		/// User repository.
+		/// </summary>
+		private readonly IUserRepository _userRepository;
+
 		#endregion
 
 		#region Constructors
@@ -37,9 +44,12 @@ namespace WebEngine.Web.Controllers
 		/// Initializes a new instance of the <see cref="StoreController"/> class.
 		/// </summary>
 		/// <param name="storeRepository">Store repository.</param>
-		public StoreController(IStoreRepository storeRepository)
+		public StoreController(
+			IStoreRepository storeRepository,
+			IUserRepository userRepository)
 		{
 			_storeRepository = storeRepository;
+			_userRepository = userRepository;
 		}
 
 		#endregion
@@ -49,6 +59,35 @@ namespace WebEngine.Web.Controllers
 		public IActionResult Index()
 		{
 			return View();
+		}
+
+		[HttpGet, Authorize]
+		public IActionResult CreateStore()
+		{
+			return View();
+		}
+
+		[HttpPost, Authorize, ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateStore(CreateStore newStore)
+		{
+			if (newStore != null)
+			{
+				int userId = await _userRepository.GetUserIdByUserName(User.Identity.Name);
+
+				Store store = new Store();
+
+				store.Name = newStore.StoreName;
+				store.UserId = userId;
+
+				bool isSuccess = await _storeRepository.AddStore(store);
+
+				if (isSuccess)
+				{
+					return RedirectToAction("Profile", "Account");
+				}
+			}
+
+			return View("Error");
 		}
 
 		#endregion

@@ -59,7 +59,7 @@ namespace WebEngine.Data.Repositories
 					{
 						user.PasswordSalt = GetPasswordSalt();
 						user.Password = PasswordHash.GetSha256Hash(user.Password, user.PasswordSalt);
-						user.RegisterDate = DateTime.Now;
+						user.RegisterDate = DateTimeOffset.Now;
 						user.IsActive = false;
 						user.IsDeleted = false;
 						user.EmailKey = Guid.NewGuid();
@@ -249,6 +249,26 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
+		/// <summary>
+		/// Get user id by name.
+		/// </summary>
+		/// <param name="userName">User name.</param>
+		/// <returns>Return user id.</returns>
+		public async Task<int> GetUserIdByUserName(string userName)
+		{
+			if (!string.IsNullOrEmpty(userName))
+			{
+				User user = await _context.Users
+					.FirstOrDefaultAsync(u => u.Name == userName);
+
+				if (user != null)
+				{
+					return user.Id;
+				}
+			}
+
+			return DEFAULT_ID;
+		}
 
 		#endregion
 
