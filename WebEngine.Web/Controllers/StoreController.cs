@@ -103,6 +103,7 @@ namespace WebEngine.Web.Controllers
 			if (disposing)
 			{
 				_storeRepository.Dispose();
+				_userRepository.Dispose();
 			}
 
 			base.Dispose(disposing);
