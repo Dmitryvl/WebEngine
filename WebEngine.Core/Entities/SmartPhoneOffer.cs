@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="OfferSmartPhone.cs" author="Dzmitry Prakapenka">
+// <copyright file="SmartPhoneOffer.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -11,9 +11,9 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="OfferSmartPhone"/> class.
+	/// <see cref="SmartPhoneOffer"/> class.
 	/// </summary>
-	public class OfferSmartPhone
+	public class SmartPhoneOffer
 	{
 		#region Properties
 

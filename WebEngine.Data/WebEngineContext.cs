@@ -62,6 +62,11 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<SmartPhone> SmartPhones { get; set; }
 
+		/// <summary>
+		/// Gets or sets smartphone offers.
+		/// </summary>
+		public DbSet<SmartPhoneOffer> SmartPhoneOffers { get; set; }
+
 		#endregion
 
 		#region Override
@@ -141,6 +146,19 @@ namespace WebEngine.Data
 				.HasForeignKey(s => s.CompanyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<SmartPhoneOffer>()
+				.HasKey(s => new { s.StoreId, s.SmartPhoneId });
+
+			builder.Entity<SmartPhoneOffer>()
+				.HasOne(s => s.Store)
+				.WithMany(st => st.SmartPhoneOffer)
+				.HasForeignKey(s => s.StoreId);
+
+			builder.Entity<SmartPhoneOffer>()
+				.HasOne(s => s.SmartPhone)
+				.WithMany(sm => sm.SmartPhoneOffer)
+				.HasForeignKey(s => s.SmartPhoneId);
 
 			#endregion
 		}

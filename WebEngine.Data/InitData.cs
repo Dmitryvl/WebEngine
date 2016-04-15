@@ -71,7 +71,7 @@ namespace WebEngine.Data
 
 					Store[] stores = new Store[]
 					{
-						new Store() { Name = "Store1", IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
+						new Store() { Name = "Store1", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
 					};
 
 					Company[] companies = new Company[]
@@ -86,12 +86,17 @@ namespace WebEngine.Data
 						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true }
 					};
 
+					SmartPhoneOffer[] spoffers = new SmartPhoneOffer[]
+					{
+						new SmartPhoneOffer() { Store = stores[0], SmartPhone = smartphones[0], IsActive= true, Message = "message" }
+					};
+
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);
 					db.Companies.AddRange(companies);
 					db.SmartPhones.AddRange(smartphones);
-					
+					db.SmartPhoneOffers.AddRange(spoffers);
 
 					await db.SaveChangesAsync();
 				}
