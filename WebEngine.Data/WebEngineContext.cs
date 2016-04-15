@@ -52,6 +52,16 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<City> Cities { get; set; }
 
+		/// <summary>
+		/// Gets or sets companies.
+		/// </summary>
+		public DbSet<Company> Companies { get; set; }
+
+		/// <summary>
+		/// Gets or sets smartphones.
+		/// </summary>
+		public DbSet<SmartPhone> SmartPhones { get; set; }
+
 		#endregion
 
 		#region Override
@@ -87,6 +97,12 @@ namespace WebEngine.Data
 			builder.Entity<City>().HasKey(c => c.Id);
 			builder.Entity<City>().Property(c => c.Name).IsRequired().HasMaxLength(240);
 
+			builder.Entity<Company>().HasKey(c => c.Id);
+			builder.Entity<Company>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+
+			builder.Entity<SmartPhone>().HasKey(s => s.Id);
+			builder.Entity<SmartPhone>().Property(s => s.Name).IsRequired().HasMaxLength(240);
+
 			#endregion
 
 			#region Relations
@@ -116,6 +132,13 @@ namespace WebEngine.Data
 				.HasOne(c => c.Region)
 				.WithMany(r => r.Cities)
 				.HasForeignKey(c => c.RegionId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<SmartPhone>()
+				.HasOne(s => s.Company)
+				.WithMany(c => c.SmartPhones)
+				.HasForeignKey(s => s.CompanyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
