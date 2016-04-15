@@ -58,6 +58,11 @@ namespace WebEngine.Data
 		public DbSet<Company> Companies { get; set; }
 
 		/// <summary>
+		/// Gets or sets processors.
+		/// </summary>
+		public DbSet<SmartPhoneProcessor> SmartPhoneProcessors { get; set; }
+
+		/// <summary>
 		/// Gets or sets smartphones.
 		/// </summary>
 		public DbSet<SmartPhone> SmartPhones { get; set; }
@@ -108,6 +113,9 @@ namespace WebEngine.Data
 			builder.Entity<SmartPhone>().HasKey(s => s.Id);
 			builder.Entity<SmartPhone>().Property(s => s.Name).IsRequired().HasMaxLength(240);
 
+			builder.Entity<SmartPhoneProcessor>().HasKey(s => s.Id);
+			builder.Entity<SmartPhoneProcessor>().Property(s => s.Name).IsRequired().HasMaxLength(240);
+
 			#endregion
 
 			#region Relations
@@ -144,6 +152,13 @@ namespace WebEngine.Data
 				.HasOne(s => s.Company)
 				.WithMany(c => c.SmartPhones)
 				.HasForeignKey(s => s.CompanyId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<SmartPhone>()
+				.HasOne(s => s.SmartPhoneProcessor)
+				.WithMany(c => c.SmartPhones)
+				.HasForeignKey(s => s.SmartPhoneProcessorId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 

@@ -80,10 +80,15 @@ namespace WebEngine.Data
 						new Company() { Name = "Company2", IsActive = true }
 					};
 
+					SmartPhoneProcessor[] spp = new SmartPhoneProcessor[]
+					{
+						new SmartPhoneProcessor() { Name = "test", KernelsCount = 2, ClockRate = 2.1f, IsActive = true }
+					};
+
 					SmartPhone[] smartphones = new SmartPhone[]
 					{
-						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true },
-						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true }
+						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true, SmartPhoneProcessor = spp[0] },
+						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true, SmartPhoneProcessor = spp[0] }
 					};
 
 					SmartPhoneOffer[] spoffers = new SmartPhoneOffer[]
@@ -95,6 +100,7 @@ namespace WebEngine.Data
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);
 					db.Companies.AddRange(companies);
+					db.SmartPhoneProcessors.AddRange(spp);
 					db.SmartPhones.AddRange(smartphones);
 					db.SmartPhoneOffers.AddRange(spoffers);
 
