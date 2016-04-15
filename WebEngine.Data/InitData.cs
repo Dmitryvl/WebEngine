@@ -69,8 +69,29 @@ namespace WebEngine.Data
 						},
 					};
 
+					Store[] stores = new Store[]
+					{
+						new Store() { Name = "Store1", IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
+					};
+
+					Company[] companies = new Company[]
+					{
+						new Company() { Name = "Company1", IsActive = true },
+						new Company() { Name = "Company2", IsActive = true }
+					};
+
+					SmartPhone[] smartphones = new SmartPhone[]
+					{
+						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true },
+						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true }
+					};
+
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
+					db.Stores.AddRange(stores);
+					db.Companies.AddRange(companies);
+					db.SmartPhones.AddRange(smartphones);
+					
 
 					await db.SaveChangesAsync();
 				}

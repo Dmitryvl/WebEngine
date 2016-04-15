@@ -8,11 +8,7 @@ namespace WebEngine.Core.Entities
 {
 	#region Usings
 
-	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
 
 	#endregion
 
@@ -21,6 +17,8 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class SmartPhone
 	{
+		#region Properties
+
 		/// <summary>
 		/// Gets or sets smartphone identifier.
 		/// </summary>
@@ -41,9 +39,20 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		#endregion
+
+		#region Navigation properties
+
 		/// <summary>
 		/// Gets or sets company.
 		/// </summary>
 		public virtual Company Company { get; set; }
+
+		/// <summary>
+		/// Gets or sets <see cref="OfferSmartPhone"/>.
+		/// </summary>
+		public virtual ICollection<OfferSmartPhone> OfferSmartPhone { get; set; }
+		
+		#endregion
 	}
 }

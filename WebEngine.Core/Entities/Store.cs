@@ -9,6 +9,7 @@ namespace WebEngine.Core.Entities
 	#region Usings
 
 	using System;
+	using System.Collections.Generic;
 
 	#endregion
 
@@ -57,6 +58,11 @@ namespace WebEngine.Core.Entities
 		/// Gets or sets owner.
 		/// </summary>
 		public virtual User User { get; set; }
+
+		/// <summary>
+		/// Gets or sets <see cref="OfferSmartPhone"/>.
+		/// </summary>
+		public virtual ICollection<OfferSmartPhone> OfferSmartPhone { get; set; }
 
 		#endregion
 	}
