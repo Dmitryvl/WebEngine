@@ -1,8 +1,8 @@
-﻿@model Profile
+﻿@model ProfileView
 @{
 	ViewData["Title"] = "Register";
 }
-<table>
+<table class="table">
 	<tr>
 		<td>User Id</td>
 		<td>@Model.UserId</td>
@@ -20,4 +20,21 @@
 		<td>@Model.RegisterDate</td>
 	</tr>
 </table>
-<a asp-controller="Store" asp-action="CreateStore"> Create Store</a>
+
+@if (Model.Stores.Count() > 0 )
+{
+	<table class="table">
+		@foreach (UserStoreView item in Model.Stores)
+		{
+			<tr>
+				<td>@item.StoreId</td>
+				<td><a asp-action="GetStore" asp-controller="Store" asp-route-storeId="@item.StoreId">@item.StoreName</a></td>
+				<td>@item.CreationDate</td>
+			</tr>
+		}
+	</table>
+}
+else
+{
+	<a asp-controller="Store" asp-action="CreateStore">Create Store</a>
+}

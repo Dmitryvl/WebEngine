@@ -9,6 +9,7 @@ namespace WebEngine.Web.Controllers
 	#region Usings
 
 	using System;
+	using System.Linq;
 	using System.Security.Claims;
 	using System.Threading.Tasks;
 
@@ -58,13 +59,19 @@ namespace WebEngine.Web.Controllers
 
 			if (user != null)
 			{
-				Profile profile = new Profile();
+				ProfileView profile = new ProfileView();
 
 				profile.UserId = user.Id;
 				profile.UserName = user.Name;
 				profile.RoleId = user.RoleId;
 				profile.RoleName = user.Role.Name;
 				profile.RegisterDate = user.RegisterDate;
+				profile.Stores = user.Stores.Select(s => new UserStoreView()
+				{
+					StoreId = s.Id,
+					StoreName = s.Name,
+					CreationDate = s.CreationDate
+				});
 
 				return View(profile);
 			}

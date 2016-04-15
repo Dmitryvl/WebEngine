@@ -149,7 +149,7 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
-				return await _context.Users
+				User user = await _context.Users
 					.AsNoTracking()
 					.Where(u => u.Name == userName && u.IsActive == true && u.IsDeleted == false)
 					.Select(u => new User()
@@ -160,8 +160,23 @@ namespace WebEngine.Data.Repositories
 						Password = u.Password,
 						PasswordSalt = u.PasswordSalt,
 						RegisterDate = u.RegisterDate,
-						Role = u.Role
+						Role = u.Role,
 					}).FirstOrDefaultAsync();
+
+				if (user != null)
+				{
+					user.Stores = await _context.Stores
+						.Where(s => s.UserId == user.Id)
+						.Select(s => new Store()
+						{
+							Id = s.Id,
+							Name = s.Name,
+							CreationDate = s.CreationDate
+						})
+						.ToArrayAsync();
+				}
+
+				return user;
 			}
 
 			return null;

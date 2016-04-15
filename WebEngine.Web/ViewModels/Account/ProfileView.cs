@@ -6,20 +6,18 @@
 
 namespace WebEngine.Web.ViewModels.Account
 {
+
 	#region Usings
-	
+
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	
-	#endregion 
+
+	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="ProfileView"/> class.
 	/// </summary>
-	public class Profile
+	public class ProfileView
 	{
 		public int UserId { get; set; }
 
@@ -30,5 +28,7 @@ namespace WebEngine.Web.ViewModels.Account
 		public string RoleName { get; set; }
 
 		public DateTimeOffset RegisterDate { get; set; }
+
+		public IEnumerable<UserStoreView> Stores { get; set; }
 	}
 }

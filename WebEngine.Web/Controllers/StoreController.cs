@@ -8,15 +8,15 @@ namespace WebEngine.Web.Controllers
 {
 	#region Usings
 
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
-	using Microsoft.AspNet.Mvc;
-	using WebEngine.Core.Interfaces;
+
 	using Microsoft.AspNet.Authorization;
-	using ViewModels.Store;
-	using Core.Entities;
+	using Microsoft.AspNet.Mvc;
+
+	using WebEngine.Core.Entities;
+	using WebEngine.Core.Interfaces;
+	using WebEngine.Web.ViewModels.Store;
+
 	#endregion
 
 	/// <summary>
@@ -62,7 +62,7 @@ namespace WebEngine.Web.Controllers
 		}
 
 		[HttpGet, Route("[controller]{storeId:int}")]
-		public async Task<IActionResult> Index(int storeId)
+		public async Task<IActionResult> GetStore(int storeId)
 		{
 			if (storeId > 0)
 			{
@@ -84,7 +84,7 @@ namespace WebEngine.Web.Controllers
 		}
 
 		[HttpGet, Route("[controller]/{storeName}")]
-		public async Task<IActionResult> Index(string storeName)
+		public async Task<IActionResult> GetStore(string storeName)
 		{
 			if (!string.IsNullOrEmpty(storeName))
 			{
@@ -105,13 +105,13 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Authorize]
+		[HttpGet, Authorize, Route("[controller]/CreateStore")]
 		public IActionResult CreateStore()
 		{
 			return View();
 		}
 
-		[HttpPost, Authorize, ValidateAntiForgeryToken]
+		[HttpPost, Authorize, ValidateAntiForgeryToken, Route("[controller]/CreateStore")]
 		public async Task<IActionResult> CreateStore(CreateStore newStore)
 		{
 			if (newStore != null)
