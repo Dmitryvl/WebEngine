@@ -35,6 +35,14 @@ namespace WebEngine.Data
 
 				if (await db.Database.EnsureCreatedAsync())
 				{
+					DataType[] dataTypes = new DataType[]
+					{
+						new DataType() { Name = "Int" },
+						new DataType() { Name = "Float" },
+						new DataType() { Name = "DateTimeOffset" },
+						new DataType() { Name = "String" }
+					};
+
 					Role[] roles = new Role[]
 					{
 						new Role() { Name = "admin", IsDeleted = false },
@@ -80,15 +88,20 @@ namespace WebEngine.Data
 						new Company() { Name = "Company2", IsActive = true }
 					};
 
-					SmartPhoneProcessor[] spp = new SmartPhoneProcessor[]
+					SmartPhoneBaseProperty[] smartPhoneBaseProperty = new SmartPhoneBaseProperty[]
 					{
-						new SmartPhoneProcessor() { Name = "test", KernelsCount = 2, ClockRate = 2.1f, IsActive = true }
+						new SmartPhoneBaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
+					};
+
+					SmartPhoneProperty[] spp = new SmartPhoneProperty[]
+					{
+						new SmartPhoneProperty() { Name = "SmartPhoneProperty", IsActive = true, SmartPhoneBaseProperty = smartPhoneBaseProperty[0], DataType = dataTypes[1] }
 					};
 
 					SmartPhone[] smartphones = new SmartPhone[]
 					{
-						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true, SmartPhoneProcessor = spp[0] },
-						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true, SmartPhoneProcessor = spp[0] }
+						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true },
+						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true }
 					};
 
 					SmartPhoneOffer[] spoffers = new SmartPhoneOffer[]
@@ -96,13 +109,21 @@ namespace WebEngine.Data
 						new SmartPhoneOffer() { Store = stores[0], SmartPhone = smartphones[0], IsActive= true, Message = "message" }
 					};
 
+					SmartPhoneToProperty[] sptop = new SmartPhoneToProperty[]
+					{
+						new SmartPhoneToProperty() { SmartPhone = smartphones[0], SmartPhoneProperty = spp[0], Value = "1", SizeValue = "Gb" }
+					};
+
+					db.DataTypes.AddRange(dataTypes);
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);
 					db.Companies.AddRange(companies);
-					db.SmartPhoneProcessors.AddRange(spp);
+					db.SmartPhoneBaseProperties.AddRange(smartPhoneBaseProperty);
+					db.SmartPhoneProperties.AddRange(spp);
 					db.SmartPhones.AddRange(smartphones);
 					db.SmartPhoneOffers.AddRange(spoffers);
+					db.SmartPhoneToProperty.AddRange(sptop);
 
 					await db.SaveChangesAsync();
 				}

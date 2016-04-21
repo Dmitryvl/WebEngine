@@ -58,14 +58,29 @@ namespace WebEngine.Data
 		public DbSet<Company> Companies { get; set; }
 
 		/// <summary>
-		/// Gets or sets processors.
+		/// Gets or sets data types.
 		/// </summary>
-		public DbSet<SmartPhoneProcessor> SmartPhoneProcessors { get; set; }
+		public DbSet<DataType> DataTypes { get; set; }
+
+		/// <summary>
+		/// Gets or sets smartphone base properties.
+		/// </summary>
+		public DbSet<SmartPhoneBaseProperty> SmartPhoneBaseProperties { get; set; }
+
+		/// <summary>
+		/// Gets or sets smartphone properties.
+		/// </summary>
+		public DbSet<SmartPhoneProperty> SmartPhoneProperties { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphones.
 		/// </summary>
 		public DbSet<SmartPhone> SmartPhones { get; set; }
+
+		/// <summary>
+		/// Gets or sets <see cref="SmartPhoneToProperty"/>.
+		/// </summary>
+		public DbSet<SmartPhoneToProperty> SmartPhoneToProperty { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphone offers.
@@ -86,35 +101,46 @@ namespace WebEngine.Data
 
 			#region Properties
 
+			const int stringLength = 240; 
+
+			builder.Entity<DataType>().HasKey(d => d.Id);
+			builder.Entity<DataType>().Property(d => d.Name).IsRequired().HasMaxLength(20);
+
 			builder.Entity<User>().HasKey(u => u.Id);
-			builder.Entity<User>().Property(u => u.Name).IsRequired().HasMaxLength(240);
-			builder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(240);
+			builder.Entity<User>().Property(u => u.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<User>().Property(u => u.Email).IsRequired().HasMaxLength(stringLength);
 			builder.Entity<User>().Property(u => u.Password).IsRequired().HasMaxLength(64);
 			builder.Entity<User>().Property(u => u.PasswordSalt).IsRequired().HasMaxLength(10);
 
 			builder.Entity<Role>().HasKey(r => r.Id);
-			builder.Entity<Role>().Property(r => r.Name).IsRequired().HasMaxLength(120);
+			builder.Entity<Role>().Property(r => r.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<Store>().HasKey(s => s.Id);
-			builder.Entity<Store>().Property(s => s.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<Store>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<Country>().HasKey(c => c.Id);
-			builder.Entity<Country>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<Country>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<Region>().HasKey(c => c.Id);
-			builder.Entity<Region>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<Region>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<City>().HasKey(c => c.Id);
-			builder.Entity<City>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<City>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<Company>().HasKey(c => c.Id);
-			builder.Entity<Company>().Property(c => c.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<Company>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
+
+			builder.Entity<SmartPhoneBaseProperty>().HasKey(s => s.Id);
+			builder.Entity<SmartPhoneBaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+
+			builder.Entity<SmartPhoneProperty>().HasKey(s => s.Id);
+			builder.Entity<SmartPhoneProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+
+			builder.Entity<SmartPhoneToProperty>().Property(s => s.Value).HasMaxLength(stringLength);
+			builder.Entity<SmartPhoneToProperty>().Property(s => s.SizeValue).HasMaxLength(stringLength);
 
 			builder.Entity<SmartPhone>().HasKey(s => s.Id);
-			builder.Entity<SmartPhone>().Property(s => s.Name).IsRequired().HasMaxLength(240);
-
-			builder.Entity<SmartPhoneProcessor>().HasKey(s => s.Id);
-			builder.Entity<SmartPhoneProcessor>().Property(s => s.Name).IsRequired().HasMaxLength(240);
+			builder.Entity<SmartPhone>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
 			#endregion
 
@@ -148,17 +174,24 @@ namespace WebEngine.Data
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhone>()
-				.HasOne(s => s.Company)
-				.WithMany(c => c.SmartPhones)
-				.HasForeignKey(s => s.CompanyId)
+			builder.Entity<SmartPhoneProperty>()
+				.HasOne(s => s.SmartPhoneBaseProperty)
+				.WithMany(c => c.SmartPhoneProperties)
+				.HasForeignKey(s => s.SmartPhoneBasePropertyId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Entity<SmartPhoneProperty>()
+				.HasOne(s => s.DataType)
+				.WithMany(c => c.SmartPhoneProperties)
+				.HasForeignKey(s => s.DataTypeId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.Entity<SmartPhone>()
-				.HasOne(s => s.SmartPhoneProcessor)
+				.HasOne(s => s.Company)
 				.WithMany(c => c.SmartPhones)
-				.HasForeignKey(s => s.SmartPhoneProcessorId)
+				.HasForeignKey(s => s.CompanyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
@@ -174,6 +207,19 @@ namespace WebEngine.Data
 				.HasOne(s => s.SmartPhone)
 				.WithMany(sm => sm.SmartPhoneOffer)
 				.HasForeignKey(s => s.SmartPhoneId);
+
+			builder.Entity<SmartPhoneToProperty>()
+				.HasKey(s => new { s.SmartPhoneId, s.SmartPhonePropertyId });
+
+			builder.Entity<SmartPhoneToProperty>()
+				.HasOne(s => s.SmartPhone)
+				.WithMany(st => st.SmartPhoneToProperty)
+				.HasForeignKey(s => s.SmartPhoneId);
+
+			builder.Entity<SmartPhoneToProperty>()
+				.HasOne(s => s.SmartPhoneProperty)
+				.WithMany(sm => sm.SmartPhoneToProperty)
+				.HasForeignKey(s => s.SmartPhonePropertyId);
 
 			#endregion
 		}

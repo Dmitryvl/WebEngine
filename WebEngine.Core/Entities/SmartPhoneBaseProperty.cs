@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneProcessor.cs" author="Dzmitry Prakapenka">
+// <copyright file="SmartPhoneBaseProperty.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,9 +13,9 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="SmartPhoneProcessor"/> class.
+	/// <see cref="SmartPhoneBaseProperty"/> class.
 	/// </summary>
-	public class SmartPhoneProcessor
+	public class SmartPhoneBaseProperty
 	{
 		#region Properties
 
@@ -30,28 +30,15 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets clock rate.
-		/// </summary>
-		public float ClockRate { get; set; }
-
-		/// <summary>
-		/// Gets or sets count of kernels.
-		/// </summary>
-		public int KernelsCount { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether processor is active.
+		/// Gets or sets a value indicating whether <see cref="SmartPhoneBaseProperty"/> is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
 		#endregion
 
 		#region Navigation properties
-		
-		/// <summary>
-		/// Gets or sets smartphones.
-		/// </summary>
-		public virtual ICollection<SmartPhone> SmartPhones { get; set; }
+
+		public virtual ICollection<SmartPhoneProperty> SmartPhoneProperties { get; set; }
 
 		#endregion
 	}

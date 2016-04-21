@@ -35,11 +35,6 @@ namespace WebEngine.Core.Entities
 		public int CompanyId { get; set; }
 
 		/// <summary>
-		/// Gets or sets smartphone processor id.
-		/// </summary>
-		public int SmartPhoneProcessorId { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether smartphone is active.
 		/// </summary>
 		public bool IsActive { get; set; }
@@ -54,15 +49,15 @@ namespace WebEngine.Core.Entities
 		public virtual Company Company { get; set; }
 
 		/// <summary>
-		/// Gets or sets smartphone processor.
-		/// </summary>
-		public virtual SmartPhoneProcessor SmartPhoneProcessor { get; set; }
-
-		/// <summary>
 		/// Gets or sets <see cref="SmartPhoneOffer"/>.
 		/// </summary>
 		public virtual ICollection<SmartPhoneOffer> SmartPhoneOffer { get; set; }
-		
+
+		/// <summary>
+		/// gets or sets <see cref="SmartPhoneToProperty"/>.
+		/// </summary>
+		public virtual ICollection<SmartPhoneToProperty> SmartPhoneToProperty { get; set; }
+
 		#endregion
 	}
 }
