@@ -28,9 +28,9 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether city is deleted.
+		/// Gets or sets a value indicating whether city is active.
 		/// </summary>
-		public bool IsDeleted { get; set; }
+		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Gets or sets region identifier.
@@ -44,7 +44,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets region.
 		/// </summary>
-		public virtual Region Region { get; set; }	
+		public virtual Region Region { get; set; }
 		
 		#endregion
 	}

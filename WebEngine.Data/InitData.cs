@@ -35,6 +35,21 @@ namespace WebEngine.Data
 
 				if (await db.Database.EnsureCreatedAsync())
 				{
+					Country[] countries = new Country[]
+					{
+						new Country() { Name = "Country", IsActive = true }
+					};
+
+					Region[] regions = new Region[]
+					{
+						new Region() { Name = "Region", Country = countries[0], IsActive = true }
+					};
+
+					City[] cities = new City[]
+					{
+						new City() { Name = "City", Region = regions[0], IsActive = true }
+					};
+
 					DataType[] dataTypes = new DataType[]
 					{
 						new DataType() { Name = "Int" },
@@ -45,8 +60,8 @@ namespace WebEngine.Data
 
 					Role[] roles = new Role[]
 					{
-						new Role() { Name = "admin", IsDeleted = false },
-						new Role() { Name = "user", IsDeleted = false }
+						new Role() { Name = "admin", IsActive = false },
+						new Role() { Name = "user", IsActive = false }
 					};
 
 					User[] users = new User[]
@@ -115,6 +130,10 @@ namespace WebEngine.Data
 					};
 
 					db.DataTypes.AddRange(dataTypes);
+					db.Countries.AddRange(countries);
+					db.Regions.AddRange(regions);
+					db.Cities.AddRange(cities);
+
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);

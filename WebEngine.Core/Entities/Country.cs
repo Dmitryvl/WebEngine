@@ -30,9 +30,9 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether country is deleted.
+		/// Gets or sets a value indicating whether country is active.
 		/// </summary>
-		public bool IsDeleted { get; set; }
+		public bool IsActive { get; set; }
 
 		#endregion
 
