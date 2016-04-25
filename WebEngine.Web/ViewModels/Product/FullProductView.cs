@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProductFullView.cs" author="Dzmitry Prakapenka">
+// <copyright file="FullProductView.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -15,7 +15,7 @@ namespace WebEngine.Web.ViewModels.Product
 	/// <summary>
 	/// TODO: Update summary.
 	/// </summary>
-	public class ProductFullView
+	public class FullProductView
 	{
 		public int ProductId { get; set; }
 

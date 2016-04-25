@@ -56,6 +56,30 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		public async Task<Product> GetProduct(string category, int productId)
+		{
+			Product product = await _context.Products
+				.Where(s => s.Category.Name == category && s.Id == productId)
+					.Include(s => s.ProductToProperty)
+					.ThenInclude(sp => sp.ProductProperty)
+					.ThenInclude(b => b.ProductBaseProperty)
+					.FirstOrDefaultAsync();
+
+			return product;
+		}
+
+		public async Task<Product> GetProduct(string category, string stringUrlName)
+		{
+			Product product = await _context.Products
+				.Where(s => s.Category.Name == category && s.UrlName == stringUrlName)
+					.Include(s => s.ProductToProperty)
+					.ThenInclude(sp => sp.ProductProperty)
+					.ThenInclude(b => b.ProductBaseProperty)
+					.FirstOrDefaultAsync();
+
+			return product;
+		}
+
 		public async Task<IList<Product>> GetProducts()
 		{
 			IList<Product> products = await _context.Products.ToArrayAsync();

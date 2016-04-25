@@ -149,6 +149,7 @@ namespace WebEngine.Data
 
 			builder.Entity<Product>().HasKey(s => s.Id);
 			builder.Entity<Product>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<Product>().Property(s => s.UrlName).IsRequired().HasMaxLength(stringLength);
 
 			#endregion
 

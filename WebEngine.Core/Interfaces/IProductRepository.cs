@@ -25,6 +25,10 @@ namespace WebEngine.Core.Interfaces
 
 		Task<Product> GetProduct(int productId);
 
+		Task<Product> GetProduct(string category, string stringUrlName);
+
+		Task<Product> GetProduct(string category, int productId);
+
 		Task<bool> AddProduct(Product product);
 
 		Task<bool> UpdateProduct(Product product);

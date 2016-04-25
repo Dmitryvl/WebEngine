@@ -30,6 +30,11 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Gets or sets url name.
+		/// </summary>
+		public string UrlName { get; set; }
+
+		/// <summary>
 		/// Gets or sets companty identifier.
 		/// </summary>
 		public int CompanyId { get; set; }

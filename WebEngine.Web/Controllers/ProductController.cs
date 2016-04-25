@@ -62,30 +62,77 @@ namespace WebEngine.Web.Controllers
 		[HttpGet, Route("[controller]{productId:int}")]
 		public async Task<IActionResult> GetProduct(int productId = 0)
 		{
-			ProductFullView productView = new ProductFullView();
-
-			Product product = await _smartPhoneRepository.GetProduct(productId);
-
-			if (product != null)
+			if (productId > 0)
 			{
-				productView.ProductId = product.Id;
-				productView.Name = product.Name;
+				Product product = await _smartPhoneRepository.GetProduct(productId);
 
-				productView.Properties = product.ProductToProperty
-					.Select(s => new ProductPropertyView()
-					{
-						PropertyId = s.ProductPropertyId,
-						PropertyName = s.Product.Name,
-						BasePropertyId = s.ProductProperty.ProductBaseProperty.Id,
-						Value = s.Value,
-						SizeValue = s.SizeValue
-					}).ToArray();
+				if (product != null)
+				{
+					FullProductView productView = GetFullProductView(product);
 
-				return View("Product", productView);
+					return View("Product", productView);
+				}
 			}
 
 			return View("Error");
 		}
+
+		[HttpGet, Route("[controller]/{category}/{productId:int}")]
+		public async Task<IActionResult> GetProduct(string category, int productId = 0)
+		{
+			if (!string.IsNullOrEmpty(category) && productId > 0)
+			{
+				Product product = await _smartPhoneRepository.GetProduct(category, productId);
+
+				if (product != null)
+				{
+					FullProductView productView = GetFullProductView(product);
+
+					return View("Product", productView);
+				}
+			}
+
+			return View("Error");
+		}
+
+		[HttpGet, Route("[controller]/{category}/{productUrlName}")]
+		public async Task<IActionResult> GetProduct(string category, string productUrlName)
+		{
+			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(productUrlName))
+			{
+				Product product = await _smartPhoneRepository.GetProduct(category, productUrlName);
+
+				if (product != null)
+				{
+					FullProductView productView = GetFullProductView(product);
+
+					return View("Product", productView);
+				}
+			}
+
+			return View("Error");
+		}
+
+		private FullProductView GetFullProductView(Product product)
+		{
+			FullProductView productView = new FullProductView();
+
+			productView.ProductId = product.Id;
+			productView.Name = product.Name;
+
+			productView.Properties = product.ProductToProperty
+				.Select(s => new ProductPropertyView()
+				{
+					PropertyId = s.ProductPropertyId,
+					PropertyName = s.Product.Name,
+					BasePropertyId = s.ProductProperty.ProductBaseProperty.Id,
+					Value = s.Value,
+					SizeValue = s.SizeValue
+				}).ToArray();
+
+			return productView;
+		}
+
 
 		protected override void Dispose(bool disposing)
 		{
