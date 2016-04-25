@@ -103,48 +103,55 @@ namespace WebEngine.Data
 						new Company() { Name = "Company2", IsActive = true }
 					};
 
-					SmartPhoneBaseProperty[] smartPhoneBaseProperty = new SmartPhoneBaseProperty[]
+					Category[] categories = new Category[]
 					{
-						new SmartPhoneBaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
+						new Category() { Name = "SmartPhone", IsActive = true },
+						new Category() { Name = "TV", IsActive = true },
+						new Category() { Name = "PC", IsActive = true }
 					};
 
-					SmartPhoneProperty[] spp = new SmartPhoneProperty[]
+					ProductBaseProperty[] productBaseProperty = new ProductBaseProperty[]
 					{
-						new SmartPhoneProperty() { Name = "SmartPhoneProperty", IsActive = true, SmartPhoneBaseProperty = smartPhoneBaseProperty[0], DataType = dataTypes[1] }
+						new ProductBaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
 					};
 
-					SmartPhone[] smartphones = new SmartPhone[]
+					ProductProperty[] pp = new ProductProperty[]
 					{
-						new SmartPhone() { Company = companies[0], Name = "SM1", IsActive = true },
-						new SmartPhone() { Company = companies[1], Name = "SM2", IsActive = true }
+						new ProductProperty() { Name = "ProductProperty", IsActive = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
 					};
 
-					SmartPhoneOffer[] spoffers = new SmartPhoneOffer[]
+					Product[] products = new Product[]
 					{
-						new SmartPhoneOffer() { Store = stores[0], SmartPhone = smartphones[0], IsActive= true, Message = "message" }
+						new Product() { CompanyId = 1, Category = categories[0], Name = "SM", IsActive = true }
 					};
 
-					SmartPhoneToProperty[] sptop = new SmartPhoneToProperty[]
+					ProductToProperty[] ptp = new ProductToProperty[]
 					{
-						new SmartPhoneToProperty() { SmartPhone = smartphones[0], SmartPhoneProperty = spp[0], Value = "1", SizeValue = "Gb" }
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[0], Value = "111", SizeValue = "Gb" }
+					};
+
+					ProductOffer[] productOffers = new ProductOffer[]
+					{
+						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message" }
 					};
 
 					db.DataTypes.AddRange(dataTypes);
 					db.Countries.AddRange(countries);
 					db.Regions.AddRange(regions);
 					db.Cities.AddRange(cities);
-
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);
 					db.Companies.AddRange(companies);
-					db.SmartPhoneBaseProperties.AddRange(smartPhoneBaseProperty);
-					db.SmartPhoneProperties.AddRange(spp);
-					db.SmartPhones.AddRange(smartphones);
-					db.SmartPhoneOffers.AddRange(spoffers);
-					db.SmartPhoneToProperty.AddRange(sptop);
+					db.Categories.AddRange(categories);
+					db.ProductBaseProperties.AddRange(productBaseProperty);
+					db.ProductProperties.AddRange(pp);
+					db.Products.AddRange(products);
+					db.ProductOffers.AddRange(productOffers);
+					db.ProductToProperty.AddRange(ptp);
 
 					await db.SaveChangesAsync();
+
 				}
 			}
 		}

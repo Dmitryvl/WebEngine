@@ -58,6 +58,11 @@ namespace WebEngine.Data
 		public DbSet<Company> Companies { get; set; }
 
 		/// <summary>
+		/// Gets or sets categories.
+		/// </summary>
+		public DbSet<Category> Categories { get; set; }
+
+		/// <summary>
 		/// Gets or sets data types.
 		/// </summary>
 		public DbSet<DataType> DataTypes { get; set; }
@@ -65,27 +70,27 @@ namespace WebEngine.Data
 		/// <summary>
 		/// Gets or sets smartphone base properties.
 		/// </summary>
-		public DbSet<SmartPhoneBaseProperty> SmartPhoneBaseProperties { get; set; }
+		public DbSet<ProductBaseProperty> ProductBaseProperties { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphone properties.
 		/// </summary>
-		public DbSet<SmartPhoneProperty> SmartPhoneProperties { get; set; }
+		public DbSet<ProductProperty> ProductProperties { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphones.
 		/// </summary>
-		public DbSet<SmartPhone> SmartPhones { get; set; }
+		public DbSet<Product> Products { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneToProperty"/>.
+		/// Gets or sets <see cref="ProductToProperty"/>.
 		/// </summary>
-		public DbSet<SmartPhoneToProperty> SmartPhoneToProperty { get; set; }
+		public DbSet<ProductToProperty> ProductToProperty { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphone offers.
 		/// </summary>
-		public DbSet<SmartPhoneOffer> SmartPhoneOffers { get; set; }
+		public DbSet<ProductOffer> ProductOffers { get; set; }
 
 		#endregion
 
@@ -101,7 +106,7 @@ namespace WebEngine.Data
 
 			#region Properties
 
-			const int stringLength = 240; 
+			const int stringLength = 240;
 
 			builder.Entity<DataType>().HasKey(d => d.Id);
 			builder.Entity<DataType>().Property(d => d.Name).IsRequired().HasMaxLength(20);
@@ -130,17 +135,20 @@ namespace WebEngine.Data
 			builder.Entity<Company>().HasKey(c => c.Id);
 			builder.Entity<Company>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<SmartPhoneBaseProperty>().HasKey(s => s.Id);
-			builder.Entity<SmartPhoneBaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<Category>().HasKey(c => c.Id);
+			builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<SmartPhoneProperty>().HasKey(s => s.Id);
-			builder.Entity<SmartPhoneProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<ProductBaseProperty>().HasKey(s => s.Id);
+			builder.Entity<ProductBaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<SmartPhoneToProperty>().Property(s => s.Value).HasMaxLength(stringLength);
-			builder.Entity<SmartPhoneToProperty>().Property(s => s.SizeValue).HasMaxLength(stringLength);
+			builder.Entity<ProductProperty>().HasKey(s => s.Id);
+			builder.Entity<ProductProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<SmartPhone>().HasKey(s => s.Id);
-			builder.Entity<SmartPhone>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<ProductToProperty>().Property(s => s.Value).HasMaxLength(stringLength);
+			builder.Entity<ProductToProperty>().Property(s => s.SizeValue).HasMaxLength(stringLength);
+
+			builder.Entity<Product>().HasKey(s => s.Id);
+			builder.Entity<Product>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
 			#endregion
 
@@ -174,52 +182,59 @@ namespace WebEngine.Data
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhoneProperty>()
-				.HasOne(s => s.SmartPhoneBaseProperty)
-				.WithMany(c => c.SmartPhoneProperties)
-				.HasForeignKey(s => s.SmartPhoneBasePropertyId)
+			builder.Entity<ProductProperty>()
+				.HasOne(s => s.ProductBaseProperty)
+				.WithMany(c => c.ProductProperties)
+				.HasForeignKey(s => s.ProductBasePropertyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhoneProperty>()
+			builder.Entity<ProductProperty>()
 				.HasOne(s => s.DataType)
-				.WithMany(c => c.SmartPhoneProperties)
+				.WithMany(c => c.ProductProperties)
 				.HasForeignKey(s => s.DataTypeId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhone>()
+			builder.Entity<Product>()
 				.HasOne(s => s.Company)
-				.WithMany(c => c.SmartPhones)
+				.WithMany(c => c.Products)
 				.HasForeignKey(s => s.CompanyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhoneOffer>()
-				.HasKey(s => new { s.StoreId, s.SmartPhoneId });
+			builder.Entity<Product>()
+				.HasOne(s => s.Category)
+				.WithMany(c => c.Products)
+				.HasForeignKey(s => s.CategoryId)
+				.IsRequired()
+				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<SmartPhoneOffer>()
+			builder.Entity<ProductOffer>()
+				.HasKey(s => new { s.StoreId, s.ProductId });
+
+			builder.Entity<ProductOffer>()
 				.HasOne(s => s.Store)
-				.WithMany(st => st.SmartPhoneOffer)
+				.WithMany(st => st.ProductOffers)
 				.HasForeignKey(s => s.StoreId);
 
-			builder.Entity<SmartPhoneOffer>()
-				.HasOne(s => s.SmartPhone)
-				.WithMany(sm => sm.SmartPhoneOffer)
-				.HasForeignKey(s => s.SmartPhoneId);
+			builder.Entity<ProductOffer>()
+				.HasOne(s => s.Product)
+				.WithMany(sm => sm.ProductOffer)
+				.HasForeignKey(s => s.ProductId);
 
-			builder.Entity<SmartPhoneToProperty>()
-				.HasKey(s => new { s.SmartPhoneId, s.SmartPhonePropertyId });
+			builder.Entity<ProductToProperty>()
+				.HasKey(s => new { s.ProductId, s.ProductPropertyId });
 
-			builder.Entity<SmartPhoneToProperty>()
-				.HasOne(s => s.SmartPhone)
-				.WithMany(st => st.SmartPhoneToProperty)
-				.HasForeignKey(s => s.SmartPhoneId);
+			builder.Entity<ProductToProperty>()
+				.HasOne(s => s.Product)
+				.WithMany(st => st.ProductToProperty)
+				.HasForeignKey(s => s.ProductId);
 
-			builder.Entity<SmartPhoneToProperty>()
-				.HasOne(s => s.SmartPhoneProperty)
-				.WithMany(sm => sm.SmartPhoneToProperty)
-				.HasForeignKey(s => s.SmartPhonePropertyId);
+			builder.Entity<ProductToProperty>()
+				.HasOne(s => s.ProductProperty)
+				.WithMany(sm => sm.ProductToProperty)
+				.HasForeignKey(s => s.ProductPropertyId);
 
 			#endregion
 		}

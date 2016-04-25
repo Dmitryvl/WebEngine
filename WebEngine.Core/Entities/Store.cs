@@ -60,9 +60,9 @@ namespace WebEngine.Core.Entities
 		public virtual User User { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneOffer"/>.
+		/// Gets or sets <see cref="ProductOffers"/>.
 		/// </summary>
-		public virtual ICollection<SmartPhoneOffer> SmartPhoneOffer { get; set; }
+		public virtual ICollection<ProductOffer> ProductOffers { get; set; }
 
 		#endregion
 	}

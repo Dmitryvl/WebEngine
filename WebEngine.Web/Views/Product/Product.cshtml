@@ -1,0 +1,14 @@
+﻿@using WebEngine.Web.ViewModels.Product
+@model WebEngine.Web.ViewModels.Product.ProductFullView
+
+@Model.Name
+
+<table class="table table-bordered">
+	@foreach (ProductPropertyView property in Model.Properties)
+	{
+		<tr>
+			<td>@property.PropertyName</td>
+			<td>@property.Value @property.SizeValue</td>
+		</tr>
+	}
+</table>

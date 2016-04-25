@@ -17,7 +17,7 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class DataType
 	{
-		#region MyRegion
+		#region Properties
 
 		/// <summary>
 		/// Gets or sets id.
@@ -31,12 +31,12 @@ namespace WebEngine.Core.Entities
 
 		#endregion
 
-		#region MyRegion
+		#region Navigation properties
 
 		/// <summary>
 		/// Gets or sets <see cref="SmartPhoneProperties"/>
 		/// </summary>
-		public virtual ICollection<SmartPhoneProperty> SmartPhoneProperties { get; set; }
+		public virtual ICollection<ProductProperty> ProductProperties { get; set; }
 		
 		#endregion
 	}

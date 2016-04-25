@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneOffer.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductOffer.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -11,9 +11,9 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="SmartPhoneOffer"/> class.
+	/// <see cref="ProductOffer"/> class.
 	/// </summary>
-	public class SmartPhoneOffer
+	public class ProductOffer
 	{
 		#region Properties
 
@@ -25,7 +25,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets smartphone identifier.
 		/// </summary>
-		public int SmartPhoneId { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
 		/// Gets or sets message.
@@ -49,7 +49,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets smartphone.
 		/// </summary>
-		public virtual SmartPhone SmartPhone { get; set; }
+		public virtual Product Product { get; set; }
 		
 		#endregion
 	}

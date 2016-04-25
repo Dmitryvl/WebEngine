@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneBaseProperty.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductBaseProperty.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,9 +13,9 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="SmartPhoneBaseProperty"/> class.
+	/// <see cref="ProductBaseProperty"/> class.
 	/// </summary>
-	public class SmartPhoneBaseProperty
+	public class ProductBaseProperty
 	{
 		#region Properties
 
@@ -30,7 +30,7 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether <see cref="SmartPhoneBaseProperty"/> is active.
+		/// Gets or sets a value indicating whether <see cref="ProductBaseProperty"/> is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
@@ -38,7 +38,7 @@ namespace WebEngine.Core.Entities
 
 		#region Navigation properties
 
-		public virtual ICollection<SmartPhoneProperty> SmartPhoneProperties { get; set; }
+		public virtual ICollection<ProductProperty> ProductProperties { get; set; }
 
 		#endregion
 	}

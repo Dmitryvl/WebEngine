@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Company.cs" author="Dzmitry Prakapenka">
+// <copyright file="Category.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,28 +13,16 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="Company"/> class.
+	/// TODO: Update summary.
 	/// </summary>
-	public class Company
+	public class Category
 	{
-		/// <summary>
-		/// Gets or sets company identifier.
-		/// </summary>
 		public int Id { get; set; }
 
-		/// <summary>
-		/// Gets or sets company name.
-		/// </summary>
 		public string Name { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether company is active.
-		/// </summary>
 		public bool IsActive { get; set; }
 
-		/// <summary>
-		/// Gets or sets smartphones.
-		/// </summary>
 		public virtual ICollection<Product> Products { get; set; }
 	}
 }

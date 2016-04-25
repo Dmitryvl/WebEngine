@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneProperty.cs" author="Dzmitry Prakapenka">
+// <copyright file="Product.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,14 +13,14 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="SmartPhoneProperty"/> class.
+	/// <see cref="Product"/> class.
 	/// </summary>
-	public class SmartPhoneProperty
+	public class Product
 	{
 		#region Properties
 
 		/// <summary>
-		/// Gets oe sets identifier.
+		/// Gets or sets smartphone identifier.
 		/// </summary>
 		public int Id { get; set; }
 
@@ -30,17 +30,17 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneBasePropertyId"/>.
+		/// Gets or sets companty identifier.
 		/// </summary>
-		public int SmartPhoneBasePropertyId { get; set; }
+		public int CompanyId { get; set; }
 
 		/// <summary>
-		/// Gets or sets data type id.
+		/// Gets or sets category id.
 		/// </summary>
-		public int DataTypeId { get; set; }
+		public int CategoryId { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether <see cref="SmartPhoneProperty"/> is active.
+		/// Gets or sets a value indicating whether smartphone is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
@@ -49,19 +49,24 @@ namespace WebEngine.Core.Entities
 		#region Navigation properties
 
 		/// <summary>
-		/// Gets or sets smartphone base property.
+		/// Gets or sets company.
 		/// </summary>
-		public virtual SmartPhoneBaseProperty SmartPhoneBaseProperty { get; set; }
+		public virtual Company Company { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneToProperty"/>.
+		/// Gets or sets category.
 		/// </summary>
-		public virtual ICollection<SmartPhoneToProperty> SmartPhoneToProperty { get; set; }
+		public virtual Category Category { get; set; }
 
 		/// <summary>
-		/// Gets or sets  datatype.
+		/// Gets or sets <see cref="ProductOffer"/>.
 		/// </summary>
-		public virtual DataType DataType { get; set; }
+		public virtual ICollection<ProductOffer> ProductOffer { get; set; }
+
+		/// <summary>
+		/// Gets or sets <see cref="ProductToProperty"/>.
+		/// </summary>
+		public virtual ICollection<ProductToProperty> ProductToProperty { get; set; }
 
 		#endregion
 	}

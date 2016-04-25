@@ -1,0 +1,15 @@
+﻿@using WebEngine.Web.ViewModels.Product
+@model WebEngine.Web.ViewModels.Product.ProductListView
+
+@if (Model.Products != null)
+{
+	<table class="table table-bordered">
+		@foreach (ProductView product in Model.Products)
+		{
+			<tr>
+				<td>@product.Id</td>
+				<td>@product.Name</td>
+			</tr>
+		}
+	</table>
+}

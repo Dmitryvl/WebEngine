@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneToProperty.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductToProperty.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -11,21 +11,21 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="SmartPhoneToProperty"/> class.
+	/// <see cref="ProductToProperty"/> class.
 	/// </summary>
-	public class SmartPhoneToProperty
+	public class ProductToProperty
 	{
-		#region MyRegion
+		#region Properties
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneId"/>.
+		/// Gets or sets <see cref="ProductId"/>.
 		/// </summary>
-		public int SmartPhoneId { get; set; }
+		public int ProductId { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhonePropertyId"/>.
+		/// Gets or sets <see cref="ProductPropertyId"/>.
 		/// </summary>
-		public int SmartPhonePropertyId { get; set; }
+		public int ProductPropertyId { get; set; }
 
 		/// <summary>
 		/// Gets or sets value.
@@ -44,12 +44,12 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets smartphone.
 		/// </summary>
-		public virtual SmartPhone SmartPhone { get; set; }
+		public virtual Product Product { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="SmartPhoneProperty"/>.
+		/// Gets or sets <see cref="ProductProperty"/>.
 		/// </summary>
-		public virtual SmartPhoneProperty SmartPhoneProperty { get; set; }
+		public virtual ProductProperty ProductProperty { get; set; }
 
 		#endregion
 	}
