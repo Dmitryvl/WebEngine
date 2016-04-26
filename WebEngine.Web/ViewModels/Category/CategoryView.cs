@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="CategoryView.cs" company="EPAM Systems">
-//     Copyright (c) "EPAM Systems". All rights reserved.
+// <copyright file="CategoryView.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
