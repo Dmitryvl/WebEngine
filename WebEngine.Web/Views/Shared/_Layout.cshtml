@@ -18,7 +18,7 @@
 	@Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -39,14 +39,12 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="container-fluid">
-		<div class="row">
+	<br />
+	<div class="container">
+		<div class="row row-offcanvas row-offcanvas-right">
 			@RenderBody()
 		</div>
 	</div>
-
-
 	<environment names="Development">
 		<script src="~/lib/jquery/dist/jquery.js"></script>
 		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>

@@ -54,7 +54,8 @@ namespace WebEngine.Web.Controllers
 					list.Products = products.Select(s => new ProductView()
 					{
 						Id = s.Id,
-						Name = s.Name
+						Name = s.Name,
+						CompanyName = s.Company.Name
 					})
 					.ToArray();
 				}

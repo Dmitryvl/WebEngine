@@ -1,15 +1,17 @@
 ﻿@using WebEngine.Web.ViewModels.Product
 @model WebEngine.Web.ViewModels.Product.ProductListView
 
-@if (Model.Products != null)
-{
-	<table class="table table-bordered">
+
+<div id="sidebar" class="col-xs-6 col-sm-3 sidebar-offcanvas" role="navigation">
+	@*@Component.Invoke("CategoryList")*@
+	TODO: filter
+</div>
+<div class="col-xs-12 col-sm-9">
+	@if (Model.Products != null)
+	{
 		@foreach (ProductView product in Model.Products)
 		{
-			<tr>
-				<td>@product.Id</td>
-				<td>@product.Name</td>
-			</tr>
+			<p>@product.CompanyName @product.Name</p>
 		}
-	</table>
-}
+	}
+</div>

@@ -122,7 +122,9 @@ namespace WebEngine.Data
 
 					Product[] products = new Product[]
 					{
-						new Product() { CompanyId = 1, Category = categories[0], Name = "SM", UrlName = "sm", IsActive = true }
+						new Product() { CompanyId = 1, Category = categories[0], Name = "SM", UrlName = "sm", IsActive = true },
+						new Product() { CompanyId = 1, Category = categories[0], Name = "SmartPhone", UrlName = "smartphone", IsActive = true },
+						new Product() { CompanyId = 1, Category = categories[0], Name = "SmartPhone2", UrlName = "smartphone2", IsActive = true },
 					};
 
 					ProductToProperty[] ptp = new ProductToProperty[]

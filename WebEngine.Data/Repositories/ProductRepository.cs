@@ -82,7 +82,10 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<IList<Product>> GetProducts(string category)
 		{
-			IList<Product> products = await _context.Products.Where(c => c.Category.Name == category).ToArrayAsync();
+			IList<Product> products = await _context.Products
+				.Where(c => c.Category.Name == category)
+				.Include(c => c.Company)
+				.ToArrayAsync();
 
 			return products;
 		}
