@@ -40,23 +40,29 @@ namespace WebEngine.Web.Controllers
 
 		#endregion
 
-		public async Task<IActionResult> Index()
+		[HttpGet, Route("[controller]/{category}")]
+		public async Task<IActionResult> Index(string category)
 		{
-			ProductListView list = new ProductListView();
-
-			IList<Product> products = await _smartPhoneRepository.GetProducts();
-
-			if (products != null)
+			if (!string.IsNullOrEmpty(category))
 			{
-				list.Products = products.Select(s => new ProductView()
+				ProductListView list = new ProductListView();
+
+				IList<Product> products = await _smartPhoneRepository.GetProducts(category);
+
+				if (products != null)
 				{
-					Id = s.Id,
-					Name = s.Name
-				})
-				.ToArray();
+					list.Products = products.Select(s => new ProductView()
+					{
+						Id = s.Id,
+						Name = s.Name
+					})
+					.ToArray();
+				}
+
+				return View(list);
 			}
 
-			return View(list);
+			return View("Error");
 		}
 
 		[HttpGet, Route("[controller]{productId:int}")]

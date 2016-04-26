@@ -69,7 +69,7 @@ namespace WebEngine.Web
 			services.AddTransient<IUserRepository, UserRepository>();
 			services.AddTransient<IStoreRepository, StoreRepository>();
 			services.AddTransient<IProductRepository, ProductRepository>();
-
+			services.AddTransient<ICategotyRepository, CategoryRepository>();
 		}
 
 

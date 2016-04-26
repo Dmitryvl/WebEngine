@@ -21,7 +21,7 @@ namespace WebEngine.Core.Interfaces
 	/// </summary>
 	public interface IProductRepository : IDisposable
 	{
-		Task<IList<Product>> GetProducts();
+		Task<IList<Product>> GetProducts(string category);
 
 		Task<Product> GetProduct(int productId);
 

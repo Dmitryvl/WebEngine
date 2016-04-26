@@ -1,0 +1,8 @@
+﻿@model IEnumerable<WebEngine.Web.ViewModels.Category.CategoryView>
+
+<ul class="nav nav-sidebar">
+	@foreach (var item in Model)
+	{
+		<li><a asp-action="Index" asp-controller="Product" asp-route-category="@item.Name">@item.Name</a></li>
+	}
+</ul>
