@@ -13,6 +13,7 @@ namespace WebEngine.Core.Interfaces
 	using System.Collections.Generic;
 
 	using WebEngine.Core.Entities;
+	using WebEngine.Core.Filters;
 
 	#endregion
 
@@ -22,6 +23,8 @@ namespace WebEngine.Core.Interfaces
 	public interface IProductRepository : IDisposable
 	{
 		Task<IList<Product>> GetProductsAsync(string category);
+
+		Task<IList<Product>> GetProductsAsync(ProductFilter filter);
 
 		Task<Product> GetProductAsync(int productId);
 

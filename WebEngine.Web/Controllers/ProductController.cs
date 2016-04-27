@@ -17,7 +17,7 @@ namespace WebEngine.Web.Controllers
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Web.ViewModels.Product;
-
+	using WebEngine.Core.Filters;
 	#endregion
 
 	/// <summary>
@@ -39,6 +39,46 @@ namespace WebEngine.Web.Controllers
 		}
 
 		#endregion
+
+		[HttpPost]
+		public async Task<IActionResult> Index([FromBody] Filter filter)
+		{
+			if (filter != null)
+			{
+				ProductFilter productFilter = new ProductFilter();
+
+				productFilter.CategoryName = filter.Category;
+				productFilter.Properties = filter.Properties.Select(p => new PropertyFilter()
+				{
+					PropertyId = p.Id,
+					Value = p.Value
+				}).ToArray();
+
+				ProductListView list = new ProductListView();
+
+				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(productFilter);
+
+				if (products != null)
+				{
+					list.Products = products.Select(s => new ProductView()
+					{
+						Id = s.Id,
+						Name = s.Name,
+						CompanyName = s.Company.Name,
+						Properties = s.ProductToProperty.Select(p => new ProductPropertyView()
+						{
+							Value = p.Value,
+							SizeValue = p.SizeValue
+						})
+					});
+				}
+
+				return View(list);
+			}
+
+			return View("Error");
+		}
+
 
 		[HttpGet, Route("[controller]/{category}")]
 		public async Task<IActionResult> Index(string category)

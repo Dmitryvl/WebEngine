@@ -5,3 +5,28 @@
 <h3>@ViewData["Message"]</h3>
 
 <p>Use this area to provide additional information.</p>
+
+@section scripts {
+	<script>
+		var model = {
+			Category: "SmartPhone",
+			Properties: [
+				{ "Id": 2, "Value": "12" }
+			],
+		}
+
+		var filter = JSON.stringify(model)
+
+		$.ajax({
+			type: 'POST',
+			url: '/Product/Index',
+			contentType: 'application/json; charset=utf-8',
+			data: filter
+		}).success(function (data) {
+			alert("ok");
+		}).fail(function (data) {
+			alert("ошибка");
+		});
+
+	</script>
+}

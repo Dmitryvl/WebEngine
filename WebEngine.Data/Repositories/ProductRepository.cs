@@ -18,6 +18,7 @@ namespace WebEngine.Data.Repositories
 
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
+	using WebEngine.Core.Filters;
 
 	#endregion
 
@@ -31,6 +32,11 @@ namespace WebEngine.Data.Repositories
 		}
 
 		public async Task<bool> AddProductAsync(Product product)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<bool> UpdateProductAsync(Product smartPhone)
 		{
 			throw new NotImplementedException();
 		}
@@ -86,8 +92,85 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<IList<Product>> GetProductsAsync(string category)
 		{
-			IList<Product> products = await _context.Products
-				.Where(p => p.Category.Name == category)
+			if (!string.IsNullOrEmpty(category))
+			{
+				IList<Product> products = await _context.Products
+					.Where(p => p.Category.Name == category)
+					.Select(p => new Product()
+					{
+						Category = p.Category,
+						Id = p.Id,
+						Name = p.Name,
+						Company = p.Company,
+						ProductToProperty = p.ProductToProperty
+						.Where(pp => pp.ProductProperty.IsPreview == true)
+						.Select(pp => new ProductToProperty()
+						{
+							Value = pp.Value,
+							SizeValue = pp.SizeValue
+						}).ToArray()
+					}).ToArrayAsync();
+
+				return products;
+			}
+
+			return null;
+		}
+
+		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter)
+		{
+			if (filter != null)
+			{
+				//IEnumerable<Product> dbProducts = _context.Products.Where(p => p.Category.Name == filter.CategoryName)
+				//	.Where(p => p.ProductToProperty.Any(e => e.ProductPropertyId == filter.Properties[0].PropertyId && e.Value == filter.Properties[0].Value))
+				//	.Select(p => new Product()
+				//	{
+				//		Category = p.Category,
+				//		Id = p.Id,
+				//		Name = p.Name,
+				//		Company = p.Company,
+				//		ProductToProperty = p.ProductToProperty
+				//		.Where(pp => pp.ProductProperty.IsPreview == true)
+				//		.Select(pp => new ProductToProperty()
+				//		{
+				//			Value = pp.Value,
+				//			SizeValue = pp.SizeValue
+				//		}).ToArray()
+				//	}).ToArray();
+
+
+				IQueryable<Product> query = _context.Products.Where(p => p.Category.Name == filter.CategoryName);
+
+				for (int i = 0; i < filter.Properties.Count; i++)
+				{
+					query = query.Union(query.Where(p => p.ProductToProperty
+						.Any(e => e.ProductPropertyId == filter.Properties[i].PropertyId && e.Value == filter.Properties[i].Value)));
+				}
+
+				try
+				{
+					var x = query.Count();
+
+					//var result = query.Select(p => new Product()
+					//{
+					//	Category = p.Category,
+					//	Id = p.Id,
+					//	Name = p.Name,
+					//	Company = p.Company,
+					//	ProductToProperty = p.ProductToProperty
+					//	.Where(pp => pp.ProductProperty.IsPreview == true)
+					//	.Select(pp => new ProductToProperty()
+					//	{
+					//		Value = pp.Value,
+					//		SizeValue = pp.SizeValue
+					//	}).ToArray()
+					//}).ToArray();
+				}
+				catch (Exception ex)
+				{ }
+
+				IList<Product> products = await _context.Products
+				.Where(p => p.Category.Name == filter.CategoryName)
 				.Select(p => new Product()
 				{
 					Category = p.Category,
@@ -103,12 +186,10 @@ namespace WebEngine.Data.Repositories
 					}).ToArray()
 				}).ToArrayAsync();
 
-			return products;
-		}
+				return products;
+			}
 
-		public async Task<bool> UpdateProductAsync(Product smartPhone)
-		{
-			throw new NotImplementedException();
+			return null;
 		}
 	}
 }
