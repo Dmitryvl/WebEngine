@@ -7,11 +7,17 @@
 	TODO: filter
 </div>
 <div class="col-xs-12 col-sm-9">
-	@if (Model.Products != null)
-	{
+
 		@foreach (ProductView product in Model.Products)
 		{
-			<p>@product.CompanyName @product.Name</p>
+			<p>
+				@product.CompanyName @product.Name
+				<br />
+				@foreach (var item in product.Properties)
+				{
+					<span>@item.Value @item.SizeValue</span>
+				}
+			</p>
 		}
-	}
+	
 </div>

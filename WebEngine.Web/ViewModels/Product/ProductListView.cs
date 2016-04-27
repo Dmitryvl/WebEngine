@@ -19,6 +19,6 @@ namespace WebEngine.Web.ViewModels.Product
 	/// </summary>
 	public class ProductListView
 	{
-		public IList<ProductView> Products { get; set; }
+		public IEnumerable<ProductView> Products { get; set; }
 	}
 }

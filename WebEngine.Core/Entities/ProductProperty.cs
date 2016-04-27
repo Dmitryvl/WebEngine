@@ -34,6 +34,8 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public int ProductBasePropertyId { get; set; }
 
+		public bool IsPreview { get; set; }
+
 		/// <summary>
 		/// Gets or sets data type id.
 		/// </summary>

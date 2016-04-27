@@ -94,13 +94,15 @@ namespace WebEngine.Data
 
 					Store[] stores = new Store[]
 					{
-						new Store() { Name = "Store1", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
+						new Store() { Name = "Store", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
 					};
 
 					Company[] companies = new Company[]
 					{
-						new Company() { Name = "Company1", IsActive = true },
-						new Company() { Name = "Company2", IsActive = true }
+						new Company() { Name = "Apple", IsActive = true },
+						new Company() { Name = "Samsung", IsActive = true },
+						new Company() { Name = "Meizu", IsActive = true },
+						new Company() { Name = "Sony", IsActive = true },
 					};
 
 					Category[] categories = new Category[]
@@ -117,19 +119,34 @@ namespace WebEngine.Data
 
 					ProductProperty[] pp = new ProductProperty[]
 					{
-						new ProductProperty() { Name = "ProductProperty", IsActive = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
+						new ProductProperty() { Name = "Screen size", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new ProductProperty() { Name = "Display resolution", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new ProductProperty() { Name = "Quantity of points of a matrix",IsPreview = true, IsActive = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new ProductProperty() { Name = "Built-in camera", IsActive = true, IsPreview = false, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new ProductProperty() { Name = "Technology of the screen", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new ProductProperty() { Name = "Amount of colors of the screen", IsActive = true, IsPreview = false, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
 					};
 
 					Product[] products = new Product[]
 					{
-						new Product() { CompanyId = 1, Category = categories[0], Name = "SM", UrlName = "sm", IsActive = true },
-						new Product() { CompanyId = 1, Category = categories[0], Name = "SmartPhone", UrlName = "smartphone", IsActive = true },
-						new Product() { CompanyId = 1, Category = categories[0], Name = "SmartPhone2", UrlName = "smartphone2", IsActive = true },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5", UrlName = "iphone5", IsActive = true },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5s", UrlName = "iphone5s", IsActive = true },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6", UrlName = "iphone6", IsActive = true },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6s", UrlName = "iphone6s", IsActive = true },
+						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s6", UrlName = "galaxys6", IsActive = true },
+						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s7", UrlName = "galaxys7", IsActive = true },
+						new Product() { Company = companies[2], Category = categories[0], Name = "mx5", UrlName = "mx5", IsActive = true },
+						new Product() { Company = companies[3], Category = categories[0], Name = "z6", UrlName = "z6", IsActive = true },
 					};
 
 					ProductToProperty[] ptp = new ProductToProperty[]
 					{
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[0], Value = "111", SizeValue = "Gb" }
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[0], Value = "4", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[1], Value = "111x111", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[2], Value = "12", SizeValue = "Mg" },
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[3], Value = "true", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[4], Value = "IPS", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], ProductProperty = pp[5], Value = "11", SizeValue = "m" }
 					};
 
 					ProductOffer[] productOffers = new ProductOffer[]

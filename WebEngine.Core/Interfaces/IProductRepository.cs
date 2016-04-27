@@ -21,18 +21,18 @@ namespace WebEngine.Core.Interfaces
 	/// </summary>
 	public interface IProductRepository : IDisposable
 	{
-		Task<IList<Product>> GetProducts(string category);
+		Task<IList<Product>> GetProductsAsync(string category);
 
-		Task<Product> GetProduct(int productId);
+		Task<Product> GetProductAsync(int productId);
 
-		Task<Product> GetProduct(string category, string stringUrlName);
+		Task<Product> GetProductAsync(string category, string stringUrlName);
 
-		Task<Product> GetProduct(string category, int productId);
+		Task<Product> GetProductAsync(string category, int productId);
 
-		Task<bool> AddProduct(Product product);
+		Task<bool> AddProductAsync(Product product);
 
-		Task<bool> UpdateProduct(Product product);
+		Task<bool> UpdateProductAsync(Product product);
 
-		Task<bool> DeleteProduct(int productId);
+		Task<bool> DeleteProductAsync(int productId);
 	}
 }

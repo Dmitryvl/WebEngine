@@ -8,6 +8,8 @@ namespace WebEngine.Web.ViewModels.Product
 {
 	#region Usings
 
+	using System.Collections.Generic;
+
 	#endregion
 
 	/// <summary>
@@ -21,5 +23,6 @@ namespace WebEngine.Web.ViewModels.Product
 
 		public string CompanyName { get; set; }
 
+		public IEnumerable<ProductPropertyView> Properties { get; set; }
 	}
 }

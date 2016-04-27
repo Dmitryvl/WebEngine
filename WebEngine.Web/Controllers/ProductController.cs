@@ -47,7 +47,7 @@ namespace WebEngine.Web.Controllers
 			{
 				ProductListView list = new ProductListView();
 
-				IList<Product> products = await _smartPhoneRepository.GetProducts(category);
+				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(category);
 
 				if (products != null)
 				{
@@ -55,9 +55,13 @@ namespace WebEngine.Web.Controllers
 					{
 						Id = s.Id,
 						Name = s.Name,
-						CompanyName = s.Company.Name
-					})
-					.ToArray();
+						CompanyName = s.Company.Name,
+						Properties = s.ProductToProperty.Select(p => new ProductPropertyView()
+						{
+							Value = p.Value,
+							SizeValue = p.SizeValue
+						})
+					});
 				}
 
 				return View(list);
@@ -71,7 +75,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (productId > 0)
 			{
-				Product product = await _smartPhoneRepository.GetProduct(productId);
+				Product product = await _smartPhoneRepository.GetProductAsync(productId);
 
 				if (product != null)
 				{
@@ -89,7 +93,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (!string.IsNullOrEmpty(category) && productId > 0)
 			{
-				Product product = await _smartPhoneRepository.GetProduct(category, productId);
+				Product product = await _smartPhoneRepository.GetProductAsync(category, productId);
 
 				if (product != null)
 				{
@@ -107,7 +111,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(productUrlName))
 			{
-				Product product = await _smartPhoneRepository.GetProduct(category, productUrlName);
+				Product product = await _smartPhoneRepository.GetProductAsync(category, productUrlName);
 
 				if (product != null)
 				{
@@ -125,13 +129,13 @@ namespace WebEngine.Web.Controllers
 			FullProductView productView = new FullProductView();
 
 			productView.ProductId = product.Id;
-			productView.Name = product.Name;
+			productView.Name = product.Company.Name + " " + product.Name;
 
 			productView.Properties = product.ProductToProperty
 				.Select(s => new ProductPropertyView()
 				{
 					PropertyId = s.ProductPropertyId,
-					PropertyName = s.Product.Name,
+					PropertyName = s.ProductProperty.Name,
 					BasePropertyId = s.ProductProperty.ProductBaseProperty.Id,
 					Value = s.Value,
 					SizeValue = s.SizeValue
@@ -139,7 +143,6 @@ namespace WebEngine.Web.Controllers
 
 			return productView;
 		}
-
 
 		protected override void Dispose(bool disposing)
 		{
