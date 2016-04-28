@@ -54,8 +54,8 @@ namespace WebEngine.Data.Repositories
 					.Where(s => s.Id == productId)
 					.Include(s => s.Company)
 					.Include(s => s.ProductToProperty)
-					.ThenInclude(sp => sp.ProductProperty)
-					.ThenInclude(b => b.ProductBaseProperty)
+					.ThenInclude(sp => sp.Property)
+					.ThenInclude(b => b.BaseProperty)
 					.FirstOrDefaultAsync();
 
 				return smartPhone;
@@ -70,8 +70,8 @@ namespace WebEngine.Data.Repositories
 				.Where(s => s.Category.Name == category && s.Id == productId)
 				.Include(s => s.Company)
 				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.ProductProperty)
-				.ThenInclude(b => b.ProductBaseProperty)
+				.ThenInclude(sp => sp.Property)
+				.ThenInclude(b => b.BaseProperty)
 				.FirstOrDefaultAsync();
 
 			return product;
@@ -83,8 +83,8 @@ namespace WebEngine.Data.Repositories
 				.Where(s => s.Category.Name == category && s.UrlName == stringUrlName)
 				.Include(s => s.Company)
 				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.ProductProperty)
-				.ThenInclude(b => b.ProductBaseProperty)
+				.ThenInclude(sp => sp.Property)
+				.ThenInclude(b => b.BaseProperty)
 				.FirstOrDefaultAsync();
 
 			return product;
@@ -103,7 +103,7 @@ namespace WebEngine.Data.Repositories
 						Name = p.Name,
 						Company = p.Company,
 						ProductToProperty = p.ProductToProperty
-						.Where(pp => pp.ProductProperty.IsPreview == true)
+						.Where(pp => pp.Property.IsPreview == true)
 						.Select(pp => new ProductToProperty()
 						{
 							Value = pp.Value,
@@ -143,28 +143,27 @@ namespace WebEngine.Data.Repositories
 
 				for (int i = 0; i < filter.Properties.Count; i++)
 				{
-					query = query.Union(query.Where(p => p.ProductToProperty
-						.Any(e => e.ProductPropertyId == filter.Properties[i].PropertyId && e.Value == filter.Properties[i].Value)));
+					query = query.Where(p => p.ProductToProperty.Any(e => e.PropertyId == filter.Properties[i].PropertyId && e.Value == filter.Properties[i].Value));
 				}
 
 				try
 				{
-					var x = query.Count();
+					//var x = query.Count();
 
-					//var result = query.Select(p => new Product()
-					//{
-					//	Category = p.Category,
-					//	Id = p.Id,
-					//	Name = p.Name,
-					//	Company = p.Company,
-					//	ProductToProperty = p.ProductToProperty
-					//	.Where(pp => pp.ProductProperty.IsPreview == true)
-					//	.Select(pp => new ProductToProperty()
-					//	{
-					//		Value = pp.Value,
-					//		SizeValue = pp.SizeValue
-					//	}).ToArray()
-					//}).ToArray();
+					var result = query.Select(p => new Product()
+					{
+						Category = p.Category,
+						Id = p.Id,
+						Name = p.Name,
+						Company = p.Company,
+						ProductToProperty = p.ProductToProperty
+						.Where(pp => pp.Property.IsPreview == true)
+						.Select(pp => new ProductToProperty()
+						{
+							Value = pp.Value,
+							SizeValue = pp.SizeValue
+						}).ToArray()
+					}).ToArray();
 				}
 				catch (Exception ex)
 				{ }
@@ -178,7 +177,7 @@ namespace WebEngine.Data.Repositories
 					Name = p.Name,
 					Company = p.Company,
 					ProductToProperty = p.ProductToProperty
-					.Where(pp => pp.ProductProperty.IsPreview == true)
+					.Where(pp => pp.Property.IsPreview == true)
 					.Select(pp => new ProductToProperty()
 					{
 						Value = pp.Value,

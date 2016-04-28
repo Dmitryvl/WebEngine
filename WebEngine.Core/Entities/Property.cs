@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProductProperty.cs" author="Dzmitry Prakapenka">
+// <copyright file="Property.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,9 +13,9 @@ namespace WebEngine.Core.Entities
 	#endregion
 
 	/// <summary>
-	/// <see cref="ProductProperty"/> class.
+	/// <see cref="Property"/> class.
 	/// </summary>
-	public class ProductProperty
+	public class Property
 	{
 		#region Properties
 
@@ -30,9 +30,9 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="ProductBasePropertyId"/>.
+		/// Gets or sets <see cref="BasePropertyId"/>.
 		/// </summary>
-		public int ProductBasePropertyId { get; set; }
+		public int BasePropertyId { get; set; }
 
 		public bool IsPreview { get; set; }
 
@@ -42,7 +42,7 @@ namespace WebEngine.Core.Entities
 		public int DataTypeId { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether <see cref="ProductProperty"/> is active.
+		/// Gets or sets a value indicating whether <see cref="Property"/> is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 
@@ -53,7 +53,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets smartphone base property.
 		/// </summary>
-		public virtual ProductBaseProperty ProductBaseProperty { get; set; }
+		public virtual BaseProperty BaseProperty { get; set; }
 
 		/// <summary>
 		/// Gets or sets <see cref="ProductToProperty"/>.

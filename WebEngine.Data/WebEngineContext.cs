@@ -68,14 +68,14 @@ namespace WebEngine.Data
 		public DbSet<DataType> DataTypes { get; set; }
 
 		/// <summary>
-		/// Gets or sets smartphone base properties.
+		/// Gets or sets base properties.
 		/// </summary>
-		public DbSet<ProductBaseProperty> ProductBaseProperties { get; set; }
+		public DbSet<BaseProperty> BaseProperties { get; set; }
 
 		/// <summary>
-		/// Gets or sets smartphone properties.
+		/// Gets or sets properties.
 		/// </summary>
-		public DbSet<ProductProperty> ProductProperties { get; set; }
+		public DbSet<Property> Properties { get; set; }
 
 		/// <summary>
 		/// Gets or sets smartphones.
@@ -138,11 +138,11 @@ namespace WebEngine.Data
 			builder.Entity<Category>().HasKey(c => c.Id);
 			builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<ProductBaseProperty>().HasKey(s => s.Id);
-			builder.Entity<ProductBaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<BaseProperty>().HasKey(s => s.Id);
+			builder.Entity<BaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<ProductProperty>().HasKey(s => s.Id);
-			builder.Entity<ProductProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<Property>().HasKey(s => s.Id);
+			builder.Entity<Property>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<ProductToProperty>().Property(s => s.Value).HasMaxLength(stringLength);
 			builder.Entity<ProductToProperty>().Property(s => s.SizeValue).HasMaxLength(stringLength);
@@ -183,16 +183,16 @@ namespace WebEngine.Data
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<ProductProperty>()
-				.HasOne(s => s.ProductBaseProperty)
-				.WithMany(c => c.ProductProperties)
-				.HasForeignKey(s => s.ProductBasePropertyId)
+			builder.Entity<Property>()
+				.HasOne(s => s.BaseProperty)
+				.WithMany(c => c.Properties)
+				.HasForeignKey(s => s.BasePropertyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.Entity<ProductProperty>()
+			builder.Entity<Property>()
 				.HasOne(s => s.DataType)
-				.WithMany(c => c.ProductProperties)
+				.WithMany(c => c.Properties)
 				.HasForeignKey(s => s.DataTypeId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
@@ -225,7 +225,7 @@ namespace WebEngine.Data
 				.HasForeignKey(s => s.ProductId);
 
 			builder.Entity<ProductToProperty>()
-				.HasKey(s => new { s.ProductId, s.ProductPropertyId });
+				.HasKey(s => new { s.ProductId, s.PropertyId });
 
 			builder.Entity<ProductToProperty>()
 				.HasOne(s => s.Product)
@@ -233,9 +233,9 @@ namespace WebEngine.Data
 				.HasForeignKey(s => s.ProductId);
 
 			builder.Entity<ProductToProperty>()
-				.HasOne(s => s.ProductProperty)
+				.HasOne(s => s.Property)
 				.WithMany(sm => sm.ProductToProperty)
-				.HasForeignKey(s => s.ProductPropertyId);
+				.HasForeignKey(s => s.PropertyId);
 
 			#endregion
 		}

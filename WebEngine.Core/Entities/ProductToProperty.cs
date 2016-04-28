@@ -23,9 +23,9 @@ namespace WebEngine.Core.Entities
 		public int ProductId { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="ProductPropertyId"/>.
+		/// Gets or sets <see cref="PropertyId"/>.
 		/// </summary>
-		public int ProductPropertyId { get; set; }
+		public int PropertyId { get; set; }
 
 		/// <summary>
 		/// Gets or sets value.
@@ -42,14 +42,14 @@ namespace WebEngine.Core.Entities
 		#region Navigation properties
 
 		/// <summary>
-		/// Gets or sets smartphone.
+		/// Gets or sets product.
 		/// </summary>
 		public virtual Product Product { get; set; }
 
 		/// <summary>
-		/// Gets or sets <see cref="ProductProperty"/>.
+		/// Gets or sets property.
 		/// </summary>
-		public virtual ProductProperty ProductProperty { get; set; }
+		public virtual Property Property { get; set; }
 
 		#endregion
 	}

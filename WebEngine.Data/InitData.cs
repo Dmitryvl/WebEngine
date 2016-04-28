@@ -112,19 +112,19 @@ namespace WebEngine.Data
 						new Category() { Name = "PC", IsActive = true }
 					};
 
-					ProductBaseProperty[] productBaseProperty = new ProductBaseProperty[]
+					BaseProperty[] productBaseProperty = new BaseProperty[]
 					{
-						new ProductBaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
+						new BaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
 					};
 
-					ProductProperty[] pp = new ProductProperty[]
+					Property[] pp = new Property[]
 					{
-						new ProductProperty() { Name = "Screen size", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new ProductProperty() { Name = "Display resolution", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new ProductProperty() { Name = "Quantity of points of a matrix",IsPreview = true, IsActive = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new ProductProperty() { Name = "Built-in camera", IsActive = true, IsPreview = false, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new ProductProperty() { Name = "Technology of the screen", IsActive = true, IsPreview = true, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new ProductProperty() { Name = "Amount of colors of the screen", IsActive = true, IsPreview = false, ProductBaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
+						new Property() { Name = "Screen size", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Display resolution", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Quantity of points of a matrix",IsPreview = true, IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Built-in camera", IsActive = true, IsPreview = false, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Technology of the screen", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Amount of colors of the screen", IsActive = true, IsPreview = false, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
 					};
 
 					Product[] products = new Product[]
@@ -141,12 +141,12 @@ namespace WebEngine.Data
 
 					ProductToProperty[] ptp = new ProductToProperty[]
 					{
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[0], Value = "4", SizeValue = "" },
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[1], Value = "111x111", SizeValue = "" },
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[2], Value = "12", SizeValue = "Mg" },
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[3], Value = "true", SizeValue = "Gb" },
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[4], Value = "IPS", SizeValue = "Gb" },
-						new ProductToProperty() { Product = products[0], ProductProperty = pp[5], Value = "11", SizeValue = "m" }
+						new ProductToProperty() { Product = products[0], Property = pp[0], Value = "4", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], Property = pp[1], Value = "111x111", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], Property = pp[2], Value = "12", SizeValue = "Mg" },
+						new ProductToProperty() { Product = products[0], Property = pp[3], Value = "true", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], Property = pp[4], Value = "IPS", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], Property = pp[5], Value = "11", SizeValue = "m" }
 					};
 
 					ProductOffer[] productOffers = new ProductOffer[]
@@ -163,8 +163,8 @@ namespace WebEngine.Data
 					db.Stores.AddRange(stores);
 					db.Companies.AddRange(companies);
 					db.Categories.AddRange(categories);
-					db.ProductBaseProperties.AddRange(productBaseProperty);
-					db.ProductProperties.AddRange(pp);
+					db.BaseProperties.AddRange(productBaseProperty);
+					db.Properties.AddRange(pp);
 					db.Products.AddRange(products);
 					db.ProductOffers.AddRange(productOffers);
 					db.ProductToProperty.AddRange(ptp);

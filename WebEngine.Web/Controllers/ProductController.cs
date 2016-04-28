@@ -174,9 +174,9 @@ namespace WebEngine.Web.Controllers
 			productView.Properties = product.ProductToProperty
 				.Select(s => new ProductPropertyView()
 				{
-					PropertyId = s.ProductPropertyId,
-					PropertyName = s.ProductProperty.Name,
-					BasePropertyId = s.ProductProperty.ProductBaseProperty.Id,
+					PropertyId = s.PropertyId,
+					PropertyName = s.Property.Name,
+					BasePropertyId = s.Property.BaseProperty.Id,
 					Value = s.Value,
 					SizeValue = s.SizeValue
 				}).ToArray();

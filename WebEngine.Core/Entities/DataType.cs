@@ -36,7 +36,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets <see cref="SmartPhoneProperties"/>
 		/// </summary>
-		public virtual ICollection<ProductProperty> ProductProperties { get; set; }
+		public virtual ICollection<Property> Properties { get; set; }
 		
 		#endregion
 	}
