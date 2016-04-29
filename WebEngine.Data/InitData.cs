@@ -171,6 +171,33 @@ namespace WebEngine.Data
 
 					await db.SaveChangesAsync();
 
+					for (int i = 0; i < 2; i++)
+					{
+						Product[] p2 = new Product[900];
+
+						for (int j = 0; j < 900; j++)
+						{
+							p2[j] = new Product() { CompanyId = 1, CategoryId = 1, Name = "test" + i, UrlName = "test", IsActive = true };
+						}
+
+						db.Products.AddRange(p2);
+
+						await db.SaveChangesAsync();
+					}
+
+					for (int i = 0; i < 20; i++)
+					{
+						Product[] p3 = new Product[900];
+
+						for (int j = 0; j < 900; j++)
+						{
+							p3[j] = new Product() { CompanyId = 1, CategoryId = 2, Name = "test" + i, UrlName = "test", IsActive = true };
+						}
+
+						db.Products.AddRange(p3);
+
+						await db.SaveChangesAsync();
+					}
 				}
 			}
 		}

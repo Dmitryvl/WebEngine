@@ -211,6 +211,10 @@ namespace WebEngine.Data
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
+			builder.Entity<Product>()
+				.HasMany(s => s.ProductToProperty)
+				.WithOne(p => p.Product);
+
 			builder.Entity<ProductOffer>()
 				.HasKey(s => new { s.StoreId, s.ProductId });
 

@@ -10,7 +10,7 @@ namespace WebEngine.Data.Repositories
 	#region Usings
 
 	using System;
-	using System.Linq;
+	//using System.Linq;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
@@ -19,6 +19,7 @@ namespace WebEngine.Data.Repositories
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Core.Filters;
+	using System.Linq;
 
 	#endregion
 
@@ -48,71 +49,75 @@ namespace WebEngine.Data.Repositories
 
 		public async Task<Product> GetProductAsync(int productId)
 		{
-			if (productId > DEFAULT_ID)
-			{
-				Product smartPhone = await _context.Products
-					.Where(s => s.Id == productId)
-					.Include(s => s.Company)
-					.Include(s => s.ProductToProperty)
-					.ThenInclude(sp => sp.Property)
-					.ThenInclude(b => b.BaseProperty)
-					.FirstOrDefaultAsync();
+			//if (productId > DEFAULT_ID)
+			//{
+			//	Product smartPhone = await _context.Products
+			//		.Where(s => s.Id == productId)
+			//		.Include(s => s.Company)
+			//		.Include(s => s.ProductToProperty)
+			//		.ThenInclude(sp => sp.Property)
+			//		.ThenInclude(b => b.BaseProperty)
+			//		.FirstOrDefaultAsync();
 
-				return smartPhone;
-			}
+			//	return smartPhone;
+			//}
 
 			return null;
 		}
 
 		public async Task<Product> GetProductAsync(string category, int productId)
 		{
-			Product product = await _context.Products
-				.Where(s => s.Category.Name == category && s.Id == productId)
-				.Include(s => s.Company)
-				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.Property)
-				.ThenInclude(b => b.BaseProperty)
-				.FirstOrDefaultAsync();
+			//Product product = await _context.Products
+			//	.Where(s => s.Category.Name == category && s.Id == productId)
+			//	.Include(s => s.Company)
+			//	.Include(s => s.ProductToProperty)
+			//	.ThenInclude(sp => sp.Property)
+			//	.ThenInclude(b => b.BaseProperty)
+			//	.FirstOrDefaultAsync();
 
-			return product;
+			//return product;
+
+			return null;
 		}
 
 		public async Task<Product> GetProductAsync(string category, string stringUrlName)
 		{
-			Product product = await _context.Products
-				.Where(s => s.Category.Name == category && s.UrlName == stringUrlName)
-				.Include(s => s.Company)
-				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.Property)
-				.ThenInclude(b => b.BaseProperty)
-				.FirstOrDefaultAsync();
+			//Product product = await _context.Products
+			//	.Where(s => s.Category.Name == category && s.UrlName == stringUrlName)
+			//	.Include(s => s.Company)
+			//	.Include(s => s.ProductToProperty)
+			//	.ThenInclude(sp => sp.Property)
+			//	.ThenInclude(b => b.BaseProperty)
+			//	.FirstOrDefaultAsync();
 
-			return product;
+			//return product;
+
+			return null;
 		}
 
 		public async Task<IList<Product>> GetProductsAsync(string category)
 		{
-			if (!string.IsNullOrEmpty(category))
-			{
-				IList<Product> products = await _context.Products
-					.Where(p => p.Category.Name == category)
-					.Select(p => new Product()
-					{
-						Category = p.Category,
-						Id = p.Id,
-						Name = p.Name,
-						Company = p.Company,
-						ProductToProperty = p.ProductToProperty
-						.Where(pp => pp.Property.IsPreview == true)
-						.Select(pp => new ProductToProperty()
-						{
-							Value = pp.Value,
-							SizeValue = pp.SizeValue
-						}).ToArray()
-					}).ToArrayAsync();
+			//if (!string.IsNullOrEmpty(category))
+			//{
+			//	IList<Product> products = await _context.Products
+			//		.Where(p => p.Category.Name == category)
+			//		.Select(p => new Product()
+			//		{
+			//			Category = p.Category,
+			//			Id = p.Id,
+			//			Name = p.Name,
+			//			Company = p.Company,
+			//			ProductToProperty = p.ProductToProperty
+			//			.Where(pp => pp.Property.IsPreview == true)
+			//			.Select(pp => new ProductToProperty()
+			//			{
+			//				Value = pp.Value,
+			//				SizeValue = pp.SizeValue
+			//			}).ToArray()
+			//		}).ToArrayAsync();
 
-				return products;
-			}
+			//	return products;
+			//}
 
 			return null;
 		}
@@ -121,71 +126,16 @@ namespace WebEngine.Data.Repositories
 		{
 			if (filter != null)
 			{
-				//IEnumerable<Product> dbProducts = _context.Products.Where(p => p.Category.Name == filter.CategoryName)
-				//	.Where(p => p.ProductToProperty.Any(e => e.ProductPropertyId == filter.Properties[0].PropertyId && e.Value == filter.Properties[0].Value))
-				//	.Select(p => new Product()
-				//	{
-				//		Category = p.Category,
-				//		Id = p.Id,
-				//		Name = p.Name,
-				//		Company = p.Company,
-				//		ProductToProperty = p.ProductToProperty
-				//		.Where(pp => pp.ProductProperty.IsPreview == true)
-				//		.Select(pp => new ProductToProperty()
-				//		{
-				//			Value = pp.Value,
-				//			SizeValue = pp.SizeValue
-				//		}).ToArray()
-				//	}).ToArray();
+				IQueryable<Product> products = _context.Products
+					.Include(s => s.Company)
+					.Include(s => s.ProductToProperty)
+					.Where(s => s.Category.Name == filter.CategoryName);
 
+				var x = await products.ToArrayAsync();
 
-				IQueryable<Product> query = _context.Products.Where(p => p.Category.Name == filter.CategoryName);
+				//return await products.ToArrayAsync();
 
-				for (int i = 0; i < filter.Properties.Count; i++)
-				{
-					query = query.Where(p => p.ProductToProperty.Any(e => e.PropertyId == filter.Properties[i].PropertyId && e.Value == filter.Properties[i].Value));
-				}
-
-				try
-				{
-					//var x = query.Count();
-
-					var result = query.Select(p => new Product()
-					{
-						Category = p.Category,
-						Id = p.Id,
-						Name = p.Name,
-						Company = p.Company,
-						ProductToProperty = p.ProductToProperty
-						.Where(pp => pp.Property.IsPreview == true)
-						.Select(pp => new ProductToProperty()
-						{
-							Value = pp.Value,
-							SizeValue = pp.SizeValue
-						}).ToArray()
-					}).ToArray();
-				}
-				catch (Exception ex)
-				{ }
-
-				IList<Product> products = await _context.Products
-				.Where(p => p.Category.Name == filter.CategoryName)
-				.Select(p => new Product()
-				{
-					Category = p.Category,
-					Id = p.Id,
-					Name = p.Name,
-					Company = p.Company,
-					ProductToProperty = p.ProductToProperty
-					.Where(pp => pp.Property.IsPreview == true)
-					.Select(pp => new ProductToProperty()
-					{
-						Value = pp.Value,
-						SizeValue = pp.SizeValue
-					}).ToArray()
-				}).ToArrayAsync();
-
-				return products;
+				return new List<Product>();
 			}
 
 			return null;

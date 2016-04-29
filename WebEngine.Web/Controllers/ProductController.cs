@@ -41,7 +41,7 @@ namespace WebEngine.Web.Controllers
 		#endregion
 
 		[HttpPost]
-		public async Task<IActionResult> Index([FromBody] Filter filter)
+		public async Task<ProductListView> Index([FromBody] Filter filter)
 		{
 			if (filter != null)
 			{
@@ -73,10 +73,10 @@ namespace WebEngine.Web.Controllers
 					});
 				}
 
-				return View(list);
+				return list;
 			}
 
-			return View("Error");
+			return null;
 		}
 
 
