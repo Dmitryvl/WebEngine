@@ -6,6 +6,7 @@
 
 namespace WebEngine.Web
 {
+
 	#region Usings
 
 	using Microsoft.AspNet.Builder;
@@ -15,8 +16,9 @@ namespace WebEngine.Web
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Logging;
 
-	using WebEngine.Data;
+	using WebEngine.Core.Config;
 	using WebEngine.Core.Interfaces;
+	using WebEngine.Data;
 	using WebEngine.Data.Repositories;
 
 	#endregion
@@ -65,6 +67,13 @@ namespace WebEngine.Web
 					options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
 
 			services.AddMvc();
+
+			services.AddOptions();
+
+			services.Configure<AppConfig>(opt =>
+			{
+				opt.ConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+			});
 
 			services.AddTransient<IUserRepository, UserRepository>();
 			services.AddTransient<IStoreRepository, StoreRepository>();

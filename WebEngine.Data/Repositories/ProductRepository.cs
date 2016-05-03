@@ -1,12 +1,11 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="SmartPhoneRepository.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductRepository.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
 namespace WebEngine.Data.Repositories
 {
-
 	#region Usings
 
 	using System;
@@ -18,7 +17,9 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.Data.Entity;
+	using Microsoft.Extensions.OptionsModel;
 
+	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Filters;
 	using WebEngine.Core.Interfaces;
@@ -30,9 +31,20 @@ namespace WebEngine.Data.Repositories
 	/// </summary>
 	public class ProductRepository : BaseRepository, IProductRepository
 	{
-		public ProductRepository(IServiceProvider services) : base(services)
+		#region Constructors
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProductRepository" /> class.
+		/// </summary>
+		/// <param name="services">IServiceProvider services.</param>
+		/// <param name="config">Application config.</param>
+		public ProductRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
 		{
 		}
+
+		#endregion
+
+		#region Public methods
 
 		public async Task<bool> AddProductAsync(Product product)
 		{
@@ -235,6 +247,6 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
-
+		#endregion
 	}
 }

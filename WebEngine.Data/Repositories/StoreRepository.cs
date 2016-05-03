@@ -13,7 +13,9 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.Data.Entity;
+	using Microsoft.Extensions.OptionsModel;
 
+	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
 
@@ -26,7 +28,12 @@ namespace WebEngine.Data.Repositories
 	{
 		#region Constructors
 
-		public StoreRepository(IServiceProvider services) : base(services)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StoreRepository" /> class.
+		/// </summary>
+		/// <param name="services">IServiceProvider services.</param>
+		/// <param name="config">Application config.</param>
+		public StoreRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
 		{
 		}
 

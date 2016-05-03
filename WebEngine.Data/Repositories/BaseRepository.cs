@@ -11,6 +11,9 @@ namespace WebEngine.Data.Repositories
 	using System;
 
 	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.OptionsModel;
+
+	using WebEngine.Core.Config;
 
 	#endregion
 
@@ -31,6 +34,11 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		protected readonly WebEngineContext _context;
 
+		/// <summary>
+		/// Connection string.
+		/// </summary>
+		protected readonly string _connectionString;
+
 		#endregion
 
 		#region Public methods
@@ -39,9 +47,10 @@ namespace WebEngine.Data.Repositories
 		/// Initializes a new instance of the <see cref="BaseRepository" /> class.
 		/// </summary>
 		/// <param name="services">Service provider.</param>
-		public BaseRepository(IServiceProvider services)
+		public BaseRepository(IServiceProvider services, IOptions<AppConfig> config)
 		{
 			_context = services.GetService<WebEngineContext>();
+			_connectionString = config.Value.ConnectionString;
 		}
 
 		/// <summary>

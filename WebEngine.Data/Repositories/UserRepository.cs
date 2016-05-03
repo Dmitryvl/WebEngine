@@ -13,7 +13,9 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.Data.Entity;
+	using Microsoft.Extensions.OptionsModel;
 
+	using WebEngine.Core.Config;
 	using WebEngine.Core.Crypto;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
@@ -30,8 +32,9 @@ namespace WebEngine.Data.Repositories
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UserRepository" /> class.
 		/// </summary>
-		/// <param name="services">Service provider.</param>
-		public UserRepository(IServiceProvider services) : base(services)
+		/// <param name="services">IServiceProvider services.</param>
+		/// <param name="config">Application config.</param>
+		public UserRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
 		{
 		}
 
