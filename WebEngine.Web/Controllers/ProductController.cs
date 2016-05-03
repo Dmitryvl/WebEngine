@@ -18,6 +18,7 @@ namespace WebEngine.Web.Controllers
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Web.ViewModels.Product;
 	using WebEngine.Core.Filters;
+
 	#endregion
 
 	/// <summary>
@@ -27,15 +28,15 @@ namespace WebEngine.Web.Controllers
 	{
 		#region Private fields
 
-		private readonly IProductRepository _smartPhoneRepository;
+		private readonly IProductRepository _productRepository;
 
 		#endregion
 
 		#region Constructors
 
-		public ProductController(IProductRepository smartPhoneRepository)
+		public ProductController(IProductRepository productRepository)
 		{
-			_smartPhoneRepository = smartPhoneRepository;
+			_productRepository = productRepository;
 		}
 
 		#endregion
@@ -56,7 +57,7 @@ namespace WebEngine.Web.Controllers
 
 				ProductListView list = new ProductListView();
 
-				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(productFilter, 1, 1);
+				IList<Product> products = await _productRepository.GetProductsAsync(productFilter, 1, 1);
 
 				if (products != null)
 				{
@@ -64,7 +65,7 @@ namespace WebEngine.Web.Controllers
 					{
 						Id = s.Id,
 						Name = s.Name,
-						CompanyName = s.Company.Name
+						//CompanyName = s.Company.Name
 					});
 				}
 
@@ -82,7 +83,7 @@ namespace WebEngine.Web.Controllers
 			{
 				ProductListView list = new ProductListView();
 
-				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(category);
+				IList<Product> products = await _productRepository.GetProductsAsync(category);
 
 				if (products != null)
 				{
@@ -110,7 +111,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (productId > 0)
 			{
-				Product product = await _smartPhoneRepository.GetProductAsync(productId);
+				Product product = await _productRepository.GetProductAsync(productId);
 
 				if (product != null)
 				{
@@ -128,7 +129,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (!string.IsNullOrEmpty(category) && productId > 0)
 			{
-				Product product = await _smartPhoneRepository.GetProductAsync(category, productId);
+				Product product = await _productRepository.GetProductAsync(category, productId);
 
 				if (product != null)
 				{
@@ -146,7 +147,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(productUrlName))
 			{
-				Product product = await _smartPhoneRepository.GetProductAsync(category, productUrlName);
+				Product product = await _productRepository.GetProductAsync(category, productUrlName);
 
 				if (product != null)
 				{
@@ -183,7 +184,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (disposing)
 			{
-				_smartPhoneRepository.Dispose();
+				_productRepository.Dispose();
 			}
 
 			base.Dispose(disposing);
