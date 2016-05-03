@@ -35,6 +35,11 @@ namespace WebEngine.Core.Entities
 		public string UrlName { get; set; }
 
 		/// <summary>
+		/// Gets or sets short info.
+		/// </summary>
+		public string ShortInfo { get; set; }
+
+		/// <summary>
 		/// Gets or sets companty identifier.
 		/// </summary>
 		public int CompanyId { get; set; }

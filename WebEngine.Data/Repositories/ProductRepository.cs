@@ -109,7 +109,7 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(category))
 			{
-				IList<Product> products = await _context.Products
+				Product[] products = await _context.Products
 					.Where(p => p.Category.Name == category)
 					.Select(p => new Product()
 					{
@@ -117,13 +117,7 @@ namespace WebEngine.Data.Repositories
 						Id = p.Id,
 						Name = p.Name,
 						Company = p.Company,
-						ProductToProperty = p.ProductToProperty
-						.Where(pp => pp.Property.IsPreview == true)
-						.Select(pp => new ProductToProperty()
-						{
-							Value = pp.Value,
-							SizeValue = pp.SizeValue
-						}).ToArray()
+						ShortInfo = p.ShortInfo
 					}).ToArrayAsync();
 
 				return products;

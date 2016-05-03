@@ -129,14 +129,14 @@ namespace WebEngine.Data
 
 					Product[] products = new Product[]
 					{
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5", UrlName = "iphone5", IsActive = true },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5s", UrlName = "iphone5s", IsActive = true },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6", UrlName = "iphone6", IsActive = true },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6s", UrlName = "iphone6s", IsActive = true },
-						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s6", UrlName = "galaxys6", IsActive = true },
-						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s7", UrlName = "galaxys7", IsActive = true },
-						new Product() { Company = companies[2], Category = categories[0], Name = "mx5", UrlName = "mx5", IsActive = true },
-						new Product() { Company = companies[3], Category = categories[0], Name = "z6", UrlName = "z6", IsActive = true },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5", UrlName = "iphone5", IsActive = true, ShortInfo = "4, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5s", UrlName = "iphone5s", IsActive = true, ShortInfo = "5, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6", UrlName = "iphone6", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6s", UrlName = "iphone6s", IsActive = true, ShortInfo = "5.15, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s6", UrlName = "galaxys6", IsActive = true, ShortInfo = "5.7, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s7", UrlName = "galaxys7", IsActive = true, ShortInfo = "5.5, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[2], Category = categories[0], Name = "mx5", UrlName = "mx5", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
+						new Product() { Company = companies[3], Category = categories[0], Name = "z6", UrlName = "z6", IsActive = true, ShortInfo = "5.2, 111x111, 12 Мg, IPS" },
 					};
 
 					ProductToProperty[] ptp = new ProductToProperty[]
@@ -171,19 +171,19 @@ namespace WebEngine.Data
 
 					await db.SaveChangesAsync();
 
-					for (int i = 0; i < 5; i++)
-					{
-						Product[] p2 = new Product[900];
+					//for (int i = 0; i < 5; i++)
+					//{
+					//	Product[] p2 = new Product[900];
 
-						for (int j = 0; j < 900; j++)
-						{
-							p2[j] = new Product() { CompanyId = 1, CategoryId = 1, Name = "test" + i, UrlName = "test", IsActive = true };
-						}
+					//	for (int j = 0; j < 900; j++)
+					//	{
+					//		p2[j] = new Product() { CompanyId = 1, CategoryId = 1, Name = "test" + i, UrlName = "test", IsActive = true };
+					//	}
 
-						db.Products.AddRange(p2);
+					//	db.Products.AddRange(p2);
 
-						await db.SaveChangesAsync();
-					}
+					//	await db.SaveChangesAsync();
+					//}
 
 					//for (int i = 0; i < 20; i++)
 					//{
@@ -199,25 +199,25 @@ namespace WebEngine.Data
 					//	await db.SaveChangesAsync();
 					//}
 
-					for (int i = 1; i < 6; i++)
-					{
-						ProductToProperty[] p3 = new ProductToProperty[990];
+					//for (int i = 1; i < 6; i++)
+					//{
+					//	ProductToProperty[] p3 = new ProductToProperty[990];
 
-						for (int j = 0; j < 990; j++)
-						{
-							p3[j] = new ProductToProperty()
-							{
-								PropertyId = i,
-								ProductId = j+4,
-								Value = "11",
-								SizeValue = ""
-							};
-						}
+					//	for (int j = 0; j < 990; j++)
+					//	{
+					//		p3[j] = new ProductToProperty()
+					//		{
+					//			PropertyId = i,
+					//			ProductId = j+4,
+					//			Value = "11",
+					//			SizeValue = ""
+					//		};
+					//	}
 
-						db.ProductToProperty.AddRange(p3);
+					//	db.ProductToProperty.AddRange(p3);
 
-						await db.SaveChangesAsync();
-					}
+					//	await db.SaveChangesAsync();
+					//}
 				}
 			}
 		}

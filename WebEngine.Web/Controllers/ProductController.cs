@@ -76,7 +76,7 @@ namespace WebEngine.Web.Controllers
 		}
 
 
-		[HttpGet, Route("[controller]/{category}")]
+		[HttpGet, Route("items/{category}")]
 		public async Task<IActionResult> Index(string category)
 		{
 			if (!string.IsNullOrEmpty(category))
@@ -87,16 +87,12 @@ namespace WebEngine.Web.Controllers
 
 				if (products != null)
 				{
-					list.Products = products.Select(s => new ProductView()
+					list.Products = products.Select(p => new ProductView()
 					{
-						Id = s.Id,
-						Name = s.Name,
-						CompanyName = s.Company.Name,
-						Properties = s.ProductToProperty.Select(p => new ProductPropertyView()
-						{
-							Value = p.Value,
-							SizeValue = p.SizeValue
-						})
+						Id = p.Id,
+						Name = p.Name,
+						ShortInfo = p.ShortInfo,
+						CompanyName = p.Company.Name
 					});
 				}
 
@@ -106,7 +102,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("[controller]{productId:int}")]
+		[HttpGet, Route("item/{productId:int}")]
 		public async Task<IActionResult> GetProduct(int productId = 0)
 		{
 			if (productId > 0)
@@ -124,7 +120,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("[controller]/{category}/{productId:int}")]
+		[HttpGet, Route("items/{category}/{productId:int}")]
 		public async Task<IActionResult> GetProduct(string category, int productId = 0)
 		{
 			if (!string.IsNullOrEmpty(category) && productId > 0)
@@ -142,7 +138,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("[controller]/{category}/{productUrlName}")]
+		[HttpGet, Route("items/{category}/{productUrlName}")]
 		public async Task<IActionResult> GetProduct(string category, string productUrlName)
 		{
 			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(productUrlName))

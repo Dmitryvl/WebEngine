@@ -13,10 +13,7 @@
 			<p>
 				@product.CompanyName @product.Name
 				<br />
-				@foreach (var item in product.Properties)
-				{
-					<span>@item.Value @item.SizeValue</span>
-				}
+				@product.ShortInfo
 			</p>
 		}
 	
