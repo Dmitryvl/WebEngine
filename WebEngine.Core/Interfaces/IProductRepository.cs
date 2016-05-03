@@ -24,7 +24,7 @@ namespace WebEngine.Core.Interfaces
 	{
 		Task<IList<Product>> GetProductsAsync(string category);
 
-		Task<IList<Product>> GetProductsAsync(ProductFilter filter);
+		Task<IList<Product>> GetProductsAsync(ProductFilter filter, int pageSize, int currentPage);
 
 		Task<Product> GetProductAsync(int productId);
 

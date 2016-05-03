@@ -56,7 +56,7 @@ namespace WebEngine.Web.Controllers
 
 				ProductListView list = new ProductListView();
 
-				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(productFilter);
+				IList<Product> products = await _smartPhoneRepository.GetProductsAsync(productFilter, 1, 1);
 
 				if (products != null)
 				{
@@ -64,12 +64,7 @@ namespace WebEngine.Web.Controllers
 					{
 						Id = s.Id,
 						Name = s.Name,
-						CompanyName = s.Company.Name,
-						Properties = s.ProductToProperty.Select(p => new ProductPropertyView()
-						{
-							Value = p.Value,
-							SizeValue = p.SizeValue
-						})
+						CompanyName = s.Company.Name
 					});
 				}
 

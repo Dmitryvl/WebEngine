@@ -1,10 +1,10 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="FilterProperty.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductShortView.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace WebEngine.Web.ViewModels.Product
+namespace WebEngine.Core.Extension
 {
 	#region Usings
 	
@@ -13,16 +13,18 @@ namespace WebEngine.Web.ViewModels.Product
 	using System.Linq;
 	using System.Text;
 	using System.Threading.Tasks;
-	
-	#endregion 
+
+	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="ProductShortView"/> class.
 	/// </summary>
-	public class FilterProperty
+	public class ProductShortView
 	{
 		public int Id { get; set; }
 
-		public string Value { get; set; }
+		public string Name { get; set; }
+
+		public string CompanyName { get; set; }
 	}
 }

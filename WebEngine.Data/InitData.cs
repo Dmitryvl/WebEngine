@@ -171,7 +171,7 @@ namespace WebEngine.Data
 
 					await db.SaveChangesAsync();
 
-					for (int i = 0; i < 2; i++)
+					for (int i = 0; i < 5; i++)
 					{
 						Product[] p2 = new Product[900];
 
@@ -185,16 +185,36 @@ namespace WebEngine.Data
 						await db.SaveChangesAsync();
 					}
 
-					for (int i = 0; i < 20; i++)
-					{
-						Product[] p3 = new Product[900];
+					//for (int i = 0; i < 20; i++)
+					//{
+					//	Product[] p3 = new Product[900];
 
-						for (int j = 0; j < 900; j++)
+					//	for (int j = 0; j < 900; j++)
+					//	{
+					//		p3[j] = new Product() { CompanyId = 1, CategoryId = 2, Name = "test" + i, UrlName = "test", IsActive = true };
+					//	}
+
+					//	db.Products.AddRange(p3);
+
+					//	await db.SaveChangesAsync();
+					//}
+
+					for (int i = 1; i < 6; i++)
+					{
+						ProductToProperty[] p3 = new ProductToProperty[990];
+
+						for (int j = 0; j < 990; j++)
 						{
-							p3[j] = new Product() { CompanyId = 1, CategoryId = 2, Name = "test" + i, UrlName = "test", IsActive = true };
+							p3[j] = new ProductToProperty()
+							{
+								PropertyId = i,
+								ProductId = j+4,
+								Value = "11",
+								SizeValue = ""
+							};
 						}
 
-						db.Products.AddRange(p3);
+						db.ProductToProperty.AddRange(p3);
 
 						await db.SaveChangesAsync();
 					}

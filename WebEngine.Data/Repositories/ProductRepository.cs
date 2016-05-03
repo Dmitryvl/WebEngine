@@ -10,7 +10,7 @@ namespace WebEngine.Data.Repositories
 	#region Usings
 
 	using System;
-	//using System.Linq;
+	using System.Linq;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
@@ -19,8 +19,9 @@ namespace WebEngine.Data.Repositories
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Core.Filters;
-	using System.Linq;
-
+	using System.Text;
+	using System.Data.SqlClient;
+	using System.Data;
 	#endregion
 
 	/// <summary>
@@ -122,23 +123,132 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
-		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter)
+		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter, int pageSize, int currentPage)
 		{
+			filter.Properties = new PropertyFilter[]
+			{
+				new PropertyFilter() { PropertyId = 2, Value = "11", IsRange = false },
+				new PropertyFilter() { PropertyId = 4, Value = "11", IsRange = false },
+			};
+
+
 			if (filter != null)
 			{
-				IQueryable<Product> products = _context.Products
-					.Include(s => s.Company)
-					.Include(s => s.ProductToProperty)
-					.Where(s => s.Category.Name == filter.CategoryName);
+				StringBuilder sb = new StringBuilder();
 
-				var x = await products.ToArrayAsync();
+				//sb.Append("(");
 
-				//return await products.ToArrayAsync();
+				int length = filter.Properties.Count;
+
+				int paramIndex = 0;
+
+				SqlParameter[] parameters = new SqlParameter[filter.Properties.Count * 2];
+
+				string intersect = " INTERSECT ";
+
+				int lastIndex = length - 1;
+
+				for (int i = 0; i < length; i++)
+				{
+					if (filter.Properties[i].IsRange /*&& filter.Properties[0].RangeId > DEFAULT_ID*/)
+					{
+						parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
+
+						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Product as p on pp.ProductId = p.Id");
+						sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
+						paramIndex++;
+						//sb.Append($" AND pp.Value = @param{paramIndex}");
+						//paramIndex++;
+					}
+					//else if (filter.Properties[0].IsRange)
+					//{
+
+					//}
+					else
+					{
+						parameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].PropertyId,
+							SqlDbType = System.Data.SqlDbType.Int,
+							Direction = System.Data.ParameterDirection.Input
+						};
+
+						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Product as p on pp.ProductId = p.Id");
+						sb.Append($" WHERE pp.PropertyId = @param{paramIndex}");
+						paramIndex++;
+
+						parameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].Value,
+							SqlDbType = System.Data.SqlDbType.NVarChar,
+							Direction = System.Data.ParameterDirection.Input
+						};
+
+						sb.Append($" AND pp.Value = @param{paramIndex}");
+						paramIndex++;
+					}
+
+					if (i != lastIndex)
+					{
+						sb.Append(intersect);
+					}
+				}
+
+				//parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", currentPage);
+
+				string sql = sb.ToString();
+
+				string cs = "Server=(localdb)\\projectsv12;Database=WebEngine10;Trusted_Connection=True;MultipleActiveResultSets=true";
+
+				List<Product> prods = new List<Product>();
+
+				using (SqlConnection sqlConnection = new SqlConnection(cs))
+				{
+					using (SqlCommand cmd = sqlConnection.CreateCommand())
+					{
+						cmd.CommandText = sql;
+						cmd.Parameters.AddRange(parameters);
+						cmd.CommandTimeout = 15;
+						cmd.CommandType = CommandType.Text;
+
+						try
+						{
+							await sqlConnection.OpenAsync();
+
+							SqlDataReader reader = cmd.ExecuteReader();
+
+							while (await reader.ReadAsync())
+							{
+								prods.Add(new Product()
+								{
+									Id = (int)reader["Id"],
+									Name = (string)reader["Name"]
+								});
+							}
+
+							reader.Close();
+						}
+						catch
+						{
+							return null;
+						}
+					}
+				}
+
+
+
+				//sb.Append(") ORDER BY p.Id OFFSET ((@CurrentPage - 1) * @PageSize) ROWS FETCH NEXT @PageSize ROWS ONLY;");
+
+				//var result = _context.Products.FromSql("Select * from Product as p where p.Id = @param0", parameters[0]).ToArray();
 
 				return new List<Product>();
 			}
 
 			return null;
 		}
+
+
 	}
 }

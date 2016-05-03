@@ -18,5 +18,13 @@ namespace WebEngine.Core.Filters
 		public int PropertyId { get; set; }
 
 		public string Value { get; set; }
+
+		public string SizeValue { get; set; }
+
+		public bool IsRange { get; set; }
+
+		public int RangeId { get; set; }
+
+		public char Operation { get; set; }
 	}
 }

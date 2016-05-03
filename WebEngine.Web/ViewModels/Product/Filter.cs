@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="Filter.cs" company="EPAM Systems">
-//     Copyright (c) "EPAM Systems". All rights reserved.
+// <copyright file="Filter.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
