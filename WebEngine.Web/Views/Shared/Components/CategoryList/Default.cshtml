@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<WebEngine.Web.ViewModels.Category.CategoryView>
 
-<div class="list-group">
-	@foreach (var item in Model)
-	{
-		<a class="list-group-item" asp-action="Index" asp-controller="Product" asp-route-category="@item.Name">@item.Name</a>
-	}
-</div>
+@foreach (var item in Model)
+{
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4 class="panel-title"><a asp-action="Index" asp-controller="Product" asp-route-category="@item.Name">@item.Name</a></h4>
+		</div>
+	</div>
+}
