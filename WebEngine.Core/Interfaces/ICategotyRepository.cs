@@ -22,5 +22,7 @@ namespace WebEngine.Core.Interfaces
 	public interface ICategotyRepository : IDisposable
 	{
 		Task<IList<Category>> GetCategories();
+
+		Task<bool> IsExist(string categoryName);
 	}
 }

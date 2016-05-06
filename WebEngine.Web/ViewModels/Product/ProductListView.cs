@@ -10,8 +10,6 @@ namespace WebEngine.Web.ViewModels.Product
 
 	using System.Collections.Generic;
 
-	using WebEngine.Core.Entities;
-
 	#endregion
 
 	/// <summary>
@@ -19,6 +17,8 @@ namespace WebEngine.Web.ViewModels.Product
 	/// </summary>
 	public class ProductListView
 	{
+		public string CategoryName { get; set; }
+
 		public IEnumerable<ProductView> Products { get; set; }
 	}
 }

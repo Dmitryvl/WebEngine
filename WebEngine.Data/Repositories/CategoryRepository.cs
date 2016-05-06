@@ -49,6 +49,27 @@ namespace WebEngine.Data.Repositories
 			return await _context.Categories.ToArrayAsync();
 		}
 
+		/// <summary>
+		/// Checking category by name.
+		/// </summary>
+		/// <param name="categoryName">Category name.</param>
+		/// <returns>Return result.</returns>
+		public async Task<bool> IsExist(string categoryName)
+		{
+			if (!string.IsNullOrEmpty(categoryName))
+			{
+				Category category = await _context.Categories
+					.FirstOrDefaultAsync(c => c.Name == categoryName);
+
+				if (category != null)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		#endregion
 	}
 }

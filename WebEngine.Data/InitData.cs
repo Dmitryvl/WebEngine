@@ -107,9 +107,9 @@ namespace WebEngine.Data
 
 					Category[] categories = new Category[]
 					{
-						new Category() { Name = "SmartPhone", IsActive = true },
-						new Category() { Name = "TV", IsActive = true },
-						new Category() { Name = "PC", IsActive = true }
+						new Category() { Name = "smartphones", IsActive = true },
+						new Category() { Name = "tv", IsActive = true },
+						new Category() { Name = "pc", IsActive = true }
 					};
 
 					BaseProperty[] productBaseProperty = new BaseProperty[]

@@ -30,13 +30,16 @@ namespace WebEngine.Web.Controllers
 
 		private readonly IProductRepository _productRepository;
 
+		private readonly ICategotyRepository _categoryRepository;
+
 		#endregion
 
 		#region Constructors
 
-		public ProductController(IProductRepository productRepository)
+		public ProductController(IProductRepository productRepository, ICategotyRepository categoryRepository)
 		{
 			_productRepository = productRepository;
+			_categoryRepository = categoryRepository;
 		}
 
 		#endregion
@@ -79,7 +82,9 @@ namespace WebEngine.Web.Controllers
 		[HttpGet, Route("items/{category}")]
 		public async Task<IActionResult> Index(string category)
 		{
-			if (!string.IsNullOrEmpty(category))
+			string categoryLower = category.ToLower();
+
+			if (!string.IsNullOrEmpty(categoryLower) && await _categoryRepository.IsExist(categoryLower))
 			{
 				ProductListView list = new ProductListView();
 
@@ -94,6 +99,8 @@ namespace WebEngine.Web.Controllers
 						ShortInfo = p.ShortInfo,
 						CompanyName = p.Company.Name
 					});
+
+					list.CategoryName = categoryLower;
 				}
 
 				return View(list);
@@ -102,7 +109,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("item/{productId:int}")]
+		[HttpGet, Route("items/{productId:int}")]
 		public async Task<IActionResult> GetProduct(int productId = 0)
 		{
 			if (productId > 0)
@@ -181,6 +188,7 @@ namespace WebEngine.Web.Controllers
 			if (disposing)
 			{
 				_productRepository.Dispose();
+				_categoryRepository.Dispose();
 			}
 
 			base.Dispose(disposing);
