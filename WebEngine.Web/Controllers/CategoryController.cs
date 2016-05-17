@@ -6,21 +6,22 @@
 
 namespace WebEngine.Web.Controllers
 {
-
 	#region Usings
 
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using Microsoft.AspNet.Mvc;
+
+	using Microsoft.AspNetCore.Mvc;
+
+	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
-	using Core.Entities;
-	using ViewModels.Category;
+	using WebEngine.Web.ViewModels.Category;
+
 	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="CategoryController"/> class.
 	/// </summary>
 	public class CategoryController : Controller
 	{

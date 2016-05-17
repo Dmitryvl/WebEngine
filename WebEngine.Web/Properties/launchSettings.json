@@ -12,14 +12,15 @@
 			"commandName": "IISExpress",
 			"launchBrowser": true,
 			"environmentVariables": {
-				"Hosting:Environment": "Development"
-			},
-			"sdkVersion": "dnx-clr-win-x86.1.0.0-rc1-update2"
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			}
 		},
-		"web": {
-			"commandName": "web",
+		"WebEngine.Web": {
+			"commandName": "Project",
+			"launchBrowser": true,
+			"launchUrl": "http://localhost:5000",
 			"environmentVariables": {
-				"Hosting:Environment": "Development"
+				"ASPNETCORE_ENVIRONMENT": "Development"
 			}
 		}
 	}

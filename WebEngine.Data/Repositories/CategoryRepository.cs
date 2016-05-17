@@ -11,8 +11,8 @@ namespace WebEngine.Data.Repositories
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using Microsoft.Data.Entity;
-	using Microsoft.Extensions.OptionsModel;
+	using Microsoft.Extensions.Options;
+	using Microsoft.EntityFrameworkCore;
 
 	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
@@ -46,7 +46,16 @@ namespace WebEngine.Data.Repositories
 		/// <returns>Return category collection.</returns>
 		public async Task<IList<Category>> GetCategories()
 		{
-			return await _context.Categories.ToArrayAsync();
+			try
+			{
+				Category[] categories = await _context.Categories.ToArrayAsync();
+
+				return categories;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
 		}
 
 		/// <summary>

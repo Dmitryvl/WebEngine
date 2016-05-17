@@ -8,8 +8,8 @@ namespace WebEngine.Web.Controllers
 {
 	#region Usings
 
-	using Microsoft.AspNet.Mvc;
-	using Microsoft.AspNet.Authorization;
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
 
 	#endregion
 

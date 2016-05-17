@@ -8,18 +8,16 @@ namespace WebEngine.Web.ViewComponents
 {
 	#region Usings
 
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Threading.Tasks;
 
-	using Microsoft.AspNet.Mvc;
+	using Microsoft.AspNetCore.Mvc;
 
 	using WebEngine.Core.Interfaces;
 
 	#endregion
 
 	/// <summary>
-	/// <see cref="FilterView"/> 
+	/// <see cref="FilterView"/> class.
 	/// </summary>
 	public class FilterView : ViewComponent
 	{
@@ -30,9 +28,9 @@ namespace WebEngine.Web.ViewComponents
 			_categoryRepository = categoryRepository;
 		}
 
-		public IViewComponentResult Invoke(string category)
+		public async Task<IViewComponentResult> InvokeAsync(string category)
 		{
-			bool isExist = Task.Run(() => _categoryRepository.IsExist(category)).Result;
+			bool isExist = await _categoryRepository.IsExist(category);
 
 			_categoryRepository.Dispose();
 

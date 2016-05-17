@@ -6,14 +6,13 @@
 
 namespace WebEngine.Data.Repositories
 {
-
 	#region Usings
 
 	using System;
 	using System.Threading.Tasks;
 
-	using Microsoft.Data.Entity;
-	using Microsoft.Extensions.OptionsModel;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Options;
 
 	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;

@@ -1,70 +1,39 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="Startup.cs" author="Dzmitry Prakapenka">
-//     All rights reserved.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using WebEngine.Core.Config;
+using WebEngine.Core.Interfaces;
+using WebEngine.Data;
+using WebEngine.Data.Repositories;
 
 namespace WebEngine.Web
 {
-
-	#region Usings
-
-	using Microsoft.AspNet.Builder;
-	using Microsoft.AspNet.Hosting;
-	using Microsoft.Data.Entity;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.Extensions.Logging;
-
-	using WebEngine.Core.Config;
-	using WebEngine.Core.Interfaces;
-	using WebEngine.Data;
-	using WebEngine.Data.Repositories;
-
-	#endregion
-
-	/// <summary>
-	/// <see cref="Startup"/> class.
-	/// </summary>
 	public class Startup
 	{
-		#region Constructors
-
 		public Startup(IHostingEnvironment env)
 		{
 			var builder = new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json")
+				.SetBasePath(env.ContentRootPath)
+				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-			if (env.IsDevelopment())
-			{
-				builder.AddUserSecrets();
-
-				builder.AddApplicationInsightsSettings(developerMode: true);
-			}
 
 			builder.AddEnvironmentVariables();
 			Configuration = builder.Build();
 		}
 
-		#endregion
-
-		#region Properties
-
-		public IConfigurationRoot Configuration { get; set; }
-
-		#endregion
-
-		#region Public methods
+		public IConfigurationRoot Configuration { get; }
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddApplicationInsightsTelemetry(Configuration);
+			string x = Configuration.GetConnectionString("DefaultConnection");
 
-			services.AddEntityFramework()
-				.AddSqlServer()
-				.AddDbContext<WebEngineContext>(options =>
-					options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+			services.AddDbContext<WebEngineContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddMvc();
 
@@ -72,7 +41,7 @@ namespace WebEngine.Web
 
 			services.Configure<AppConfig>(opt =>
 			{
-				opt.ConnectionString = Configuration["Data:DefaultConnection:ConnectionString"];
+				opt.ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
 			});
 
 			services.AddTransient<IUserRepository, UserRepository>();
@@ -81,33 +50,30 @@ namespace WebEngine.Web
 			services.AddTransient<ICategotyRepository, CategoryRepository>();
 		}
 
-
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
-			app.UseApplicationInsightsRequestTelemetry();
-
 			if (env.IsDevelopment())
 			{
-				app.UseBrowserLink();
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
+				app.UseBrowserLink();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
 			}
 
-			app.UseCookieAuthentication(options =>
+			app.UseCookieAuthentication(new CookieAuthenticationOptions()
 			{
-				options.AuthenticationScheme = "Cookies";
-				options.LoginPath = new Microsoft.AspNet.Http.PathString("/Account/Login");
-				options.AutomaticAuthenticate = true;
-				options.AutomaticChallenge = true;
-				options.CookieName = "websettings";
+				AuthenticationScheme = "Cookies",
+				LoginPath = new PathString("/Account/Login"),
+				AutomaticAuthenticate = true,
+				AutomaticChallenge = true,
+				CookieName = "websettings"
 			});
-
-			app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
-
-			app.UseApplicationInsightsExceptionTelemetry();
 
 			app.UseStaticFiles();
 
@@ -130,9 +96,5 @@ namespace WebEngine.Web
 
 			InitData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 		}
-
-		public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-
-		#endregion
 	}
 }

@@ -6,7 +6,7 @@
 	<div class="left-sidebar">
 		<h2>Category</h2>
 		<div class="panel-group category-products" id="accordian">
-			@Component.Invoke("CategoryList")
+			@await Component.InvokeAsync("CategoryList")
 		</div><!--/category-products-->
 		@*<div class="brands_products">
 				<!--brands_products-->
@@ -47,8 +47,6 @@
 		<h2 class="title text-center">Features Items</h2>
 
 	</div><!--features_items-->
-
-
 	@*<div class="category-tab">
 			<!--category-tab-->
 			<div class="col-sm-12">

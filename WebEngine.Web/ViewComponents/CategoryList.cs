@@ -6,22 +6,22 @@
 
 namespace WebEngine.Web.ViewComponents
 {
-
 	#region Usings
 
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text;
 	using System.Threading.Tasks;
-	using Microsoft.AspNet.Mvc;
-	using Core.Interfaces;
-	using Core.Entities;
-	using ViewModels.Category;
+
+	using Microsoft.AspNetCore.Mvc;
+
+	using WebEngine.Core.Entities;
+	using WebEngine.Core.Interfaces;
+	using WebEngine.Web.ViewModels.Category;
+
 	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="CategoryList"/> view component.
 	/// </summary>
 	public class CategoryList : ViewComponent
 	{
@@ -32,9 +32,9 @@ namespace WebEngine.Web.ViewComponents
 			_categoryRepository = categoryRepository;
 		}
 
-		public IViewComponentResult Invoke()
+		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			IList<Category> categories = Task.Run(() => _categoryRepository.GetCategories()).Result;
+			IList<Category> categories = await _categoryRepository.GetCategories();
 
 			if (categories != null)
 			{

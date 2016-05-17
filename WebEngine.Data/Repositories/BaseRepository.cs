@@ -11,7 +11,7 @@ namespace WebEngine.Data.Repositories
 	using System;
 
 	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.Extensions.OptionsModel;
+	using Microsoft.Extensions.Options;
 
 	using WebEngine.Core.Config;
 

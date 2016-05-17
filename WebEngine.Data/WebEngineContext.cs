@@ -8,8 +8,8 @@ namespace WebEngine.Data
 {
 	#region Usings
 
-	using Microsoft.Data.Entity;
-	using Microsoft.Data.Entity.Metadata;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore.Metadata;
 
 	using WebEngine.Core.Entities;
 
@@ -20,6 +20,14 @@ namespace WebEngine.Data
 	/// </summary>
 	public class WebEngineContext : DbContext
 	{
+		#region Constructors
+
+		public WebEngineContext(DbContextOptions<WebEngineContext> options) : base(options)
+		{
+		}
+
+		#endregion
+
 		#region Public properties
 
 		/// <summary>

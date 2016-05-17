@@ -16,8 +16,8 @@ namespace WebEngine.Data.Repositories
 	using System.Text;
 	using System.Threading.Tasks;
 
-	using Microsoft.Data.Entity;
-	using Microsoft.Extensions.OptionsModel;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Options;
 
 	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
@@ -150,7 +150,7 @@ namespace WebEngine.Data.Repositories
 					{
 						parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
 
-						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Product as p on pp.ProductId = p.Id");
+						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
 						sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
 						paramIndex++;
 						//sb.Append($" AND pp.Value = @param{paramIndex}");
@@ -170,7 +170,7 @@ namespace WebEngine.Data.Repositories
 							Direction = ParameterDirection.Input
 						};
 
-						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Product as p on pp.ProductId = p.Id");
+						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
 						sb.Append($" WHERE pp.PropertyId = @param{paramIndex}");
 						paramIndex++;
 
@@ -196,7 +196,7 @@ namespace WebEngine.Data.Repositories
 
 				string sql = sb.ToString();
 
-				string cs = "Server=(localdb)\\projectsv12;Database=WebEngine10;Trusted_Connection=True;MultipleActiveResultSets=true";
+				string cs = "Server=(localdb)\\projectsv12;Database=WebEngine11;Trusted_Connection=True;MultipleActiveResultSets=true";
 
 				List<Product> prods = new List<Product>();
 
@@ -224,7 +224,7 @@ namespace WebEngine.Data.Repositories
 								});
 							}
 
-							reader.Close();
+							reader.Dispose();
 						}
 						catch
 						{

@@ -9,7 +9,7 @@
 	<div class="left-sidebar">
 		<h2>filter</h2>
 		<div class="panel-group category-products" id="accordian">
-			@Component.Invoke("FilterView", Model.CategoryName)
+			@await Component.InvokeAsync("FilterView", new { category = Model.CategoryName })
 		</div>
 	</div>
 </div>

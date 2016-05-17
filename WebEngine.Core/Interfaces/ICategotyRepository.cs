@@ -6,18 +6,18 @@
 
 namespace WebEngine.Core.Interfaces
 {
-
 	#region Usings
 
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+
 	using WebEngine.Core.Entities;
 
 	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="ICategotyRepository"/> interface.
 	/// </summary>
 	public interface ICategotyRepository : IDisposable
 	{
