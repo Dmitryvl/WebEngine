@@ -1,20 +1,32 @@
-﻿
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using WebEngine.Core.Config;
-using WebEngine.Core.Interfaces;
-using WebEngine.Data;
-using WebEngine.Data.Repositories;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Startup.cs" author="Dzmitry Prakapenka">
+//     All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace WebEngine.Web
 {
+	#region Usings
+
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.AspNetCore.Http;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
+	using Microsoft.Extensions.Logging;
+
+	using WebEngine.Core.Config;
+	using WebEngine.Core.Interfaces;
+	using WebEngine.Data;
+	using WebEngine.Data.Repositories;
+
+	#endregion
+
 	public class Startup
 	{
+		#region Constructors
+
 		public Startup(IHostingEnvironment env)
 		{
 			var builder = new ConfigurationBuilder()
@@ -26,12 +38,18 @@ namespace WebEngine.Web
 			Configuration = builder.Build();
 		}
 
+		#endregion
+
+		#region Properties
+
 		public IConfigurationRoot Configuration { get; }
+
+		#endregion
+
+		#region Public methods
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			string x = Configuration.GetConnectionString("DefaultConnection");
-
 			services.AddDbContext<WebEngineContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -41,7 +59,7 @@ namespace WebEngine.Web
 
 			services.Configure<AppConfig>(opt =>
 			{
-				opt.ConnectionString = Configuration["ConnectionStrings:DefaultConnection"];
+				opt.ConnectionString = Configuration.GetConnectionString("DefaultConnection");
 			});
 
 			services.AddTransient<IUserRepository, UserRepository>();
@@ -96,5 +114,7 @@ namespace WebEngine.Web
 
 			InitData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 		}
+
+		#endregion
 	}
 }
