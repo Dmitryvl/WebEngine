@@ -127,24 +127,6 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("items/{category}/{productId:int}")]
-		public async Task<IActionResult> GetProduct(string category, int productId = 0)
-		{
-			if (!string.IsNullOrEmpty(category) && productId > 0)
-			{
-				Product product = await _productRepository.GetProductAsync(category, productId);
-
-				if (product != null)
-				{
-					FullProductView productView = GetFullProductView(product);
-
-					return View("Product", productView);
-				}
-			}
-
-			return View("Error");
-		}
-
 		[HttpGet, Route("items/{category}/{productUrlName}")]
 		public async Task<IActionResult> GetProduct(string category, string productUrlName)
 		{
