@@ -78,6 +78,11 @@ namespace WebEngine.Core.Interfaces
 		/// <returns>Return result.</returns>
 		Task<bool> UserActivation(int userId, Guid emailKey);
 
+		/// <summary>
+		/// Get user id by user name.
+		/// </summary>
+		/// <param name="userName">User name.</param>
+		/// <returns>Return user id.</returns>
 		Task<int> GetUserIdByUserName(string userName);
 	}
 }

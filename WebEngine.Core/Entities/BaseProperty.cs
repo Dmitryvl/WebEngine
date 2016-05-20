@@ -38,6 +38,9 @@ namespace WebEngine.Core.Entities
 
 		#region Navigation properties
 
+		/// <summary>
+		/// Gets or sets properties.
+		/// </summary>
 		public virtual ICollection<Property> Properties { get; set; }
 
 		#endregion

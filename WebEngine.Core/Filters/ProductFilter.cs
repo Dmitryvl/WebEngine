@@ -17,8 +17,14 @@ namespace WebEngine.Core.Filters
 	/// </summary>
 	public class ProductFilter
 	{
+		/// <summary>
+		/// Gets or sets category name.
+		/// </summary>
 		public string CategoryName { get; set; }
 
-		public IList<PropertyFilter> Properties { get; set;}
+		/// <summary>
+		/// Gets or sets properties.
+		/// </summary>
+		public IList<PropertyFilter> Properties { get; set; }
 	}
 }

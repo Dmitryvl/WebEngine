@@ -40,7 +40,7 @@ namespace WebEngine.Core.Entities
 		public string ShortInfo { get; set; }
 
 		/// <summary>
-		/// Gets or sets companty identifier.
+		/// Gets or sets company identifier.
 		/// </summary>
 		public int CompanyId { get; set; }
 

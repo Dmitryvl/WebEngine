@@ -1,6 +1,6 @@
 {
-    "title": "WebEngine.Web",
-    "copyright": "Dzmitry Prakapenka",
+	"title": "WebEngine.Web",
+	"copyright": "Dzmitry Prakapenka",
 	"userSecretsId": "",
 
 	"dependencies": {

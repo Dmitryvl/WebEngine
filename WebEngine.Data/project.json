@@ -1,6 +1,6 @@
 {
-    "title": "WebEngine.Data",
-    "copyright": "Dzmitry Prakapenka",
+	"title": "WebEngine.Data",
+	"copyright": "Dzmitry Prakapenka",
 	"version": "1.0.0-*",
 
 	"dependencies": {

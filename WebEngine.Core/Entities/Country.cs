@@ -44,6 +44,5 @@ namespace WebEngine.Core.Entities
 		public virtual ICollection<Region> Regions { get; set; }
 
 		#endregion
-
 	}
 }

@@ -30,7 +30,7 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets oe sets a value indicating whether region is active.
+		/// Gets or sets a value indicating whether region is active.
 		/// </summary>
 		public bool IsActive { get; set; }
 

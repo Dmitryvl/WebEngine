@@ -46,21 +46,41 @@ namespace WebEngine.Data.Repositories
 
 		#region Public methods
 
+		/// <summary>
+		/// Add product.
+		/// </summary>
+		/// <param name="product">New product.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> AddProductAsync(Product product)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Update product.
+		/// </summary>
+		/// <param name="product">Changed product.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> UpdateProductAsync(Product smartPhone)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Delete product.
+		/// </summary>
+		/// <param name="productId">Product id.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> DeleteProductAsync(int productId)
 		{
 			throw new NotImplementedException();
 		}
 
+		/// <summary>
+		/// Get product by product id.
+		/// </summary>
+		/// <param name="productId">Product id.</param>
+		/// <returns>Return product.</returns>
 		public async Task<Product> GetProductAsync(int productId)
 		{
 			if (productId > DEFAULT_ID)
@@ -79,19 +99,12 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
-		public async Task<Product> GetProductAsync(string category, int productId)
-		{
-			Product product = await _context.Products
-				.Where(s => s.Category.Name == category && s.Id == productId)
-				.Include(s => s.Company)
-				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.Property)
-				.ThenInclude(b => b.BaseProperty)
-				.FirstOrDefaultAsync();
-
-			return product;
-		}
-
+		/// <summary>
+		/// Get product by product categoty.
+		/// </summary>
+		/// <param name="category">Category name.</param>
+		/// <param name="stringUrlName">Url name.</param>
+		/// <returns>Return product.</returns>
 		public async Task<Product> GetProductAsync(string category, string stringUrlName)
 		{
 			Product product = await _context.Products
@@ -105,6 +118,11 @@ namespace WebEngine.Data.Repositories
 			return product;
 		}
 
+		/// <summary>
+		/// Get products by canegory name.
+		/// </summary>
+		/// <param name="category">Category name.</param>
+		/// <returns>Return product collection.</returns>
 		public async Task<IList<Product>> GetProductsAsync(string category)
 		{
 			if (!string.IsNullOrEmpty(category))
@@ -126,6 +144,13 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// Get filtred products.
+		/// </summary>
+		/// <param name="filter">Product filter.</param>
+		/// <param name="pageSize">Page size.</param>
+		/// <param name="currentPage">Current page.</param>
+		/// <returns>Return product collection.</returns>
 		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter, int pageSize, int currentPage)
 		{
 			if (filter != null)

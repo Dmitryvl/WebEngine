@@ -17,6 +17,8 @@ namespace WebEngine.Core.Entities
 	/// </summary>
 	public class Company
 	{
+		#region Properties
+
 		/// <summary>
 		/// Gets or sets company identifier.
 		/// </summary>
@@ -32,9 +34,15 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		#endregion
+
+		#region Navigation properties
+
 		/// <summary>
 		/// Gets or sets smartphones.
 		/// </summary>
 		public virtual ICollection<Product> Products { get; set; }
+
+		#endregion
 	}
 }

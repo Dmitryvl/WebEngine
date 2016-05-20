@@ -21,8 +21,17 @@ namespace WebEngine.Core.Interfaces
 	/// </summary>
 	public interface ICategotyRepository : IDisposable
 	{
+		/// <summary>
+		/// Gets all categories.
+		/// </summary>
+		/// <returns>Return category collection.</returns>
 		Task<IList<Category>> GetCategories();
 
+		/// <summary>
+		/// Checking category.
+		/// </summary>
+		/// <param name="categoryName">Category name.</param>
+		/// <returns>Return result.</returns>
 		Task<bool> IsExist(string categoryName);
 	}
 }

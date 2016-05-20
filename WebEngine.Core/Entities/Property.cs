@@ -20,7 +20,7 @@ namespace WebEngine.Core.Entities
 		#region Properties
 
 		/// <summary>
-		/// Gets oe sets identifier.
+		/// Gets or sets identifier.
 		/// </summary>
 		public int Id { get; set; }
 
@@ -34,6 +34,9 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public int BasePropertyId { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether property is preview.
+		/// </summary>
 		public bool IsPreview { get; set; }
 
 		/// <summary>
@@ -61,7 +64,7 @@ namespace WebEngine.Core.Entities
 		public virtual ICollection<ProductToProperty> ProductToProperty { get; set; }
 
 		/// <summary>
-		/// Gets or sets  datatype.
+		/// Gets or sets data type.
 		/// </summary>
 		public virtual DataType DataType { get; set; }
 

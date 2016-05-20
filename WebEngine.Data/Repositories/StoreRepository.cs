@@ -40,6 +40,11 @@ namespace WebEngine.Data.Repositories
 
 		#region Public methods
 
+		/// <summary>
+		/// Add new store.
+		/// </summary>
+		/// <param name="store">New store.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> AddStore(Store store)
 		{
 			if (store != null && store.UserId > DEFAULT_ID)
@@ -64,6 +69,11 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
+		/// <summary>
+		/// Delete store.
+		/// </summary>
+		/// <param name="storeId">Store id.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> DeleteStore(int storeId)
 		{
 			if (storeId > DEFAULT_ID)
@@ -87,6 +97,11 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
+		/// <summary>
+		/// Get store by id.
+		/// </summary>
+		/// <param name="storeId">Store id.</param>
+		/// <returns>Return store.</returns>
 		public async Task<Store> GetStoreById(int storeId)
 		{
 			if (storeId > DEFAULT_ID)
@@ -101,6 +116,11 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// Get store by name.
+		/// </summary>
+		/// <param name="storeName">Store name.</param>
+		/// <returns>Return store.</returns>
 		public async Task<Store> GetStoreByName(string storeName)
 		{
 			if (!string.IsNullOrEmpty(storeName))
@@ -115,6 +135,11 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
+		/// <summary>
+		/// Update store.
+		/// </summary>
+		/// <param name="store">Changed store.</param>
+		/// <returns>Return result.</returns>
 		public async Task<bool> UpdateStore(Store store)
 		{
 			if (store != null)

@@ -22,6 +22,10 @@ namespace WebEngine.Data
 	{
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="WebEngineContext"/> class.
+		/// </summary>
+		/// <param name="options">Context options.</param>
 		public WebEngineContext(DbContextOptions<WebEngineContext> options) : base(options)
 		{
 		}
