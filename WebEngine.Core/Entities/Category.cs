@@ -30,6 +30,11 @@ namespace WebEngine.Core.Entities
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Gets or sets view name.
+		/// </summary>
+		public string ViewName { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether category is active.
 		/// </summary>
 		public bool IsActive { get; set; }

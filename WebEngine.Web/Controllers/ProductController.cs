@@ -84,26 +84,32 @@ namespace WebEngine.Web.Controllers
 		{
 			string categoryLower = category.ToLower();
 
-			if (!string.IsNullOrEmpty(categoryLower) && await _categoryRepository.IsExist(categoryLower))
+			if (!string.IsNullOrEmpty(categoryLower))
 			{
-				ProductListView list = new ProductListView();
+				Category dbCategory = await _categoryRepository.GetCategory(categoryLower);
 
-				IList<Product> products = await _productRepository.GetProductsAsync(category);
-
-				if (products != null)
+				if (dbCategory != null)
 				{
-					list.Products = products.Select(p => new ProductView()
+					ProductListView list = new ProductListView();
+
+					IList<Product> products = await _productRepository.GetProductsAsync(category);
+
+					if (products != null)
 					{
-						Id = p.Id,
-						Name = p.Name,
-						ShortInfo = p.ShortInfo,
-						CompanyName = p.Company.Name
-					});
+						list.Products = products.Select(p => new ProductView()
+						{
+							Id = p.Id,
+							Name = p.Name,
+							ShortInfo = p.ShortInfo,
+							CompanyName = p.Company.Name
+						});
 
-					list.CategoryName = categoryLower;
+						list.CategoryName = categoryLower;
+						list.CategoryViewName = dbCategory.ViewName;
+					}
+
+					return View(list);
 				}
-
-				return View(list);
 			}
 
 			return View("Error");

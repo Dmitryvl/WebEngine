@@ -149,6 +149,7 @@ namespace WebEngine.Data
 
 			builder.Entity<Category>().HasKey(c => c.Id);
 			builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
+			builder.Entity<Category>().Property(c => c.ViewName).IsRequired().HasMaxLength(stringLength);
 
 			builder.Entity<BaseProperty>().HasKey(s => s.Id);
 			builder.Entity<BaseProperty>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);

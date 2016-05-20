@@ -59,6 +59,31 @@ namespace WebEngine.Data.Repositories
 		}
 
 		/// <summary>
+		/// Get category by name.
+		/// </summary>
+		/// <param name="categoryName">Category name.</param>
+		/// <returns>Return category.</returns>
+		public async Task<Category> GetCategory(string categoryName)
+		{
+			if (!string.IsNullOrEmpty(categoryName))
+			{
+				try
+				{
+					Category category = await _context.Categories
+						.FirstOrDefaultAsync(c => c.Name == categoryName);
+
+					return category;
+				}
+				catch
+				{
+					return null;
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
 		/// Checking category by name.
 		/// </summary>
 		/// <param name="categoryName">Category name.</param>

@@ -33,5 +33,12 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return result.</returns>
 		Task<bool> IsExist(string categoryName);
+
+		/// <summary>
+		/// Get category by name.
+		/// </summary>
+		/// <param name="categoryName">Category name.</param>
+		/// <returns>Return category.</returns>
+		Task<Category> GetCategory(string categoryName);
 	}
 }

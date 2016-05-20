@@ -5,6 +5,7 @@
 /// <reference path="js/gmaps.js" />
 /// <reference path="js/html5shiv.js" />
 /// <reference path="js/jquery.js" />
+/// <reference path="js/jquery.prettyPhoto.js" />
 /// <reference path="js/jquery.scrollup.min.js" />
 /// <reference path="js/main.js" />
 /// <reference path="js/price-range.js" />
