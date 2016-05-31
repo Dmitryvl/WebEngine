@@ -36,5 +36,10 @@ namespace WebEngine.Web.ViewModels.Product
 		/// Gets or sets short info about product.
 		/// </summary>
 		public string ShortInfo { get; set; }
+
+		/// <summary>
+		/// Gets or sets url name.
+		/// </summary>
+		public string UrlName { get; set; }
 	}
 }

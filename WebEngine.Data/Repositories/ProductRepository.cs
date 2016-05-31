@@ -103,19 +103,67 @@ namespace WebEngine.Data.Repositories
 		/// Get product by product categoty.
 		/// </summary>
 		/// <param name="category">Category name.</param>
-		/// <param name="stringUrlName">Url name.</param>
+		/// <param name="urlName">Url name.</param>
 		/// <returns>Return product.</returns>
-		public async Task<Product> GetProductAsync(string category, string stringUrlName)
+		public async Task<Product> GetProductAsync(string category, string urlName)
 		{
-			Product product = await _context.Products
-				.Where(s => s.Category.Name == category && s.UrlName == stringUrlName)
-				.Include(s => s.Company)
-				.Include(s => s.ProductToProperty)
-				.ThenInclude(sp => sp.Property)
-				.ThenInclude(b => b.BaseProperty)
-				.FirstOrDefaultAsync();
+			try
+			{
+				Product product = await _context.Products
+					.Where(p => p.Category.Name == category && p.UrlName == urlName && p.IsActive == true)
+					.Select(p => new Product()
+					{
+						Id = GetValue(p.Id),
+						Name = GetValue(p.Name),
+						CategoryId = GetValue(p.CategoryId),
+						CompanyId = GetValue(p.CompanyId),
+						ShortInfo = GetValue(p.ShortInfo),
+						UrlName = GetValue(p.UrlName),
+						Company = new Company()
+						{
+							Id = GetValue(p.Company.Id),
+							Name = GetValue(p.Company.Name)
+						}
+					})
+					.FirstOrDefaultAsync();
 
-			return product;
+				if (product != null)
+				{
+					product.ProductToProperty = await _context.ProductToProperty
+						.Where(pp => pp.ProductId == product.Id && pp.Property.IsActive == true && pp.Property.BaseProperty.IsActive == true)
+						.Select(pp => new ProductToProperty()
+						{
+							ProductId = GetValue(pp.ProductId),
+							PropertyId = GetValue(pp.PropertyId),
+							Value = GetValue(pp.Value),
+							SizeValue = GetValue(pp.SizeValue),
+							Property = new Property()
+							{
+								Id = GetValue(pp.Property.Id),
+								Name = GetValue(pp.Property.Name),
+								DataTypeId = GetValue(pp.Property.DataTypeId),
+								DataType = new DataType()
+								{
+									Id = GetValue(pp.Property.DataType.Id),
+									Name = GetValue(pp.Property.DataType.Name),
+								},
+								BasePropertyId = GetValue(pp.Property.BasePropertyId),
+								BaseProperty = new BaseProperty()
+								{
+									Id = GetValue(pp.Property.BaseProperty.Id),
+									Name = GetValue(pp.Property.BaseProperty.Name)
+								}
+							}
+						})
+						.ToArrayAsync();
+				}
+
+				return product;
+			}
+			catch
+			{
+				return null;
+			}
 		}
 
 		/// <summary>
@@ -135,7 +183,8 @@ namespace WebEngine.Data.Repositories
 						Id = p.Id,
 						Name = p.Name,
 						Company = p.Company,
-						ShortInfo = p.ShortInfo
+						ShortInfo = p.ShortInfo,
+						UrlName = p.UrlName
 					}).ToArrayAsync();
 
 				return products;

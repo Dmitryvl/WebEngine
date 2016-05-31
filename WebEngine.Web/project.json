@@ -41,7 +41,7 @@
 			"type": "build"
 		},
 		"WebEngine.Core": "1.0.0-*",
-		"WebEngine.Data": "1.0.0-*"
+		"WebEngine.Data": "1.0.0-*",
 	},
 
 	"tools": {

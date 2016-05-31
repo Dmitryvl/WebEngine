@@ -65,5 +65,59 @@ namespace WebEngine.Data.Repositories
 		}
 
 		#endregion
+
+		#region Protected methods
+
+		protected int GetValue(int? param)
+		{
+			if (param != null)
+			{
+				return param.Value;
+			}
+
+			return DEFAULT_ID;
+		}
+
+		protected string GetValue(string param)
+		{
+			if (param != null)
+			{
+				return param;
+			}
+
+			return string.Empty;
+		}
+
+		protected float GetValue(float? param)
+		{
+			if (param != null)
+			{
+				return param.Value;
+			}
+
+			return 0f;
+		}
+
+		protected DateTimeOffset GetValue(DateTimeOffset? param)
+		{
+			if (param != null)
+			{
+				return param.Value;
+			}
+
+			return new DateTimeOffset();
+		}
+
+		protected bool GetValue(bool? param)
+		{
+			if (param != null)
+			{
+				return param.Value;
+			}
+
+			return false;
+		}
+
+		#endregion
 	}
 }

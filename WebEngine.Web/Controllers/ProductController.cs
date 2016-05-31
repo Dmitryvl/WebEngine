@@ -101,7 +101,8 @@ namespace WebEngine.Web.Controllers
 							Id = p.Id,
 							Name = p.Name,
 							ShortInfo = p.ShortInfo,
-							CompanyName = p.Company.Name
+							CompanyName = p.Company.Name,
+							UrlName = p.UrlName
 						});
 
 						list.CategoryName = categoryLower;
@@ -115,7 +116,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("items/{productId:int}")]
+		[HttpGet, Route("item/{productId:int}")]
 		public async Task<IActionResult> GetProduct(int productId = 0)
 		{
 			if (productId > 0)
@@ -133,12 +134,12 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("items/{category}/{productUrlName}")]
-		public async Task<IActionResult> GetProduct(string category, string productUrlName)
+		[HttpGet, Route("items/{category}/{urlName}")]
+		public async Task<IActionResult> GetProduct(string category, string urlName)
 		{
-			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(productUrlName))
+			if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(urlName))
 			{
-				Product product = await _productRepository.GetProductAsync(category, productUrlName);
+				Product product = await _productRepository.GetProductAsync(category, urlName);
 
 				if (product != null)
 				{
@@ -156,7 +157,8 @@ namespace WebEngine.Web.Controllers
 			FullProductView productView = new FullProductView();
 
 			productView.ProductId = product.Id;
-			productView.Name = product.Company.Name + " " + product.Name;
+			productView.ProductName = product.Name;
+			productView.CompanyName = product.Company.Name;
 
 			productView.Properties = product.ProductToProperty
 				.Select(s => new ProductPropertyView()

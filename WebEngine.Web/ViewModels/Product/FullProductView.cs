@@ -13,13 +13,15 @@ namespace WebEngine.Web.ViewModels.Product
 	#endregion
 
 	/// <summary>
-	/// TODO: Update summary.
+	/// <see cref="FullProductView"/> class.
 	/// </summary>
 	public class FullProductView
 	{
 		public int ProductId { get; set; }
 
-		public string Name { get; set; }
+		public string ProductName { get; set; }
+
+		public string CompanyName { get; set; }
 
 		public IList<ProductPropertyView> Properties { get; set; }
 	}
