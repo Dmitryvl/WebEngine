@@ -17,12 +17,24 @@ namespace WebEngine.Web.ViewModels.Account
 	/// </summary>
 	public class UserStoreView
 	{
+		/// <summary>
+		/// Gets or sets store id.
+		/// </summary>
 		public int StoreId { get; set; }
 
+		/// <summary>
+		/// Gets or sets store name.
+		/// </summary>
 		public string StoreName { get; set; }
 
+		/// <summary>
+		/// Gets or sets creation date.
+		/// </summary>
 		public DateTimeOffset CreationDate { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether store is active.
+		/// </summary>
 		public bool IsActive { get; set; }
 	}
 }
