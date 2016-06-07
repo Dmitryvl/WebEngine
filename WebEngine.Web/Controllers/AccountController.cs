@@ -55,7 +55,7 @@ namespace WebEngine.Web.Controllers
 
 		public async Task<IActionResult> Profile()
 		{
-			User user = await _userRepository.GetUserByName(User.Identity.Name);
+			User user = await _userRepository.GetUserByNameAsync(User.Identity.Name);
 
 			if (user != null)
 			{
@@ -74,6 +74,36 @@ namespace WebEngine.Web.Controllers
 				});
 
 				return View(profile);
+			}
+
+			return View("Error");
+		}
+
+		[HttpGet, AllowAnonymous, Route("[controller]/about/{userName}")]
+		public async Task<IActionResult> GetUserProfile(string userName)
+		{
+			if (!string.IsNullOrEmpty(userName))
+			{
+				User user = await _userRepository.GetUserByNameAsync(userName);
+
+				if (user != null)
+				{
+					ProfileView profile = new ProfileView();
+
+					profile.UserId = user.Id;
+					profile.UserName = user.Name;
+					profile.RoleId = user.RoleId;
+					profile.RoleName = user.Role.Name;
+					profile.RegisterDate = user.RegisterDate;
+					profile.Stores = user.Stores.Select(s => new UserStoreView()
+					{
+						StoreId = s.Id,
+						StoreName = s.Name,
+						CreationDate = s.CreationDate
+					});
+
+					return View("Profile", profile);
+				}
 			}
 
 			return View("Error");
@@ -105,7 +135,7 @@ namespace WebEngine.Web.Controllers
 
 			if (ModelState.IsValid)
 			{
-				User user = await _userRepository.GetValidUser(model.Email, model.Password);
+				User user = await _userRepository.GetValidUserAsync(model.Email, model.Password);
 
 				if (user != null)
 				{
@@ -145,7 +175,7 @@ namespace WebEngine.Web.Controllers
 					Password = model.Password
 				};
 
-				bool isSuccess = await _userRepository.AddUser(user);
+				bool isSuccess = await _userRepository.AddUserAsync(user);
 
 				if (isSuccess)
 				{
@@ -179,7 +209,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (userId > 0 || emailKey != Guid.Empty)
 			{
-				bool isActivated = await _userRepository.UserActivation(userId, emailKey);
+				bool isActivated = await _userRepository.UserActivationAsync(userId, emailKey);
 
 				if (isActivated)
 				{

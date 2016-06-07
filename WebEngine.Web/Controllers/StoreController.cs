@@ -66,7 +66,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (storeId > 0)
 			{
-				Store store = await _storeRepository.GetStoreById(storeId);
+				Store store = await _storeRepository.GetStoreByIdAsync(storeId);
 
 				if (store != null)
 				{
@@ -88,7 +88,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (!string.IsNullOrEmpty(storeName))
 			{
-				Store store = await _storeRepository.GetStoreByName(storeName);
+				Store store = await _storeRepository.GetStoreByNameAsync(storeName);
 
 				if (store != null)
 				{
@@ -116,14 +116,14 @@ namespace WebEngine.Web.Controllers
 		{
 			if (newStore != null)
 			{
-				int userId = await _userRepository.GetUserIdByUserName(User.Identity.Name);
+				int userId = await _userRepository.GetUserIdByUserNameAsync(User.Identity.Name);
 
 				Store store = new Store();
 
 				store.Name = newStore.StoreName;
 				store.UserId = userId;
 
-				bool isSuccess = await _storeRepository.AddStore(store);
+				bool isSuccess = await _storeRepository.AddStoreAsync(store);
 
 				if (isSuccess)
 				{

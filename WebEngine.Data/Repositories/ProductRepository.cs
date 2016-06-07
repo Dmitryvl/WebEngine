@@ -91,7 +91,8 @@ namespace WebEngine.Data.Repositories
 					.Include(s => s.ProductToProperty)
 					.ThenInclude(sp => sp.Property)
 					.ThenInclude(b => b.BaseProperty)
-					.FirstOrDefaultAsync();
+					.FirstOrDefaultAsync()
+					.ConfigureAwait(false);
 
 				return smartPhone;
 			}
@@ -125,12 +126,15 @@ namespace WebEngine.Data.Repositories
 							Name = GetValue(p.Company.Name)
 						}
 					})
-					.FirstOrDefaultAsync();
+					.FirstOrDefaultAsync()
+					.ConfigureAwait(false);
 
 				if (product != null)
 				{
 					product.ProductToProperty = await _context.ProductToProperty
-						.Where(pp => pp.ProductId == product.Id && pp.Property.IsActive == true && pp.Property.BaseProperty.IsActive == true)
+						.Where(pp => pp.ProductId == product.Id
+						&& pp.Property.IsActive == true
+						&& pp.Property.BaseProperty.IsActive == true)
 						.Select(pp => new ProductToProperty()
 						{
 							ProductId = GetValue(pp.ProductId),
@@ -155,7 +159,8 @@ namespace WebEngine.Data.Repositories
 								}
 							}
 						})
-						.ToArrayAsync();
+						.ToArrayAsync()
+						.ConfigureAwait(false);
 				}
 
 				return product;
@@ -185,7 +190,9 @@ namespace WebEngine.Data.Repositories
 						Company = p.Company,
 						ShortInfo = p.ShortInfo,
 						UrlName = p.UrlName
-					}).ToArrayAsync();
+					})
+					.ToArrayAsync()
+					.ConfigureAwait(false);
 
 				return products;
 			}

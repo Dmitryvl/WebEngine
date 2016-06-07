@@ -30,7 +30,7 @@ namespace WebEngine.Web.ViewComponents
 
 		public async Task<IViewComponentResult> InvokeAsync(string category)
 		{
-			bool isExist = await _categoryRepository.IsExist(category);
+			bool isExist = await _categoryRepository.IsExistAsync(category);
 
 			_categoryRepository.Dispose();
 

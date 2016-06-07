@@ -25,20 +25,20 @@ namespace WebEngine.Core.Interfaces
 		/// Gets all categories.
 		/// </summary>
 		/// <returns>Return category collection.</returns>
-		Task<IList<Category>> GetCategories();
+		Task<IList<Category>> GetCategoriesAsync();
 
 		/// <summary>
 		/// Checking category.
 		/// </summary>
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return result.</returns>
-		Task<bool> IsExist(string categoryName);
+		Task<bool> IsExistAsync(string categoryName);
 
 		/// <summary>
 		/// Get category by name.
 		/// </summary>
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return category.</returns>
-		Task<Category> GetCategory(string categoryName);
+		Task<Category> GetCategoryAsync(string categoryName);
 	}
 }

@@ -43,7 +43,7 @@ namespace WebEngine.Web.Controllers
 		[HttpGet]
 		public async Task<PartialViewResult> GetCategories()
 		{
-			IList<Category> categories = await _categoryRepository.GetCategories();
+			IList<Category> categories = await _categoryRepository.GetCategoriesAsync();
 
 			if (categories != null)
 			{

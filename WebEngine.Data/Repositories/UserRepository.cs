@@ -47,16 +47,17 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="user">User entity.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> AddUser(User user)
+		public async Task<bool> AddUserAsync(User user)
 		{
 			if (user != null)
 			{
 				User dbUser = await _context.Users
-					.FirstOrDefaultAsync(u => u.Name == user.Name || u.Email == user.Email);
+					.FirstOrDefaultAsync(u => u.Name == user.Name || u.Email == user.Email)
+					.ConfigureAwait(false);
 
 				if (dbUser == null)
 				{
-					int defaultRoleId = await GetDefaultRoleId();
+					int defaultRoleId = await GetDefaultRoleIdAsync().ConfigureAwait(false);
 
 					if (defaultRoleId > DEFAULT_ID)
 					{
@@ -70,7 +71,7 @@ namespace WebEngine.Data.Repositories
 
 						_context.Users.Add(user);
 
-						await _context.SaveChangesAsync();
+						await _context.SaveChangesAsync().ConfigureAwait(false);
 
 						return true;
 					}
@@ -85,12 +86,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="userId">User identifier.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> DeleteUser(int userId)
+		public async Task<bool> DeleteUserAsync(int userId)
 		{
 			if (userId > DEFAULT_ID)
 			{
 				User user = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == userId);
+					.FirstOrDefaultAsync(u => u.Id == userId)
+					.ConfigureAwait(false);
 
 				if (user != null)
 				{
@@ -98,7 +100,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Entry(user).State = EntityState.Modified;
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}
@@ -112,13 +114,14 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="userEmail">User email.</param>
 		/// <returns>Return user.</returns>
-		public async Task<User> GetUserByEmail(string userEmail)
+		public async Task<User> GetUserByEmailAsync(string userEmail)
 		{
 			if (!string.IsNullOrEmpty(userEmail))
 			{
 				return await _context.Users
 					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Email == userEmail);
+					.FirstOrDefaultAsync(u => u.Email == userEmail)
+					.ConfigureAwait(false);
 			}
 
 			return null;
@@ -129,13 +132,14 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="userId">User identifier.</param>
 		/// <returns>Return result.</returns>
-		public async Task<User> GetUserById(int userId)
+		public async Task<User> GetUserByIdAsync(int userId)
 		{
 			if (userId > DEFAULT_ID)
 			{
 				User user = await _context.Users
 					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Id == userId);
+					.FirstOrDefaultAsync(u => u.Id == userId)
+					.ConfigureAwait(false);
 
 				return user;
 			}
@@ -148,7 +152,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="userName">User name.</param>
 		/// <returns>Return user.</returns>
-		public async Task<User> GetUserByName(string userName)
+		public async Task<User> GetUserByNameAsync(string userName)
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
@@ -164,7 +168,9 @@ namespace WebEngine.Data.Repositories
 						PasswordSalt = u.PasswordSalt,
 						RegisterDate = u.RegisterDate,
 						Role = u.Role,
-					}).FirstOrDefaultAsync();
+					})
+					.FirstOrDefaultAsync()
+					.ConfigureAwait(false);
 
 				if (user != null)
 				{
@@ -176,7 +182,8 @@ namespace WebEngine.Data.Repositories
 							Name = s.Name,
 							CreationDate = s.CreationDate
 						})
-						.ToArrayAsync();
+						.ToArrayAsync()
+						.ConfigureAwait(false);
 				}
 
 				return user;
@@ -190,12 +197,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="user">User entity.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> UpdateUser(User user)
+		public async Task<bool> UpdateUserAsync(User user)
 		{
 			if (user != null)
 			{
 				User dbUser = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == user.Id);
+					.FirstOrDefaultAsync(u => u.Id == user.Id)
+					.ConfigureAwait(false);
 
 				if (dbUser != null)
 				{
@@ -203,7 +211,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Entry(dbUser).State = EntityState.Modified;
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}
@@ -218,7 +226,7 @@ namespace WebEngine.Data.Repositories
 		/// <param name="userEmail">User email</param>
 		/// <param name="password">Password value.</param>
 		/// <returns>Return user.</returns>
-		public async Task<User> GetValidUser(string userEmail, string password)
+		public async Task<User> GetValidUserAsync(string userEmail, string password)
 		{
 			if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(password))
 			{
@@ -233,7 +241,9 @@ namespace WebEngine.Data.Repositories
 						Password = u.Password,
 						PasswordSalt = u.PasswordSalt,
 						Role = u.Role
-					}).FirstOrDefaultAsync();
+					})
+					.FirstOrDefaultAsync()
+					.ConfigureAwait(false);
 
 				if (user != null && user.Password == PasswordHash.GetSha256Hash(password, user.PasswordSalt))
 				{
@@ -250,12 +260,13 @@ namespace WebEngine.Data.Repositories
 		/// <param name="userId">User identifier.</param>
 		/// <param name="emailKey">Email key.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> UserActivation(int userId, Guid emailKey)
+		public async Task<bool> UserActivationAsync(int userId, Guid emailKey)
 		{
 			if (userId > DEFAULT_ID && emailKey != Guid.Empty)
 			{
 				User user = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == userId && u.EmailKey == emailKey);
+					.FirstOrDefaultAsync(u => u.Id == userId && u.EmailKey == emailKey)
+					.ConfigureAwait(false);
 
 				if (user != null)
 				{
@@ -264,7 +275,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Entry(user).State = EntityState.Modified;
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}
@@ -278,13 +289,14 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="userName">User name.</param>
 		/// <returns>Return user id.</returns>
-		public async Task<int> GetUserIdByUserName(string userName)
+		public async Task<int> GetUserIdByUserNameAsync(string userName)
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
 				User user = await _context.Users
 					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Name == userName);
+					.FirstOrDefaultAsync(u => u.Name == userName)
+					.ConfigureAwait(false);
 
 				if (user != null)
 				{
@@ -316,13 +328,14 @@ namespace WebEngine.Data.Repositories
 		/// Get default role id.
 		/// </summary>
 		/// <returns>Return role id.</returns>
-		private async Task<int> GetDefaultRoleId()
+		private async Task<int> GetDefaultRoleIdAsync()
 		{
 			const string defaultRoleName = "user";
 
 			Role role = await _context.Roles
 				.AsNoTracking()
-				.FirstOrDefaultAsync(r => r.Name == defaultRoleName);
+				.FirstOrDefaultAsync(r => r.Name == defaultRoleName)
+				.ConfigureAwait(false);
 
 			if (role != null)
 			{

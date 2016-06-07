@@ -45,12 +45,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="store">New store.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> AddStore(Store store)
+		public async Task<bool> AddStoreAsync(Store store)
 		{
 			if (store != null && store.UserId > DEFAULT_ID)
 			{
 				Store dbStore = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId);
+					.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId)
+					.ConfigureAwait(false);
 
 				if (dbStore == null)
 				{
@@ -60,7 +61,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Stores.Add(store);
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}
@@ -74,12 +75,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="storeId">Store id.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> DeleteStore(int storeId)
+		public async Task<bool> DeleteStoreAsync(int storeId)
 		{
 			if (storeId > DEFAULT_ID)
 			{
 				Store store = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Id == storeId);
+					.FirstOrDefaultAsync(s => s.Id == storeId)
+					.ConfigureAwait(false);
 
 				if (store != null)
 				{
@@ -88,7 +90,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Entry(store).State = EntityState.Modified;
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}
@@ -102,13 +104,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="storeId">Store id.</param>
 		/// <returns>Return store.</returns>
-		public async Task<Store> GetStoreById(int storeId)
+		public async Task<Store> GetStoreByIdAsync(int storeId)
 		{
 			if (storeId > DEFAULT_ID)
 			{
 				Store store = await _context.Stores
-					.AsNoTracking()
-					.FirstOrDefaultAsync(s=>s.Id == storeId);
+					.FirstOrDefaultAsync(s=>s.Id == storeId)
+					.ConfigureAwait(false);
 
 				return store;
 			}
@@ -121,13 +123,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="storeName">Store name.</param>
 		/// <returns>Return store.</returns>
-		public async Task<Store> GetStoreByName(string storeName)
+		public async Task<Store> GetStoreByNameAsync(string storeName)
 		{
 			if (!string.IsNullOrEmpty(storeName))
 			{
 				Store store = await _context.Stores
-					.AsNoTracking()
-					.FirstOrDefaultAsync(s => s.Name == storeName);
+					.FirstOrDefaultAsync(s => s.Name == storeName)
+					.ConfigureAwait(false);
 
 				return store;
 			}
@@ -140,12 +142,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="store">Changed store.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> UpdateStore(Store store)
+		public async Task<bool> UpdateStoreAsync(Store store)
 		{
 			if (store != null)
 			{
 				Store dbStore = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Id == store.Id);
+					.FirstOrDefaultAsync(s => s.Id == store.Id)
+					.ConfigureAwait(false);
 
 				if (dbStore != null)
 				{
@@ -153,7 +156,7 @@ namespace WebEngine.Data.Repositories
 
 					_context.Entry(store).State = EntityState.Modified;
 
-					await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync().ConfigureAwait(false);
 
 					return true;
 				}

@@ -34,7 +34,7 @@ namespace WebEngine.Web.ViewComponents
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
-			IList<Category> categories = await _categoryRepository.GetCategories();
+			IList<Category> categories = await _categoryRepository.GetCategoriesAsync();
 
 			if (categories != null)
 			{

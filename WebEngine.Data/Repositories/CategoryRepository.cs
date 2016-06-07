@@ -44,11 +44,13 @@ namespace WebEngine.Data.Repositories
 		/// Get categories.
 		/// </summary>
 		/// <returns>Return category collection.</returns>
-		public async Task<IList<Category>> GetCategories()
+		public async Task<IList<Category>> GetCategoriesAsync()
 		{
 			try
 			{
-				Category[] categories = await _context.Categories.ToArrayAsync();
+				Category[] categories = await _context.Categories
+					.ToArrayAsync()
+					.ConfigureAwait(false);
 
 				return categories;
 			}
@@ -63,14 +65,15 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return category.</returns>
-		public async Task<Category> GetCategory(string categoryName)
+		public async Task<Category> GetCategoryAsync(string categoryName)
 		{
 			if (!string.IsNullOrEmpty(categoryName))
 			{
 				try
 				{
 					Category category = await _context.Categories
-						.FirstOrDefaultAsync(c => c.Name == categoryName);
+						.FirstOrDefaultAsync(c => c.Name == categoryName)
+						.ConfigureAwait(false);
 
 					return category;
 				}
@@ -88,12 +91,13 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return result.</returns>
-		public async Task<bool> IsExist(string categoryName)
+		public async Task<bool> IsExistAsync(string categoryName)
 		{
 			if (!string.IsNullOrEmpty(categoryName))
 			{
 				Category category = await _context.Categories
-					.FirstOrDefaultAsync(c => c.Name == categoryName);
+					.FirstOrDefaultAsync(c => c.Name == categoryName)
+					.ConfigureAwait(false);
 
 				if (category != null)
 				{

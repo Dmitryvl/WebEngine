@@ -86,7 +86,7 @@ namespace WebEngine.Web.Controllers
 
 			if (!string.IsNullOrEmpty(categoryLower))
 			{
-				Category dbCategory = await _categoryRepository.GetCategory(categoryLower);
+				Category dbCategory = await _categoryRepository.GetCategoryAsync(categoryLower);
 
 				if (dbCategory != null)
 				{
