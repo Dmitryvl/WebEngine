@@ -65,7 +65,7 @@ a#scrollUp {
 **************************/
 
 .header_top {
-	background: none repeat scroll 0 0 #F0F0E9;
+	background: none repeat scroll 0 0 #f5f5f5;
 	margin-top:0;
 }
 
@@ -251,7 +251,7 @@ a#scrollUp {
 		}
 
 .search_box input {
-	background: #F0F0E9;
+	background: #f5f5f5;
 	border: medium none;
 	color: #B2B2B2;
 	font-family: 'roboto';
@@ -343,7 +343,7 @@ ul.sub-menu {
 **************************/
 
 #footer {
-	background: #F0F0E9;
+	background: #f5f5f5;
 }
 
 
@@ -543,7 +543,7 @@ ul.sub-menu {
 }
 
 .footer-bottom {
-	background: #D6D6D0;
+	background: #CCCCC6;
 	padding-top: 10px;
 }
 
@@ -652,7 +652,7 @@ ul.sub-menu {
 }
 
 .category-products {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	margin-bottom: 35px;
 	padding-bottom: 20px;
 	padding-top: 15px;
@@ -760,7 +760,7 @@ h2.title:before {
 	}
 
 .brands-name {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	padding-bottom: 20px;
 	padding-top: 15px;
 }
@@ -796,7 +796,7 @@ h2.title:before {
 
 .well {
 	background-color: #FFFFFF;
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	border-radius: 4px;
 	box-shadow: none;
 	margin-bottom: 20px;
@@ -845,7 +845,7 @@ h2.title {
 }
 
 .product-image-wrapper {
-	border: 1px solid #F7F7F5;
+	border: 1px solid #E6E4DF;
 	overflow: hidden;
 	margin-bottom: 30px;
 }
@@ -913,7 +913,7 @@ h2.title {
 }
 
 .choose {
-	border-top: 1px solid #F7F7F0;
+	border-top: 1px solid #E6E4DF;
 }
 
 	.choose ul li a {
@@ -1013,7 +1013,7 @@ h2.title {
 }
 
 	.our_partners ul {
-		background: #F7F7F0;
+		background: #E6E4DF;
 		margin-bottom: 50px;
 	}
 
@@ -1062,7 +1062,7 @@ h2.title {
 	}
 
 	.pagination li a, .pagination li span {
-		background-color: #f0f0e9;
+		background-color: #f5f5f5;
 		border: 0;
 		float: left;
 		line-height: 1.42857;
@@ -1113,7 +1113,7 @@ h2.title {
 }
 
 	.view-product img {
-		border: 1px solid #F7F7F0;
+		border: 1px solid #E6E4DF;
 		height: 380px;
 		width: 100%;
 	}
@@ -1157,7 +1157,7 @@ h2.title {
 		}
 
 .product-information {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	overflow: hidden;
 	padding-bottom: 60px;
 	padding-left: 60px;
@@ -1237,7 +1237,7 @@ h2.title {
 
 
 .shop-details-tab {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	margin-bottom: 75px;
 	margin-left: 15px;
 	margin-right: 15px;
@@ -1289,7 +1289,7 @@ h2.title {
 }
 
 	#reviews form span input {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: 0 none;
 		color: #A6A6A1;
 		font-family: 'Roboto', sans-serif;
@@ -1304,7 +1304,7 @@ h2.title {
 		}
 
 #reviews textarea {
-	background: #F0F0E9;
+	background: #f5f5f5;
 	border: medium none;
 	color: #A6A6A1;
 	height: 195px;
@@ -1393,7 +1393,7 @@ h2.title {
 
 
 	.login-form form input, .signup-form form input {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: medium none;
 		color: #696763;
 		display: block;
@@ -1520,7 +1520,7 @@ h2.title {
 
 
 	#cart_items .cart_info .table.table-condensed tr {
-		border-bottom: 1px solid#F7F7F0;
+		border-bottom: 1px solid#E6E4DF;
 	}
 
 		#cart_items .cart_info .table.table-condensed tr:last-child {
@@ -1571,7 +1571,7 @@ h2.title {
 }
 
 .cart_quantity_button a {
-	background: #F0F0E9;
+	background: #f5f5f5;
 	color: #696763;
 	display: inline-block;
 	font-size: 16px;
@@ -1600,7 +1600,7 @@ h2.title {
 
 
 	.cart_delete a {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		color: #FFFFFF;
 		padding: 5px 7px;
 		font-size: 16px;
@@ -1680,7 +1680,7 @@ h2.title {
 
 		.user_info .single_field.zip-field input {
 			background: transparent;
-			border: 1px solid#F0F0E9;
+			border: 1px solid#f5f5f5;
 		}
 
 	.user_info > li {
@@ -1692,7 +1692,7 @@ h2.title {
 		}
 
 	.user_info input, select, textarea {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: 0;
 		color: #696763;
 		padding: 5px;
@@ -1738,7 +1738,7 @@ h2.title {
 }
 
 	.register-req, .step-one .heading {
-		background: none repeat scroll 0 0 #F0F0E9;
+		background: none repeat scroll 0 0 #f5f5f5;
 		color: #363432;
 		font-size: 20px;
 		margin-bottom: 35px;
@@ -1841,7 +1841,7 @@ h2.title {
 	.form-two > form > select,
 	.form-two > form > input,
 	.form-one > form > input {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: 0 none;
 		margin-bottom: 10px;
 		padding: 10px;
@@ -1911,7 +1911,7 @@ h2.title {
 	}
 
 	#cart_items .cart_info .table.table-condensed.total-result .shipping-cost {
-		border-bottom: 1px solid #F7F7F0;
+		border-bottom: 1px solid #E6E4DF;
 	}
 
 
@@ -1936,7 +1936,7 @@ h2.title {
 }
 
 .blog-post-area .single-blog-post a img {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	width: 100%;
 	margin-bottom: 30px;
 }
@@ -1957,7 +1957,7 @@ h2.title {
 	}
 
 		.blog-post-area .post-meta ul li {
-			background: #F0F0E9;
+			background: #f5f5f5;
 			float: left;
 			margin-right: 10px;
 			padding: 0 5px;
@@ -2016,7 +2016,7 @@ h2.title {
 }
 
 	.pagination-area .pagination li a {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: 0 none;
 		border-radius: 0;
 		color: #696763;
@@ -2041,7 +2041,7 @@ h2.title {
 }
 
 	.pager-area .pager li a {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		border: 0 none;
 		border-radius: 0;
 		color: #696763;
@@ -2058,7 +2058,7 @@ h2.title {
 		}
 
 .rating-area {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	direction: block;
 	overflow: hidden;
 }
@@ -2120,7 +2120,7 @@ h2.title {
 }
 
 .commnets {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	padding: 18px 18px 18px 0;
 	margin-bottom: 50px;
 }
@@ -2172,7 +2172,7 @@ h2.title {
 			display: block;
 			font-size: 10px;
 			padding: 1px;
-			background: #F0F0E9;
+			background: #f5f5f5;
 		}
 
 			.blog-socials ul li a:hover {
@@ -2200,7 +2200,7 @@ h2.title {
 }
 
 .response-area .media {
-	border: 1px solid #F7F7F0;
+	border: 1px solid #E6E4DF;
 	padding: 18px 18px 18px 0;
 	margin-bottom: 27px;
 }
@@ -2229,7 +2229,7 @@ h2.title {
 
 
 	.sinlge-post-meta li {
-		background: #F0F0E9;
+		background: #f5f5f5;
 		color: #363432;
 		float: left;
 		font-size: 10px;
@@ -2284,7 +2284,7 @@ h2.title {
 	}
 
 	.replay-box form input {
-		border: 1px solid #F7F7F0;
+		border: 1px solid #E6E4DF;
 		color: #ADB2B2;
 		font-size: 12px;
 		margin-bottom: 22px;
@@ -2303,7 +2303,7 @@ h2.title {
 
 	.text-area textarea {
 		background: transparent;
-		border: 1px solid#F7F7F0;
+		border: 1px solid#E6E4DF;
 	}
 
 .btn.btn-primary {
