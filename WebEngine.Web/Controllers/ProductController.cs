@@ -52,6 +52,8 @@ namespace WebEngine.Web.Controllers
 				ProductFilter productFilter = new ProductFilter();
 
 				productFilter.CategoryName = filter.Category;
+				productFilter.PageSize = 4;
+				productFilter.CurrentPage = 2;
 				productFilter.Properties = filter.Properties.Select(p => new PropertyFilter()
 				{
 					PropertyId = p.Id,
@@ -60,7 +62,7 @@ namespace WebEngine.Web.Controllers
 
 				ProductListView list = new ProductListView();
 
-				IList<Product> products = await _productRepository.GetProductsAsync(productFilter, 1, 1);
+				IList<Product> products = await _productRepository.GetProductsAsync(productFilter);
 
 				if (products != null)
 				{
@@ -92,7 +94,14 @@ namespace WebEngine.Web.Controllers
 				{
 					ProductListView list = new ProductListView();
 
-					IList<Product> products = await _productRepository.GetProductsAsync(category);
+					ProductFilter productFilter = new ProductFilter();
+
+					productFilter.CategoryName = category;
+					productFilter.PageSize = 4;
+					productFilter.CurrentPage = 1;
+					productFilter.Properties = new PropertyFilter[0];
+
+					IList<Product> products = await _productRepository.GetProductsAsync(productFilter);
 
 					if (products != null)
 					{

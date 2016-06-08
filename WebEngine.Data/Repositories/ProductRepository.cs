@@ -176,7 +176,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="category">Category name.</param>
 		/// <returns>Return product collection.</returns>
-		public async Task<IList<Product>> GetProductsAsync(string category)
+		private async Task<IList<Product>> GetProductsAsync(string category)
 		{
 			if (!string.IsNullOrEmpty(category))
 			{
@@ -204,119 +204,123 @@ namespace WebEngine.Data.Repositories
 		/// Get filtred products.
 		/// </summary>
 		/// <param name="filter">Product filter.</param>
-		/// <param name="pageSize">Page size.</param>
-		/// <param name="currentPage">Current page.</param>
 		/// <returns>Return product collection.</returns>
-		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter, int pageSize, int currentPage)
+		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter)
 		{
 			if (filter != null)
 			{
-				StringBuilder sb = new StringBuilder();
+				int propertiesCount = filter.Properties.Count;
 
-				//sb.Append("(");
-
-				int length = filter.Properties.Count;
-
-				int paramIndex = 0;
-
-				SqlParameter[] parameters = new SqlParameter[filter.Properties.Count * 2];
-
-				string intersect = " INTERSECT ";
-
-				int lastIndex = length - 1;
-
-				for (int i = 0; i < length; i++)
+				if (propertiesCount > DEFAULT_ID)
 				{
-					if (filter.Properties[i].IsRange /*&& filter.Properties[0].RangeId > DEFAULT_ID*/)
-					{
-						parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
+					StringBuilder sb = new StringBuilder();
 
-						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
-						sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
-						paramIndex++;
-						//sb.Append($" AND pp.Value = @param{paramIndex}");
-						//paramIndex++;
-					}
-					//else if (filter.Properties[0].IsRange)
-					//{
+					sb.Append("(");
 
-					//}
-					else
+					int paramIndex = 0;
+
+					SqlParameter[] parameters = new SqlParameter[filter.Properties.Count * 2 + 2];
+
+					string intersect = " INTERSECT ";
+
+					int lastIndex = propertiesCount - 1;
+
+					for (int i = 0; i < propertiesCount; i++)
 					{
-						parameters[paramIndex] = new SqlParameter()
+						if (filter.Properties[i].IsRange /*&& filter.Properties[0].RangeId > DEFAULT_ID*/)
 						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].PropertyId,
-							SqlDbType = SqlDbType.Int,
-							Direction = ParameterDirection.Input
-						};
+							parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
 
-						sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
-						sb.Append($" WHERE pp.PropertyId = @param{paramIndex}");
-						paramIndex++;
-
-						parameters[paramIndex] = new SqlParameter()
+							sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
+							sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
+							paramIndex++;
+							//sb.Append($" AND pp.Value = @param{paramIndex}");
+							//paramIndex++;
+						}
+						else
 						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].Value,
-							SqlDbType = SqlDbType.NVarChar,
-							Direction = ParameterDirection.Input
-						};
-
-						sb.Append($" AND pp.Value = @param{paramIndex}");
-						paramIndex++;
-					}
-
-					if (i != lastIndex)
-					{
-						sb.Append(intersect);
-					}
-				}
-
-				//parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", currentPage);
-
-				string sql = sb.ToString();
-
-				string cs = "Server=(localdb)\\projectsv12;Database=WebEngine11;Trusted_Connection=True;MultipleActiveResultSets=true";
-
-				List<Product> prods = new List<Product>();
-
-				using (SqlConnection sqlConnection = new SqlConnection(cs))
-				{
-					using (SqlCommand cmd = sqlConnection.CreateCommand())
-					{
-						cmd.CommandText = sql;
-						cmd.Parameters.AddRange(parameters);
-						cmd.CommandTimeout = 15;
-						cmd.CommandType = CommandType.Text;
-
-						try
-						{
-							await sqlConnection.OpenAsync();
-
-							SqlDataReader reader = cmd.ExecuteReader();
-
-							while (await reader.ReadAsync())
+							parameters[paramIndex] = new SqlParameter()
 							{
-								prods.Add(new Product()
-								{
-									Id = (int)reader["Id"],
-									Name = (string)reader["Name"]
-								});
-							}
+								ParameterName = $"@param{paramIndex}",
+								Value = filter.Properties[i].PropertyId,
+								SqlDbType = SqlDbType.Int,
+								Direction = ParameterDirection.Input
+							};
 
-							reader.Dispose();
+							sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
+							sb.Append($" WHERE pp.PropertyId = @param{paramIndex}");
+							paramIndex++;
+
+							parameters[paramIndex] = new SqlParameter()
+							{
+								ParameterName = $"@param{paramIndex}",
+								Value = filter.Properties[i].Value,
+								SqlDbType = SqlDbType.NVarChar,
+								Direction = ParameterDirection.Input
+							};
+
+							sb.Append($" AND pp.Value = @param{paramIndex}");
+							paramIndex++;
 						}
-						catch
+
+						if (i != lastIndex)
 						{
-							return null;
+							sb.Append(intersect);
 						}
 					}
+
+					parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.CurrentPage);
+
+					paramIndex++;
+
+					parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
+
+					sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex-1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
+
+					string sql = sb.ToString();
+
+					List<Product> prods = new List<Product>();
+
+					using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+					{
+						using (SqlCommand cmd = sqlConnection.CreateCommand())
+						{
+							cmd.CommandText = sql;
+							cmd.Parameters.AddRange(parameters);
+							cmd.CommandTimeout = 15;
+							cmd.CommandType = CommandType.Text;
+
+							try
+							{
+								await sqlConnection.OpenAsync();
+
+								SqlDataReader reader = cmd.ExecuteReader();
+
+								while (await reader.ReadAsync())
+								{
+									prods.Add(new Product()
+									{
+										Id = (int)reader["Id"],
+										Name = (string)reader["Name"],
+										//ShortInfo = (string)reader["ShortInfo"],
+									});
+								}
+
+								reader.Dispose();
+							}
+							catch
+							{
+								return null;
+							}
+						}
+					}
+
+					return prods;
 				}
-
-				//sb.Append(") ORDER BY p.Id OFFSET ((@CurrentPage - 1) * @PageSize) ROWS FETCH NEXT @PageSize ROWS ONLY;");
-
-				return prods;
+				else
+				{
+					return await GetProductsAsync(filter.CategoryName);
+				}
 			}
 
 			return null;

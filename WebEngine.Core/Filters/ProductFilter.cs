@@ -26,5 +26,15 @@ namespace WebEngine.Core.Filters
 		/// Gets or sets properties.
 		/// </summary>
 		public IList<PropertyFilter> Properties { get; set; }
+
+		/// <summary>
+		/// Gets or sets page size.
+		/// </summary>
+		public int PageSize { get; set; }
+
+		/// <summary>
+		/// Gets or sets current page.
+		/// </summary>
+		public int CurrentPage { get; set; }
 	}
 }
