@@ -22,6 +22,7 @@ namespace WebEngine.Web.Controllers
 	/// <summary>
 	/// <see cref="StoreController"/> class.
 	/// </summary>
+	[Route("store")]
 	public class StoreController : Controller
 	{
 		#region Private fields
@@ -61,7 +62,7 @@ namespace WebEngine.Web.Controllers
 			return View();
 		}
 
-		[HttpGet, Route("[controller]{storeId:int}")]
+		[HttpGet, Route("{storeId:int}")]
 		public async Task<IActionResult> GetStore(int storeId)
 		{
 			if (storeId > 0)
@@ -83,7 +84,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Route("[controller]/{storeName}")]
+		[HttpGet, Route("{storeName}")]
 		public async Task<IActionResult> GetStore(string storeName)
 		{
 			if (!string.IsNullOrEmpty(storeName))
@@ -105,7 +106,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, Authorize, Route("[controller]/CreateStore")]
+		[HttpGet, Authorize, Route("CreateStore")]
 		public IActionResult CreateStore()
 		{
 			return View();

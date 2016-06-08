@@ -79,7 +79,7 @@ namespace WebEngine.Web.Controllers
 			return View("Error");
 		}
 
-		[HttpGet, AllowAnonymous, Route("[controller]/about/{userName}")]
+		[HttpGet, AllowAnonymous, Route("about/{userName}")]
 		public async Task<IActionResult> GetUserProfile(string userName)
 		{
 			if (!string.IsNullOrEmpty(userName))

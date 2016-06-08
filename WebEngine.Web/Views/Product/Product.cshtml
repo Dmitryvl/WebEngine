@@ -1,31 +1,29 @@
 ﻿@*
------------------------------------------------------------------------
-	<copyright file="Profile.cs" author="Dzmitry Prakapenka">
-		All rights reserved.
-	</copyright>
------------------------------------------------------------------------
+	-----------------------------------------------------------------------
+		<copyright file="Profile.cs" author="Dzmitry Prakapenka">
+			All rights reserved.
+		</copyright>
+	-----------------------------------------------------------------------
 *@
 @using WebEngine.Web.ViewModels.Product
 @model WebEngine.Web.ViewModels.Product.FullProductView
 
 <div class="col-sm-3">
 	<div class="left-sidebar">
-		<h2>Category</h2>
-		<div class="panel-group category-products" id="accordian">
-			@await Component.InvokeAsync("CategoryList")
-		</div>
+		@await Component.InvokeAsync("CategoryList")
 	</div>
-</div><div class="col-sm-9 padding-right">
+</div>
+<div class="col-sm-9 padding-right">
 	<div class="features_items">
+		<h2 class="title text-center">@Model.CompanyName @Model.ProductName</h2>
 		<div class="product-details">
 			<!--product-details-->
-			<div class="col-sm-5">
+			<div class="col-sm-4">
 				<div class="view-product">
 					@*<img src="images/product-details/1.jpg" alt="" />*@
 					<h3>ZOOM</h3>
 				</div>
 				<div id="similar-product" class="carousel slide" data-ride="carousel">
-
 					<!-- Wrapper for slides -->
 					<div class="carousel-inner">
 						@*<div class="item active">
@@ -59,7 +57,7 @@
 				<div class="product-information">
 					<!--/product-information-->
 					<img src="images/product-details/new.jpg" class="newarrival" alt="" />
-					<h2>@Model.CompanyName @Model.ProductName</h2>
+					<h2></h2>
 					<p>Web ID: 1089772</p>
 					<span>
 						info
