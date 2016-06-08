@@ -47,5 +47,8 @@
 				</div>
 			</div>
 		}
+
+		@Html.HiddenFor(model => model.TotalPages, new { id = "totalPages" })
+		@Html.HiddenFor(model => model.CurrentPage, new { id = "currentPage" })
 	</div>
 </div>

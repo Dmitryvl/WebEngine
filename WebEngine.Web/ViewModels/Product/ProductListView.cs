@@ -31,5 +31,15 @@ namespace WebEngine.Web.ViewModels.Product
 		/// Gets or sets products.
 		/// </summary>
 		public IEnumerable<ProductView> Products { get; set; }
+
+		/// <summary>
+		/// Gets or sets current page.
+		/// </summary>
+		public int CurrentPage { get; set; }
+
+		/// <summary>
+		/// Gets or sets total pages.
+		/// </summary>
+		public int TotalPages { get; set; }
 	}
 }
