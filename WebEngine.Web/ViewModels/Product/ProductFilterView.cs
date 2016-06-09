@@ -19,6 +19,9 @@ namespace WebEngine.Web.ViewModels.Product
 	/// </summary>
 	public class ProductFilterView
 	{
+		/// <summary>
+		/// Gets or sets product filter items.
+		/// </summary>
 		public IList<ProductFilterItem> Items { get; set; }
 	}
 }

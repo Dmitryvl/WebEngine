@@ -7,13 +7,7 @@
 namespace WebEngine.Core.Entities
 {
 	#region Usings
-	
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	
+
 	#endregion
 
 	/// <summary>
@@ -23,16 +17,28 @@ namespace WebEngine.Core.Entities
 	{
 		#region Public properties
 
+		/// <summary>
+		/// Gets or sets id.
+		/// </summary>
 		public int Id { get; set; }
 
+		/// <summary>
+		/// Gets or sets product filter item id.
+		/// </summary>
 		public int ProductFilterItemId { get; set; }
 
+		/// <summary>
+		/// Gets or sets value.
+		/// </summary>
 		public string Value { get; set; }
 
 		#endregion
 
 		#region Navigation properties
 
+		/// <summary>
+		/// Gets or sets product filter item.
+		/// </summary>
 		public virtual ProductFilterItem ProductFilterItem { get; set; }
 
 		#endregion

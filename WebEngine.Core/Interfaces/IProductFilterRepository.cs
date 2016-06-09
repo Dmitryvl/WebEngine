@@ -21,6 +21,11 @@ namespace WebEngine.Core.Interfaces
 	/// </summary>
 	public interface IProductFilterRepository : IDisposable
 	{
+		/// <summary>
+		/// Get product filter items.
+		/// </summary>
+		/// <param name="categoryId">Category id.</param>
+		/// <returns>Return filter item collection.</returns>
 		Task<IList<ProductFilterItem>> GetProductFilterItems(int categoryId);
 	}
 }

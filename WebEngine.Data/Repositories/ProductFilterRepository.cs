@@ -11,13 +11,15 @@ namespace WebEngine.Data.Repositories
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text;
 	using System.Threading.Tasks;
-	using Core.Interfaces;
-	using Microsoft.Extensions.Options;
+
 	using Core.Config;
 	using Core.Entities;
+	using Core.Interfaces;
+
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Options;
+
 	#endregion
 
 	/// <summary>
@@ -27,6 +29,11 @@ namespace WebEngine.Data.Repositories
 	{
 		#region Constructors
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ProductFilterRepository" /> class.
+		/// </summary>
+		/// <param name="services">IServiceProvider services.</param>
+		/// <param name="config">Application config.</param>
 		public ProductFilterRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
 		{
 		}
@@ -35,6 +42,11 @@ namespace WebEngine.Data.Repositories
 
 		#region Public methods
 
+		/// <summary>
+		/// Get product filter items.
+		/// </summary>
+		/// <param name="categoryId">Category id.</param>
+		/// <returns>Return filter item collection.</returns>
 		public async Task<IList<ProductFilterItem>> GetProductFilterItems(int categoryId)
 		{
 			if (categoryId > DEFAULT_ID)
