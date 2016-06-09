@@ -117,7 +117,7 @@ namespace WebEngine.Data
 						new BaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
 					};
 
-					Property[] pp = new Property[]
+					Property[] properties = new Property[]
 					{
 						new Property() { Name = "Screen size", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
 						new Property() { Name = "Display resolution", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
@@ -141,17 +141,29 @@ namespace WebEngine.Data
 
 					ProductToProperty[] ptp = new ProductToProperty[]
 					{
-						new ProductToProperty() { Product = products[0], Property = pp[0], Value = "4", SizeValue = "" },
-						new ProductToProperty() { Product = products[0], Property = pp[1], Value = "111x111", SizeValue = "" },
-						new ProductToProperty() { Product = products[0], Property = pp[2], Value = "12", SizeValue = "Mg" },
-						new ProductToProperty() { Product = products[0], Property = pp[3], Value = "true", SizeValue = "Gb" },
-						new ProductToProperty() { Product = products[0], Property = pp[4], Value = "IPS", SizeValue = "Gb" },
-						new ProductToProperty() { Product = products[0], Property = pp[5], Value = "11", SizeValue = "m" }
+						new ProductToProperty() { Product = products[0], Property = properties[0], Value = "4", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], Property = properties[1], Value = "111x111", SizeValue = "" },
+						new ProductToProperty() { Product = products[0], Property = properties[2], Value = "12", SizeValue = "Mg" },
+						new ProductToProperty() { Product = products[0], Property = properties[3], Value = "true", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], Property = properties[4], Value = "IPS", SizeValue = "Gb" },
+						new ProductToProperty() { Product = products[0], Property = properties[5], Value = "11", SizeValue = "m" }
 					};
 
 					ProductOffer[] productOffers = new ProductOffer[]
 					{
 						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message" }
+					};
+
+					ProductFilterItem[] productFilterItems = new ProductFilterItem[]
+					{
+						new ProductFilterItem() { Category = categories[0], Property = properties[0], FilterItemType = "DropDownList" },
+						new ProductFilterItem() { Category = categories[0], Property = properties[1], FilterItemType = "Range" }
+					};
+
+					ProductFilterItemValue[] productFilterItemValues = new ProductFilterItemValue[]
+					{
+						new ProductFilterItemValue() { ProductFilterItem = productFilterItems[0], Value = "5.1" },
+						new ProductFilterItemValue() { ProductFilterItem = productFilterItems[0], Value = "5.2" }
 					};
 
 					db.DataTypes.AddRange(dataTypes);
@@ -164,10 +176,12 @@ namespace WebEngine.Data
 					db.Companies.AddRange(companies);
 					db.Categories.AddRange(categories);
 					db.BaseProperties.AddRange(productBaseProperty);
-					db.Properties.AddRange(pp);
+					db.Properties.AddRange(properties);
 					db.Products.AddRange(products);
 					db.ProductOffers.AddRange(productOffers);
 					db.ProductToProperty.AddRange(ptp);
+					db.ProductFilterItems.AddRange(productFilterItems);
+					db.ProductFilterItemValue.AddRange(productFilterItemValues);
 
 					await db.SaveChangesAsync();
 

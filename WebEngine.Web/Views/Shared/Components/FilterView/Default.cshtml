@@ -1,0 +1,42 @@
+﻿@*
+	-----------------------------------------------------------------------
+		<copyright file="Profile.cs" author="Dzmitry Prakapenka">
+			All rights reserved.
+		</copyright>
+	-----------------------------------------------------------------------
+*@
+
+@model WebEngine.Web.ViewModels.Product.ProductFilterView
+
+@for (int i = 0; i < Model.Items.Count; i++)
+{
+	@if (Model.Items[i].FilterItemType == "DropDownList")
+	{
+		@Model.Items[i].Property.Name @Model.Items[i].FilterItemType
+
+		<br />
+
+		<select id="@Model.Items[i].PropertyId">
+			@foreach (var item in Model.Items[i].ProductFilterItemValues)
+			{
+				<option value="@item.Value">@item.Value</option>
+			}
+		</select>
+
+		<br />
+	}
+	else if (Model.Items[i].FilterItemType == "Range")
+	{
+		@Model.Items[i].Property.Name @Model.Items[i].FilterItemType
+
+		<br />
+		<ul>
+			@foreach (var value in Model.Items[i].ProductFilterItemValues)
+			{
+				<li>
+					@value.Value
+				</li>
+			}
+		</ul>
+	}
+}

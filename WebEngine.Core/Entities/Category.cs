@@ -48,6 +48,11 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public virtual ICollection<Product> Products { get; set; }
 
+		/// <summary>
+		/// Gets or sets product filter items.
+		/// </summary>
+		public virtual ICollection<ProductFilterItem> ProductFilterItems { get; set; }
+
 		#endregion
 	}
 }

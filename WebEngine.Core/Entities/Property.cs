@@ -64,6 +64,11 @@ namespace WebEngine.Core.Entities
 		public virtual ICollection<ProductToProperty> ProductToProperty { get; set; }
 
 		/// <summary>
+		/// Gets or sets product filter items.
+		/// </summary>
+		public virtual ICollection<ProductFilterItem> ProductFilterItems { get; set; }
+
+		/// <summary>
 		/// Gets or sets data type.
 		/// </summary>
 		public virtual DataType DataType { get; set; }

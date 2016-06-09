@@ -10,7 +10,11 @@ namespace WebEngine.Web.ViewComponents
 
 	using System.Threading.Tasks;
 
+	using Core.Entities;
+
 	using Microsoft.AspNetCore.Mvc;
+
+	using ViewModels.Product;
 
 	using WebEngine.Core.Interfaces;
 
@@ -21,25 +25,40 @@ namespace WebEngine.Web.ViewComponents
 	/// </summary>
 	public class FilterView : ViewComponent
 	{
-		private ICategotyRepository _categoryRepository;
+		private readonly ICategotyRepository _categoryRepository;
 
-		public FilterView(ICategotyRepository categoryRepository)
+		private readonly IProductFilterRepository _productFilterRepository;
+
+		public FilterView(
+			ICategotyRepository categoryRepository,
+			IProductFilterRepository productFilterRepository)
 		{
 			_categoryRepository = categoryRepository;
+			_productFilterRepository = productFilterRepository;
 		}
 
 		public async Task<IViewComponentResult> InvokeAsync(string category)
 		{
-			bool isExist = await _categoryRepository.IsExistAsync(category);
+			Category dbCategory = await _categoryRepository.GetCategoryAsync(category);
 
-			_categoryRepository.Dispose();
-
-			if (isExist)
+			if (dbCategory != null)
 			{
-				return View($"{category.ToLower()}Filter");
-			}
+				ProductFilterView filterView = new ProductFilterView();
 
-			return View("Error");
+				filterView.Items = await _productFilterRepository.GetProductFilterItems(dbCategory.Id);
+
+				_categoryRepository.Dispose();
+				_productFilterRepository.Dispose();
+
+				return View(filterView);
+			}
+			else
+			{
+				_categoryRepository.Dispose();
+				_productFilterRepository.Dispose();
+
+				return View("Error");
+			}
 		}
 	}
 }

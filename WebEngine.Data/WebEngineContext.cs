@@ -104,6 +104,16 @@ namespace WebEngine.Data
 		/// </summary>
 		public DbSet<ProductOffer> ProductOffers { get; set; }
 
+		/// <summary>
+		/// Gets or sets product filter items.
+		/// </summary>
+		public DbSet<ProductFilterItem> ProductFilterItems { get; set; }
+
+		/// <summary>
+		/// Gets or sets product filter item values.
+		/// </summary>
+		public DbSet<ProductFilterItemValue> ProductFilterItemValue { get; set; }
+
 		#endregion
 
 		#region Override
@@ -164,6 +174,12 @@ namespace WebEngine.Data
 			builder.Entity<Product>().Property(s => s.Name).IsRequired().HasMaxLength(stringLength);
 			builder.Entity<Product>().Property(s => s.UrlName).IsRequired().HasMaxLength(stringLength);
 			builder.Entity<Product>().Property(s => s.ShortInfo).HasMaxLength(stringLength);
+
+			builder.Entity<ProductFilterItem>().HasKey(p => p.Id);
+			builder.Entity<ProductFilterItem>().Property(p => p.FilterItemType).IsRequired().HasMaxLength(stringLength);
+
+			builder.Entity<ProductFilterItemValue>().HasKey(p => p.Id);
+			builder.Entity<ProductFilterItemValue>().Property(p => p.Value).IsRequired().HasMaxLength(stringLength);
 
 			#endregion
 
@@ -254,6 +270,21 @@ namespace WebEngine.Data
 				.HasOne(s => s.Property)
 				.WithMany(sm => sm.ProductToProperty)
 				.HasForeignKey(s => s.PropertyId);
+
+			builder.Entity<ProductFilterItem>()
+				.HasOne(p => p.Category)
+				.WithMany(c => c.ProductFilterItems)
+				.HasForeignKey(s => s.CategoryId);
+
+			builder.Entity<ProductFilterItem>()
+				.HasOne(p => p.Property)
+				.WithMany(pp => pp.ProductFilterItems)
+				.HasForeignKey(p => p.PropertyId);
+
+			builder.Entity<ProductFilterItemValue>()
+				.HasOne(p => p.ProductFilterItem)
+				.WithMany(pf => pf.ProductFilterItemValues)
+				.HasForeignKey(p => p.ProductFilterItemId);
 
 			#endregion
 		}
