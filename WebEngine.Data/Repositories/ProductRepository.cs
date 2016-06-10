@@ -172,35 +172,6 @@ namespace WebEngine.Data.Repositories
 		}
 
 		/// <summary>
-		/// Get products by canegory name.
-		/// </summary>
-		/// <param name="category">Category name.</param>
-		/// <returns>Return product collection.</returns>
-		private async Task<IList<Product>> GetProductsAsync(string category)
-		{
-			if (!string.IsNullOrEmpty(category))
-			{
-				Product[] products = await _context.Products
-					.Where(p => p.Category.Name == category)
-					.Select(p => new Product()
-					{
-						Category = p.Category,
-						Id = p.Id,
-						Name = p.Name,
-						Company = p.Company,
-						ShortInfo = p.ShortInfo,
-						UrlName = p.UrlName
-					})
-					.ToArrayAsync()
-					.ConfigureAwait(false);
-
-				return products;
-			}
-
-			return null;
-		}
-
-		/// <summary>
 		/// Get filtred products.
 		/// </summary>
 		/// <param name="filter">Product filter.</param>
@@ -275,7 +246,7 @@ namespace WebEngine.Data.Repositories
 
 					parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
 
-					sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex-1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
+					sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex - 1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
 
 					string sql = sb.ToString();
 
@@ -319,7 +290,51 @@ namespace WebEngine.Data.Repositories
 				}
 				else
 				{
-					return await GetProductsAsync(filter.CategoryName);
+					//return await GetProductsAsync(filter.CategoryName);
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Get filtered products.
+		/// </summary>
+		/// <param name="categoryId">Category id.</param>
+		/// <param name="currentPage">Current page number.</param>
+		/// <param name="pageSize">Page size</param>
+		/// <returns>Return product collection.</returns>
+		public async Task<IList<Product>> GetProductsAsync(int categoryId, int currentPage, int pageSize)
+		{
+			if (categoryId > DEFAULT_ID)
+			{
+				try
+				{
+					Product[] products = await _context.Products
+						.Where(p => p.CategoryId == categoryId)
+						.Select(p => new Product()
+						{
+							Id = GetValue(p.Id),
+							Name = GetValue(p.Name),
+							UrlName = GetValue(p.UrlName),
+							ShortInfo = GetValue(p.ShortInfo),
+							Company = new Company()
+							{
+								Id = GetValue(p.Company.Id),
+								Name = GetValue(p.Company.Name)
+							}
+						})
+						.OrderByDescending(p=>p.Id)
+						.Skip((currentPage - 1) * pageSize)
+						.Take(pageSize)
+						.ToArrayAsync()
+						.ConfigureAwait(false);
+
+					return products;
+				}
+				catch
+				{
+					return null;
 				}
 			}
 

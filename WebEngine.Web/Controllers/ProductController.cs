@@ -32,80 +32,68 @@ namespace WebEngine.Web.Controllers
 
 		private readonly ICategotyRepository _categoryRepository;
 
+		private readonly IProductFilterRepository _productFilterRepository;
+
 		#endregion
 
 		#region Constructors
 
-		public ProductController(IProductRepository productRepository, ICategotyRepository categoryRepository)
+		public ProductController(
+			IProductRepository productRepository,
+			ICategotyRepository categoryRepository,
+			IProductFilterRepository productFilterRepository)
 		{
 			_productRepository = productRepository;
 			_categoryRepository = categoryRepository;
+			_productFilterRepository = productFilterRepository;
 		}
 
 		#endregion
 
 		[HttpPost]
-		public async Task<ProductListView> Index([FromBody] Filter filter)
+		public async Task<IActionResult> Index([FromBody]Filter filter)
 		{
 			if (filter != null)
 			{
-				ProductFilter productFilter = new ProductFilter();
+				
 
-				productFilter.CategoryName = filter.Category;
-				productFilter.PageSize = 4;
-				productFilter.CurrentPage = 2;
-				productFilter.Properties = filter.Properties.Select(p => new PropertyFilter()
-				{
-					PropertyId = p.Id,
-					Value = p.Value
-				}).ToArray();
 
-				ProductListView list = new ProductListView();
+				//IEnumerable<Product> products = await _productRepository.GetProductsAsync(productFilter);
 
-				IList<Product> products = await _productRepository.GetProductsAsync(productFilter);
+				//if (products != null)
+				//{
+					
+				//}
 
-				if (products != null)
-				{
-					list.Products = products.Select(s => new ProductView()
-					{
-						Id = s.Id,
-						Name = s.Name,
-						//CompanyName = s.Company.Name
-					});
-				}
-
-				return list;
+				return PartialView();
 			}
 
-			return null;
+			return View("Error");
 		}
 
 
 		[HttpGet, Route("items/{category}")]
 		public async Task<IActionResult> Index(string category)
 		{
-			string categoryLower = category.ToLower();
-
-			if (!string.IsNullOrEmpty(categoryLower))
+			if (!string.IsNullOrEmpty(category))
 			{
-				Category dbCategory = await _categoryRepository.GetCategoryAsync(categoryLower);
+				Category dbCategory = await _categoryRepository.GetCategoryAsync(category);
 
 				if (dbCategory != null)
 				{
-					ProductListView list = new ProductListView();
+					ProductsPage page = new ProductsPage();
 
-					ProductFilter productFilter = new ProductFilter();
+					page.CategoryName = dbCategory.Name;
+					page.CategoryViewName = dbCategory.ViewName;
+					page.CurrentPage = 1;
 
-					productFilter.CategoryName = category;
-					productFilter.PageSize = 4;
-					productFilter.CurrentPage = 1;
-					productFilter.Properties = new PropertyFilter[0];
+					IEnumerable<Product> products = await _productRepository.GetProductsAsync(dbCategory.Id, page.CurrentPage, 30);
 
-					IList<Product> products = await _productRepository.GetProductsAsync(productFilter);
+					IEnumerable<ProductFilterItem> filterItems = await _productFilterRepository.GetProductFilterItems(dbCategory.Id);
 
 					if (products != null)
 					{
-						list.Products = products.Select(p => new ProductView()
+						page.Products = products.Select(p => new ProductView()
 						{
 							Id = p.Id,
 							Name = p.Name,
@@ -113,12 +101,20 @@ namespace WebEngine.Web.Controllers
 							CompanyName = p.Company.Name,
 							UrlName = p.UrlName
 						});
-
-						list.CategoryName = categoryLower;
-						list.CategoryViewName = dbCategory.ViewName;
 					}
 
-					return View(list);
+					if (filterItems != null)
+					{
+						page.FilterItems = filterItems.Select(i => new FilterItemView()
+						{
+							PropertyId = i.PropertyId,
+							FilterItemType = i.FilterItemType,
+							PropertyName = i.Property.Name,
+							FilterItemValues = i.ProductFilterItemValues.Select(v => v.Value)
+						});
+					}
+
+					return View(page);
 				}
 			}
 
@@ -188,6 +184,7 @@ namespace WebEngine.Web.Controllers
 			{
 				_productRepository.Dispose();
 				_categoryRepository.Dispose();
+				_productFilterRepository.Dispose();
 			}
 
 			base.Dispose(disposing);

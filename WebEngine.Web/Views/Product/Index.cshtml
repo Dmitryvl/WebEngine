@@ -1,13 +1,12 @@
 ﻿@*
------------------------------------------------------------------------
-	<copyright file="Profile.cs" author="Dzmitry Prakapenka">
-		All rights reserved.
-	</copyright>
------------------------------------------------------------------------
+	-----------------------------------------------------------------------
+		<copyright file="Profile.cs" author="Dzmitry Prakapenka">
+			All rights reserved.
+		</copyright>
+	-----------------------------------------------------------------------
 *@
 
-@using WebEngine.Web.ViewModels.Product
-@model WebEngine.Web.ViewModels.Product.ProductListView
+@model WebEngine.Web.ViewModels.Product.ProductsPage
 
 @{
 	ViewData["Title"] = Model.CategoryViewName;
@@ -17,14 +16,16 @@
 	<div class="left-sidebar">
 		<h2>filter</h2>
 		<div class="panel-group category-products" id="accordian">
-			@await Component.InvokeAsync("FilterView", new { category = Model.CategoryName })
+			@*@await Component.InvokeAsync("FilterView", new { category = Model.CategoryName })*@
+
+			@Html.Partial("_ProductFilter", Model.FilterItems)
 		</div>
 	</div>
 </div>
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
 		<h2 class="title text-center">@Model.CategoryViewName</h2>
-		@foreach (ProductView product in Model.Products)
+		@foreach (var product in Model.Products)
 		{
 			<div class="col-sm-4">
 				<div class="product-image-wrapper">
@@ -39,8 +40,10 @@
 					<div class="choose">
 						<ul class="nav nav-pills nav-justified">
 							@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
-							<li><a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName" >
-								<i class="fa fa-plus-square"></i>More...</a>
+							<li>
+								<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
+									<i class="fa fa-plus-square"></i>More...
+								</a>
 							</li>
 						</ul>
 					</div>
@@ -52,3 +55,51 @@
 		@Html.HiddenFor(model => model.CurrentPage, new { id = "currentPage" })
 	</div>
 </div>
+
+
+@section Scripts {
+	<script>
+
+		let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new
+					  {
+						  PropertyId = m.PropertyId,
+						  FilterItemType = m.FilterItemType
+					  })));
+
+		for(let i = 0; i < elements.length; i++) {
+
+			if(elements[i].FilterItemType == 'DropDownList'){
+
+				$('#'+elements[i].PropertyId).change(function(){
+					let value = $('#'+elements[i].PropertyId).val();
+
+					var model = {
+						Category: "SmartPhone",
+						Properties: [
+							{ "Id": elements[i].PropertyId, "Value": value, "IsRange" : false },
+							//{ "Id": 4, "Value": "11", "IsRange" : false }
+						],
+					}
+
+					var filter = JSON.stringify(model)
+
+					$.ajax({
+						type: 'POST',
+						url: '/Product/Index',
+						contentType: 'application/json; charset=utf-8',
+						data: filter
+					}).success(function (data) {
+						alert("ok");
+					}).fail(function (data) {
+						alert("ошибка");
+					});
+				});
+
+			} else if(elements[i].FilterItemType == 'Range'){
+
+
+			}
+		}
+
+	</script>
+}

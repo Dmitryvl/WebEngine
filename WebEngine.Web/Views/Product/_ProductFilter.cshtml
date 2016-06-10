@@ -1,0 +1,38 @@
+﻿@*
+	-----------------------------------------------------------------------
+		<copyright file="Profile.cs" author="Dzmitry Prakapenka">
+			All rights reserved.
+		</copyright>
+	-----------------------------------------------------------------------
+*@
+
+@model IEnumerable<WebEngine.Web.ViewModels.Product.FilterItemView>
+
+<div id="filter">
+	@foreach (var filterItem in Model)
+	{
+		@if (filterItem.FilterItemType == "DropDownList")
+		{
+			<label class="control-label">@filterItem.PropertyName</label>
+
+			<select id="@filterItem.PropertyId" class="form-control">
+				@foreach (var item in filterItem.FilterItemValues)
+				{
+					<option value="@item">@item</option>
+				}
+			</select>
+		}
+		else if (filterItem.FilterItemType == "Range")
+		{
+			<label class="control-label">@filterItem.PropertyName</label>
+
+			<div id="@filterItem.PropertyId">
+				<div class="input-group">
+					<input type="text" id="@string.Concat("first", filterItem.PropertyId)" class="first form-control" />
+					<span class="input-group-addon">-</span>
+					<input type="text" id="@string.Concat("second", filterItem.PropertyId)" class="second form-control" />
+				</div>
+			</div>
+		}
+	}
+</div>

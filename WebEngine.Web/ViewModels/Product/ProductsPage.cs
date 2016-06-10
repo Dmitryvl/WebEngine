@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProductListView.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductsPage.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,10 +13,20 @@ namespace WebEngine.Web.ViewModels.Product
 	#endregion
 
 	/// <summary>
-	/// <see cref="ProductListView"/> class.
+	/// <see cref="ProductsPage"/> class.
 	/// </summary>
-	public class ProductListView
+	public class ProductsPage
 	{
+		/// <summary>
+		/// Gets or sets products.
+		/// </summary>
+		public IEnumerable<ProductView> Products { get; set; }
+
+		/// <summary>
+		/// Gets or sets filter items.
+		/// </summary>
+		public IEnumerable<FilterItemView> FilterItems { get; set; }
+
 		/// <summary>
 		/// Gets or sets category name.
 		/// </summary>
@@ -26,11 +36,6 @@ namespace WebEngine.Web.ViewModels.Product
 		/// Gets or sets category view name.
 		/// </summary>
 		public string CategoryViewName { get; set; }
-
-		/// <summary>
-		/// Gets or sets products.
-		/// </summary>
-		public IEnumerable<ProductView> Products { get; set; }
 
 		/// <summary>
 		/// Gets or sets current page.

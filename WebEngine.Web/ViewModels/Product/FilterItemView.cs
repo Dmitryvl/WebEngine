@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="FilterView.cs" author="Dzmitry Prakapenka">
+// <copyright file="FilterItemView.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,18 +10,19 @@ namespace WebEngine.Web.ViewModels.Product
 
 	using System.Collections.Generic;
 
-	using Core.Entities;
-
 	#endregion
 
 	/// <summary>
-	/// <see cref="ProductFilterView"/> class.
+	/// <see cref="FilterItemView"/> class.
 	/// </summary>
-	public class ProductFilterView
+	public class FilterItemView
 	{
-		/// <summary>
-		/// Gets or sets product filter items.
-		/// </summary>
-		public IList<ProductFilterItem> Items { get; set; }
+		public int PropertyId { get; set; }
+
+		public string PropertyName { get; set; }
+
+		public string FilterItemType { get; set; }
+
+		public IEnumerable<string> FilterItemValues { get; set; }
 	}
 }
