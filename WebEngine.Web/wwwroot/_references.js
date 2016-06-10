@@ -2,6 +2,7 @@
 /// <reference path="../gulpfile.js" />
 /// <reference path="js/bootstrap.min.js" />
 /// <reference path="js/contact.js" />
+/// <reference path="js/filter.js" />
 /// <reference path="js/gmaps.js" />
 /// <reference path="js/html5shiv.js" />
 /// <reference path="js/jquery.js" />
