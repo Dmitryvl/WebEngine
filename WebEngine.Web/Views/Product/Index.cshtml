@@ -6,7 +6,7 @@
 	-----------------------------------------------------------------------
 *@
 
-@model WebEngine.Web.ViewModels.Product.ProductsPage
+@model WebEngine.Web.ViewModels.Product.ProductPageView
 
 @{
 	ViewData["Title"] = Model.CategoryViewName;
@@ -50,21 +50,32 @@
 				</div>
 			</div>
 		}
-
-		@Html.HiddenFor(model => model.TotalPages, new { id = "totalPages" })
-		@Html.HiddenFor(model => model.CurrentPage, new { id = "currentPage" })
 	</div>
+
+	<ul id="pagination" class="pagination-sm"></ul>
+
+	@Html.HiddenFor(model => model.TotalPages, new { id = "totalPages" })
+	@Html.HiddenFor(model => model.CurrentPage, new { id = "currentPage" })
+
 </div>
 
 
 @section Scripts {
 	<script>
 
-		let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new
-					  {
-						  PropertyId = m.PropertyId,
-						  FilterItemType = m.FilterItemType
-					  })));
+		let categoryId = @Model.CategoryId;
+
+		let totalPages = @Model.TotalPages;
+
+		let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new { PropertyId = m.PropertyId, FilterItemType = m.FilterItemType })));
+
+		$('#pagination').twbsPagination({
+			totalPages: totalPages,
+			visiblePages: 7,
+			onPageClick: function (event, page) {
+
+			}
+		});
 
 		for(let i = 0; i < elements.length; i++) {
 
@@ -74,7 +85,7 @@
 					let value = $('#'+elements[i].PropertyId).val();
 
 					var model = {
-						Category: "SmartPhone",
+						CategoryId: categoryId,
 						Properties: [
 							{ "Id": elements[i].PropertyId, "Value": value, "IsRange" : false },
 							//{ "Id": 4, "Value": "11", "IsRange" : false }
@@ -99,6 +110,10 @@
 
 
 			}
+		}
+
+		function GrabFilter(){
+			
 		}
 
 	</script>

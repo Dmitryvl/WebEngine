@@ -18,7 +18,7 @@ namespace WebEngine.Web.Controllers
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Web.ViewModels.Product;
 	using WebEngine.Core.Filters;
-
+	using Core.PageModels;
 	#endregion
 
 	/// <summary>
@@ -33,6 +33,8 @@ namespace WebEngine.Web.Controllers
 		private readonly ICategotyRepository _categoryRepository;
 
 		private readonly IProductFilterRepository _productFilterRepository;
+
+		private const int PAGE_SIZE = 3;
 
 		#endregion
 
@@ -55,15 +57,7 @@ namespace WebEngine.Web.Controllers
 		{
 			if (filter != null)
 			{
-				
 
-
-				//IEnumerable<Product> products = await _productRepository.GetProductsAsync(productFilter);
-
-				//if (products != null)
-				//{
-					
-				//}
 
 				return PartialView();
 			}
@@ -81,40 +75,53 @@ namespace WebEngine.Web.Controllers
 
 				if (dbCategory != null)
 				{
-					ProductsPage page = new ProductsPage();
-
-					page.CategoryName = dbCategory.Name;
-					page.CategoryViewName = dbCategory.ViewName;
-					page.CurrentPage = 1;
-
-					IEnumerable<Product> products = await _productRepository.GetProductsAsync(dbCategory.Id, page.CurrentPage, 30);
-
-					IEnumerable<ProductFilterItem> filterItems = await _productFilterRepository.GetProductFilterItems(dbCategory.Id);
-
-					if (products != null)
+					ProductFilter productFilter = new ProductFilter()
 					{
-						page.Products = products.Select(p => new ProductView()
-						{
-							Id = p.Id,
-							Name = p.Name,
-							ShortInfo = p.ShortInfo,
-							CompanyName = p.Company.Name,
-							UrlName = p.UrlName
-						});
-					}
+						CategoryId = dbCategory.Id,
+						CategoryName = dbCategory.Name,
+						CurrentPage = 1,
+						PageSize = PAGE_SIZE
+					};
 
-					if (filterItems != null)
+					ProductPage productPage = await _productRepository.GetProductPage(productFilter);
+
+					if (productPage != null)
 					{
-						page.FilterItems = filterItems.Select(i => new FilterItemView()
-						{
-							PropertyId = i.PropertyId,
-							FilterItemType = i.FilterItemType,
-							PropertyName = i.Property.Name,
-							FilterItemValues = i.ProductFilterItemValues.Select(v => v.Value)
-						});
-					}
+						ProductPageView page = new ProductPageView();
 
-					return View(page);
+						page.CategoryName = dbCategory.Name;
+						page.CategoryViewName = dbCategory.ViewName;
+						page.CategoryId = dbCategory.Id;
+						page.CurrentPage = 1;
+						page.TotalPages = productPage.TotalPages;
+
+						IEnumerable<ProductFilterItem> filterItems = await _productFilterRepository.GetProductFilterItems(dbCategory.Id);
+
+						if (productPage.Products != null)
+						{
+							page.Products = productPage.Products.Select(p => new ProductView()
+							{
+								Id = p.Id,
+								Name = p.Name,
+								ShortInfo = p.ShortInfo,
+								CompanyName = p.Company.Name,
+								UrlName = p.UrlName
+							});
+						}
+
+						if (filterItems != null)
+						{
+							page.FilterItems = filterItems.Select(i => new FilterItemView()
+							{
+								PropertyId = i.PropertyId,
+								FilterItemType = i.FilterItemType,
+								PropertyName = i.Property.Name,
+								FilterItemValues = i.ProductFilterItemValues.Select(v => v.Value)
+							});
+						}
+
+						return View(page);
+					}
 				}
 			}
 

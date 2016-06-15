@@ -23,6 +23,11 @@ namespace WebEngine.Core.Filters
 		public string CategoryName { get; set; }
 
 		/// <summary>
+		/// Gets or sets category id.
+		/// </summary>
+		public int CategoryId { get; set; }
+
+		/// <summary>
 		/// Gets or sets properties.
 		/// </summary>
 		public IList<PropertyFilter> Properties { get; set; }

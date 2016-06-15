@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProductsPage.cs" author="Dzmitry Prakapenka">
+// <copyright file="ProductsPageView.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -13,9 +13,9 @@ namespace WebEngine.Web.ViewModels.Product
 	#endregion
 
 	/// <summary>
-	/// <see cref="ProductsPage"/> class.
+	/// <see cref="ProductPageView"/> class.
 	/// </summary>
-	public class ProductsPage
+	public class ProductPageView
 	{
 		/// <summary>
 		/// Gets or sets products.
@@ -36,6 +36,11 @@ namespace WebEngine.Web.ViewModels.Product
 		/// Gets or sets category view name.
 		/// </summary>
 		public string CategoryViewName { get; set; }
+
+		/// <summary>
+		/// Gets or sets category id.
+		/// </summary>
+		public int CategoryId { get; set; }
 
 		/// <summary>
 		/// Gets or sets current page.

@@ -8,6 +8,7 @@
 /// <reference path="js/jquery.js" />
 /// <reference path="js/jquery.prettyPhoto.js" />
 /// <reference path="js/jquery.scrollup.min.js" />
+/// <reference path="js/jquery.twbspagination.js" />
 /// <reference path="js/main.js" />
 /// <reference path="js/price-range.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />

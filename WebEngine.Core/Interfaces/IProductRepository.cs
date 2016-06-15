@@ -6,6 +6,7 @@
 
 namespace WebEngine.Core.Interfaces
 {
+
 	#region Usings
 
 	using System;
@@ -14,7 +15,8 @@ namespace WebEngine.Core.Interfaces
 
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Filters;
-
+	using WebEngine.Core.PageModels;
+	
 	#endregion
 
 	/// <summary>
@@ -44,6 +46,8 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="pageSize">Page size</param>
 		/// <returns>Return product collection.</returns>
 		Task<IList<Product>> GetProductsAsync(int categoryId, int currentPage, int pageSize);
+
+		Task<ProductPage> GetProductPage(ProductFilter productFilter);
 
 		/// <summary>
 		/// Get product by product id.

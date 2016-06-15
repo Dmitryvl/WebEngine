@@ -23,7 +23,8 @@ namespace WebEngine.Data.Repositories
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Filters;
 	using WebEngine.Core.Interfaces;
-
+	using Core.PageModels;
+	using System.Collections;
 	#endregion
 
 	/// <summary>
@@ -178,9 +179,11 @@ namespace WebEngine.Data.Repositories
 		/// <returns>Return product collection.</returns>
 		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter)
 		{
-			if (filter != null)
+			if (filter != null && filter.CategoryId > DEFAULT_ID)
 			{
 				int propertiesCount = filter.Properties.Count;
+
+				string query = "SELECT p.Id, p.Name, p.ShortInfo FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id";
 
 				if (propertiesCount > DEFAULT_ID)
 				{
@@ -202,7 +205,7 @@ namespace WebEngine.Data.Repositories
 						{
 							parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
 
-							sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
+							sb.Append(query);
 							sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
 							paramIndex++;
 							//sb.Append($" AND pp.Value = @param{paramIndex}");
@@ -218,8 +221,8 @@ namespace WebEngine.Data.Repositories
 								Direction = ParameterDirection.Input
 							};
 
-							sb.Append("SELECT p.Id, p.Name FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
-							sb.Append($" WHERE pp.PropertyId = @param{paramIndex}");
+							sb.Append("SELECT p.Id, p.Name, p.ShortInfo FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
+							sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
 							paramIndex++;
 
 							parameters[paramIndex] = new SqlParameter()
@@ -273,7 +276,7 @@ namespace WebEngine.Data.Repositories
 									{
 										Id = (int)reader["Id"],
 										Name = (string)reader["Name"],
-										//ShortInfo = (string)reader["ShortInfo"],
+										ShortInfo = (string)reader["ShortInfo"],
 									});
 								}
 
@@ -324,7 +327,7 @@ namespace WebEngine.Data.Repositories
 								Name = GetValue(p.Company.Name)
 							}
 						})
-						.OrderByDescending(p=>p.Id)
+						.OrderByDescending(p => p.Id)
 						.Skip((currentPage - 1) * pageSize)
 						.Take(pageSize)
 						.ToArrayAsync()
@@ -339,6 +342,56 @@ namespace WebEngine.Data.Repositories
 			}
 
 			return null;
+		}
+
+		public async Task<ProductPage> GetProductPage(ProductFilter productFilter)
+		{
+			if (productFilter != null && productFilter.CategoryId > DEFAULT_ID)
+			{
+				ProductPage page = new ProductPage();
+
+				int propertiesCount = productFilter.Properties != null ? productFilter.Properties.Count() : DEFAULT_ID;
+
+				if (propertiesCount > DEFAULT_ID)
+				{
+
+				}
+
+				page.Products = await GetProductsAsync(productFilter.CategoryId, productFilter.CurrentPage, productFilter.PageSize);
+
+				int count = await GetProductsCount(productFilter.CategoryId);
+
+				page.TotalPages = count % productFilter.PageSize == DEFAULT_ID ? count / productFilter.PageSize : count / productFilter.PageSize + 1;
+
+				return page;
+			}
+
+			return null;
+		}
+
+		#endregion
+
+		#region Private methods
+
+		private async Task<int> GetProductsCount(int categoryId)
+		{
+			if (categoryId > DEFAULT_ID)
+			{
+				try
+				{
+					int count = await _context.Products
+						.CountAsync(p => p.CategoryId == categoryId)
+						.ConfigureAwait(false);
+
+					return count;
+				}
+				catch
+				{
+					return DEFAULT_ID;
+				}
+			}
+
+			return DEFAULT_ID;
 		}
 
 		#endregion
