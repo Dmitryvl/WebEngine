@@ -25,96 +25,139 @@
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
 		<h2 class="title text-center">@Model.CategoryViewName</h2>
-		@foreach (var product in Model.Products)
-		{
-			<div class="col-sm-4">
-				<div class="product-image-wrapper">
-					<div class="single-products">
-						<div class="productinfo text-center">
-							@*<img src="~/images/No_image.png" alt="" />*@
-							<h2>@product.CompanyName @product.Name</h2>
-							<p>@product.ShortInfo</p>
-							@*<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>*@
+		<div id="view">
+			@foreach (var product in Model.Products)
+			{
+				<div class="col-sm-4">
+					<div class="product-image-wrapper">
+						<div class="single-products">
+							<div class="productinfo text-center">
+								@*<img src="~/images/No_image.png" alt="" />*@
+								<h2>@product.CompanyName @product.Name</h2>
+								<p>@product.ShortInfo</p>
+								@*<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>*@
+							</div>
+						</div>
+						<div class="choose">
+							<ul class="nav nav-pills nav-justified">
+								@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
+								<li>
+									<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
+										<i class="fa fa-plus-square"></i>More...
+									</a>
+								</li>
+							</ul>
 						</div>
 					</div>
-					<div class="choose">
-						<ul class="nav nav-pills nav-justified">
-							@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
-							<li>
-								<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
-									<i class="fa fa-plus-square"></i>More...
-								</a>
-							</li>
-						</ul>
-					</div>
 				</div>
-			</div>
-		}
+			}
+
+			@Html.Hidden("totalPages", Model.TotalPages, new { id = "totalPages" })
+			@Html.Hidden("currentPage", Model.CurrentPage, new { id = "currentPage" })
+		</div>
 	</div>
 
 	<ul id="pagination" class="pagination-sm"></ul>
-
-	@Html.HiddenFor(model => model.TotalPages, new { id = "totalPages" })
-	@Html.HiddenFor(model => model.CurrentPage, new { id = "currentPage" })
-
 </div>
 
 
 @section Scripts {
 	<script>
+		'use strict';
 
-		let categoryId = @Model.CategoryId;
+		$(document).ready(function() {
 
-		let totalPages = @Model.TotalPages;
+			class Filter {
+				constructor(categoryId, currentPage , properties) {
+					this.CategoryId = categoryId;
+					this.CurrentPage = currentPage;
+					this.Properties = properties;
+				}
+			}
 
-		let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new { PropertyId = m.PropertyId, FilterItemType = m.FilterItemType })));
+			class FilterItem{
+				constructor(id, value, isRange) {
+					this.Id = id;
+					this.Value = value;
+					this.IsRange = isRange;
+				}
+			}
 
-		$('#pagination').twbsPagination({
-			totalPages: totalPages,
-			visiblePages: 7,
-			onPageClick: function (event, page) {
+			let categoryId = @Model.CategoryId;
 
+			let totalPages = @Model.TotalPages;
+
+			let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new { PropertyId = m.PropertyId, FilterItemType = m.FilterItemType })));
+
+			$('#pagination').twbsPagination({
+				totalPages: totalPages,
+				visiblePages: 7,
+				initiateStartPageClick: false,
+				onPageClick: onSelectPage
+			});
+
+			for(let i = 0; i < elements.length; i++) {
+
+				if(elements[i].FilterItemType == 'DropDownList'){
+
+					$('#'+elements[i].PropertyId).change(function(){
+						let model = GrabFilter(1);
+						Send(model);
+					});
+
+				} else if(elements[i].FilterItemType == 'Range'){
+
+
+				}
+			}
+
+			function GrabFilter(currentPage) {
+
+				let model = new Filter(categoryId, currentPage, [])
+
+				for(let i = 0; i < elements.length; i++) {
+					if(elements[i].FilterItemType == 'DropDownList') {
+						let value = $('#'+elements[i].PropertyId).val();
+						let property = new FilterItem(elements[i].PropertyId, value, false)
+						model.Properties.push(property);
+					} else if(elements[i].FilterItemType == 'Range'){
+
+					}
+				}
+
+				// temp value
+				model.Properties.push(new FilterItem(4, '11', false));
+
+				return model;
+			}
+
+			function onSelectPage (event, page) {
+				let model = GrabFilter(page);
+				Send(model);
+			}
+
+			function Send(model) {
+				let filter = JSON.stringify(model);
+
+				$.ajax({
+					type: 'POST',
+					url: '/Product/Index',
+					contentType: 'application/json; charset=utf-8',
+					data: filter
+				}).success(function (data) {
+					var domElement = $(data);
+					$('div#view').append(domElement);
+					$('#pagination').twbsPagination({
+						totalPages: $('#totalPages').val(),
+						startPage : $('#currentPage').val(),
+						visiblePages: 7,
+						initiateStartPageClick: false,
+						onPageClick: onSelectPage
+					});
+				}).fail(function (data) {
+					alert("ошибка");
+				});
 			}
 		});
-
-		for(let i = 0; i < elements.length; i++) {
-
-			if(elements[i].FilterItemType == 'DropDownList'){
-
-				$('#'+elements[i].PropertyId).change(function(){
-					let value = $('#'+elements[i].PropertyId).val();
-
-					var model = {
-						CategoryId: categoryId,
-						Properties: [
-							{ "Id": elements[i].PropertyId, "Value": value, "IsRange" : false },
-							//{ "Id": 4, "Value": "11", "IsRange" : false }
-						],
-					}
-
-					var filter = JSON.stringify(model)
-
-					$.ajax({
-						type: 'POST',
-						url: '/Product/Index',
-						contentType: 'application/json; charset=utf-8',
-						data: filter
-					}).success(function (data) {
-						alert("ok");
-					}).fail(function (data) {
-						alert("ошибка");
-					});
-				});
-
-			} else if(elements[i].FilterItemType == 'Range'){
-
-
-			}
-		}
-
-		function GrabFilter(){
-			
-		}
-
 	</script>
 }

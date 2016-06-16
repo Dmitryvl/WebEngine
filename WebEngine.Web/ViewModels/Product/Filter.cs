@@ -25,7 +25,7 @@ namespace WebEngine.Web.ViewModels.Product
 		/// <summary>
 		/// Gets or sets category.
 		/// </summary>
-		public string Category { get; set; }
+		public int CategoryId { get; set; }
 
 		/// <summary>
 		/// Gets or sets current page.

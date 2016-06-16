@@ -7,14 +7,9 @@
 namespace WebEngine.Web.ViewModels.Product
 {
 	#region Usings
-	
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using System.Threading.Tasks;
-	
-	#endregion 
+
+
+	#endregion
 
 	/// <summary>
 	/// TODO: Update summary.
@@ -24,5 +19,7 @@ namespace WebEngine.Web.ViewModels.Product
 		public int Id { get; set; }
 
 		public string Value { get; set; }
+
+		public bool IsRange { get; set; }
 	}
 }

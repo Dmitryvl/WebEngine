@@ -57,9 +57,37 @@ namespace WebEngine.Web.Controllers
 		{
 			if (filter != null)
 			{
+				ProductFilter productFilter = new ProductFilter();
+				productFilter.CategoryId = filter.CategoryId;
+				productFilter.CurrentPage = filter.CurrentPage;
+				productFilter.PageSize = PAGE_SIZE;
+				productFilter.Properties = filter.Properties
+					.Select(p => new PropertyFilter()
+					{
+						PropertyId = p.Id,
+						Value = p.Value,
+						IsRange = p.IsRange
+					})
+					.ToArray();
 
+				ProductPage page = await _productRepository.GetProductPage(productFilter);
 
-				return PartialView();
+				if (page != null)
+				{
+					ProductPageView view = new ProductPageView();
+					view.CurrentPage = filter.CurrentPage;
+					view.TotalPages = 7;//page.TotalPages;
+					view.Products = page.Products.Select(p => new ProductView()
+					{
+						Id = p.Id,
+						Name = p.Name,
+						ShortInfo = p.ShortInfo,
+						UrlName = p.UrlName,
+						CompanyName = p.Company.Name
+					});
+
+					return PartialView("_ShortProduct", view);
+				}
 			}
 
 			return View("Error");

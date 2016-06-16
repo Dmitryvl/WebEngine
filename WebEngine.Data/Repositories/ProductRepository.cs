@@ -181,9 +181,9 @@ namespace WebEngine.Data.Repositories
 		{
 			if (filter != null && filter.CategoryId > DEFAULT_ID)
 			{
-				int propertiesCount = filter.Properties.Count;
+				int propertiesCount = filter.Properties != null ? filter.Properties.Count : DEFAULT_ID;
 
-				string query = "SELECT p.Id, p.Name, p.ShortInfo FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id";
+				string query = "SELECT p.Id, p.Name, p.ShortInfo, c.Name as CategoryName FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id INNER JOIN Categories as c on p.CategoryId = c.Id";
 
 				if (propertiesCount > DEFAULT_ID)
 				{
@@ -221,7 +221,7 @@ namespace WebEngine.Data.Repositories
 								Direction = ParameterDirection.Input
 							};
 
-							sb.Append("SELECT p.Id, p.Name, p.ShortInfo FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id");
+							sb.Append(query);
 							sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
 							paramIndex++;
 
@@ -277,6 +277,10 @@ namespace WebEngine.Data.Repositories
 										Id = (int)reader["Id"],
 										Name = (string)reader["Name"],
 										ShortInfo = (string)reader["ShortInfo"],
+										Category = new Category()
+										{
+											Name = (string)reader["CategoryName"]
+										}
 									});
 								}
 
@@ -293,7 +297,7 @@ namespace WebEngine.Data.Repositories
 				}
 				else
 				{
-					//return await GetProductsAsync(filter.CategoryName);
+					return await GetProductsAsync(filter.CategoryId, filter.CurrentPage, filter.PageSize);
 				}
 			}
 
@@ -356,8 +360,7 @@ namespace WebEngine.Data.Repositories
 				{
 
 				}
-
-				page.Products = await GetProductsAsync(productFilter.CategoryId, productFilter.CurrentPage, productFilter.PageSize);
+				page.Products = await GetProductsAsync(productFilter);
 
 				int count = await GetProductsCount(productFilter.CategoryId);
 
@@ -393,6 +396,17 @@ namespace WebEngine.Data.Repositories
 
 			return DEFAULT_ID;
 		}
+
+/* select count(result.Id) as ProductCount from
+(SELECT p.Id, p.Name, p.ShortInfo, c.Name FROM ProductToProperty as pp
+INNER JOIN Products as p on pp.ProductId = p.Id
+INNER JOIN Categories as c on p.CategoryId = c.Id
+WHERE pp.PropertyId = 6 AND p.CategoryId = 1 AND CONVERT(float, pp.Value) > 5.1)
+INTERSECT SELECT p.Id, p.Name, p.ShortInfo, c.Name FROM ProductToProperty as pp 
+INNER JOIN Products as p on pp.ProductId = p.Id 
+INNER JOIN Categories as c on p.CategoryId = c.Id
+WHERE pp.PropertyId = 4 AND p.CategoryId = 1 AND pp.Value = '11')
+as result */
 
 		#endregion
 	}
