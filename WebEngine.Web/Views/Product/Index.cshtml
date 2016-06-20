@@ -54,10 +54,11 @@
 
 			@Html.Hidden("totalPages", Model.TotalPages, new { id = "totalPages" })
 			@Html.Hidden("currentPage", Model.CurrentPage, new { id = "currentPage" })
+
+
 		</div>
 	</div>
-
-	<ul id="pagination" class="pagination-sm"></ul>
+	<div id="pagination" class="text-center"></div>
 </div>
 
 
@@ -66,7 +67,6 @@
 		'use strict';
 
 		$(document).ready(function() {
-
 			class Filter {
 				constructor(categoryId, currentPage , properties) {
 					this.CategoryId = categoryId;
@@ -74,7 +74,6 @@
 					this.Properties = properties;
 				}
 			}
-
 			class FilterItem{
 				constructor(id, value, isRange) {
 					this.Id = id;
@@ -89,11 +88,14 @@
 
 			let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new { PropertyId = m.PropertyId, FilterItemType = m.FilterItemType })));
 
-			$('#pagination').twbsPagination({
+			let pag = $('#pagination').simplePaginator({
 				totalPages: totalPages,
-				visiblePages: 7,
-				initiateStartPageClick: false,
-				onPageClick: onSelectPage
+				maxButtonsVisible: 5,
+				currentPage: 1,
+				firstLabel: 'First',
+				lastLabel: 'Last',
+				clickCurrentPage: false,
+				pageChange: onSelectPage
 			});
 
 			for(let i = 0; i < elements.length; i++) {
@@ -125,13 +127,13 @@
 					}
 				}
 
-				// temp value
-				model.Properties.push(new FilterItem(4, '11', false));
+				//temp value
+				//model.Properties.push(new FilterItem(4, '11', false));
 
 				return model;
 			}
 
-			function onSelectPage (event, page) {
+			function onSelectPage (page) {
 				let model = GrabFilter(page);
 				Send(model);
 			}
@@ -146,16 +148,12 @@
 					data: filter
 				}).success(function (data) {
 					var domElement = $(data);
-					$('div#view').append(domElement);
-					$('#pagination').twbsPagination({
-						totalPages: $('#totalPages').val(),
-						startPage : $('#currentPage').val(),
-						visiblePages: 7,
-						initiateStartPageClick: false,
-						onPageClick: onSelectPage
-					});
+					$('div#view').replaceWith(domElement);
+
+					pag.simplePaginator('setTotalPages', $('#totalPages').val());
+
 				}).fail(function (data) {
-					alert("ошибка");
+					alert("I'm sorry. An error occurred while processing your request.");
 				});
 			}
 		});

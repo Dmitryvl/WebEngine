@@ -34,7 +34,7 @@ namespace WebEngine.Web.Controllers
 
 		private readonly IProductFilterRepository _productFilterRepository;
 
-		private const int PAGE_SIZE = 3;
+		private const int PAGE_SIZE = 1;
 
 		#endregion
 
@@ -57,11 +57,14 @@ namespace WebEngine.Web.Controllers
 		{
 			if (filter != null)
 			{
+				const string any = "any";
+
 				ProductFilter productFilter = new ProductFilter();
 				productFilter.CategoryId = filter.CategoryId;
 				productFilter.CurrentPage = filter.CurrentPage;
 				productFilter.PageSize = PAGE_SIZE;
 				productFilter.Properties = filter.Properties
+					.Where(p => p.Id > 0 && !string.IsNullOrEmpty(p.Value) && p.Value != any)
 					.Select(p => new PropertyFilter()
 					{
 						PropertyId = p.Id,
@@ -76,7 +79,7 @@ namespace WebEngine.Web.Controllers
 				{
 					ProductPageView view = new ProductPageView();
 					view.CurrentPage = filter.CurrentPage;
-					view.TotalPages = 7;//page.TotalPages;
+					view.TotalPages = page.TotalPages;
 					view.Products = page.Products.Select(p => new ProductView()
 					{
 						Id = p.Id,

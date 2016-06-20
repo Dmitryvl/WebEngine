@@ -16,6 +16,7 @@
 			<label class="control-label">@filterItem.PropertyName</label>
 
 			<select id="@filterItem.PropertyId" class="form-control">
+				<option value="any" selected="selected">Any</option>
 				@foreach (var item in filterItem.FilterItemValues)
 				{
 					<option value="@item">@item</option>

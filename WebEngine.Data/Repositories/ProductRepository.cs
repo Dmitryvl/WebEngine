@@ -23,8 +23,9 @@ namespace WebEngine.Data.Repositories
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Filters;
 	using WebEngine.Core.Interfaces;
-	using Core.PageModels;
-	using System.Collections;
+	using WebEngine.Core.PageModels;
+	using WebEngine.Core.Static;
+
 	#endregion
 
 	/// <summary>
@@ -172,197 +173,17 @@ namespace WebEngine.Data.Repositories
 			}
 		}
 
-		/// <summary>
-		/// Get filtred products.
-		/// </summary>
-		/// <param name="filter">Product filter.</param>
-		/// <returns>Return product collection.</returns>
-		public async Task<IList<Product>> GetProductsAsync(ProductFilter filter)
-		{
-			if (filter != null && filter.CategoryId > DEFAULT_ID)
-			{
-				int propertiesCount = filter.Properties != null ? filter.Properties.Count : DEFAULT_ID;
-
-				string query = "SELECT p.Id, p.Name, p.ShortInfo, c.Name as CategoryName FROM ProductToProperty as pp INNER JOIN Products as p on pp.ProductId = p.Id INNER JOIN Categories as c on p.CategoryId = c.Id";
-
-				if (propertiesCount > DEFAULT_ID)
-				{
-					StringBuilder sb = new StringBuilder();
-
-					sb.Append("(");
-
-					int paramIndex = 0;
-
-					SqlParameter[] parameters = new SqlParameter[filter.Properties.Count * 2 + 2];
-
-					string intersect = " INTERSECT ";
-
-					int lastIndex = propertiesCount - 1;
-
-					for (int i = 0; i < propertiesCount; i++)
-					{
-						if (filter.Properties[i].IsRange /*&& filter.Properties[0].RangeId > DEFAULT_ID*/)
-						{
-							parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", int.Parse(filter.Properties[i].Value));
-
-							sb.Append(query);
-							sb.Append($" WHERE pp.PropertyId {filter.Properties[i].Operation} @param{paramIndex}");
-							paramIndex++;
-							//sb.Append($" AND pp.Value = @param{paramIndex}");
-							//paramIndex++;
-						}
-						else
-						{
-							parameters[paramIndex] = new SqlParameter()
-							{
-								ParameterName = $"@param{paramIndex}",
-								Value = filter.Properties[i].PropertyId,
-								SqlDbType = SqlDbType.Int,
-								Direction = ParameterDirection.Input
-							};
-
-							sb.Append(query);
-							sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
-							paramIndex++;
-
-							parameters[paramIndex] = new SqlParameter()
-							{
-								ParameterName = $"@param{paramIndex}",
-								Value = filter.Properties[i].Value,
-								SqlDbType = SqlDbType.NVarChar,
-								Direction = ParameterDirection.Input
-							};
-
-							sb.Append($" AND pp.Value = @param{paramIndex}");
-							paramIndex++;
-						}
-
-						if (i != lastIndex)
-						{
-							sb.Append(intersect);
-						}
-					}
-
-					parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.CurrentPage);
-
-					paramIndex++;
-
-					parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
-
-					sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex - 1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
-
-					string sql = sb.ToString();
-
-					List<Product> prods = new List<Product>();
-
-					using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
-					{
-						using (SqlCommand cmd = sqlConnection.CreateCommand())
-						{
-							cmd.CommandText = sql;
-							cmd.Parameters.AddRange(parameters);
-							cmd.CommandTimeout = 15;
-							cmd.CommandType = CommandType.Text;
-
-							try
-							{
-								await sqlConnection.OpenAsync();
-
-								SqlDataReader reader = cmd.ExecuteReader();
-
-								while (await reader.ReadAsync())
-								{
-									prods.Add(new Product()
-									{
-										Id = (int)reader["Id"],
-										Name = (string)reader["Name"],
-										ShortInfo = (string)reader["ShortInfo"],
-										Category = new Category()
-										{
-											Name = (string)reader["CategoryName"]
-										}
-									});
-								}
-
-								reader.Dispose();
-							}
-							catch
-							{
-								return null;
-							}
-						}
-					}
-
-					return prods;
-				}
-				else
-				{
-					return await GetProductsAsync(filter.CategoryId, filter.CurrentPage, filter.PageSize);
-				}
-			}
-
-			return null;
-		}
-
-		/// <summary>
-		/// Get filtered products.
-		/// </summary>
-		/// <param name="categoryId">Category id.</param>
-		/// <param name="currentPage">Current page number.</param>
-		/// <param name="pageSize">Page size</param>
-		/// <returns>Return product collection.</returns>
-		public async Task<IList<Product>> GetProductsAsync(int categoryId, int currentPage, int pageSize)
-		{
-			if (categoryId > DEFAULT_ID)
-			{
-				try
-				{
-					Product[] products = await _context.Products
-						.Where(p => p.CategoryId == categoryId)
-						.Select(p => new Product()
-						{
-							Id = GetValue(p.Id),
-							Name = GetValue(p.Name),
-							UrlName = GetValue(p.UrlName),
-							ShortInfo = GetValue(p.ShortInfo),
-							Company = new Company()
-							{
-								Id = GetValue(p.Company.Id),
-								Name = GetValue(p.Company.Name)
-							}
-						})
-						.OrderByDescending(p => p.Id)
-						.Skip((currentPage - 1) * pageSize)
-						.Take(pageSize)
-						.ToArrayAsync()
-						.ConfigureAwait(false);
-
-					return products;
-				}
-				catch
-				{
-					return null;
-				}
-			}
-
-			return null;
-		}
-
 		public async Task<ProductPage> GetProductPage(ProductFilter productFilter)
 		{
 			if (productFilter != null && productFilter.CategoryId > DEFAULT_ID)
 			{
 				ProductPage page = new ProductPage();
 
-				int propertiesCount = productFilter.Properties != null ? productFilter.Properties.Count() : DEFAULT_ID;
+				ProductSqlQueries sql = GetSqlQueries(productFilter);
 
-				if (propertiesCount > DEFAULT_ID)
-				{
+				page.Products = await GetProductsAsync(sql.ProductSqlQuery, sql.ProductParameters);
 
-				}
-				page.Products = await GetProductsAsync(productFilter);
-
-				int count = await GetProductsCount(productFilter.CategoryId);
+				int count = await GetTotalPages(sql.CountSqlQuery, sql.CountParameters);
 
 				page.TotalPages = count % productFilter.PageSize == DEFAULT_ID ? count / productFilter.PageSize : count / productFilter.PageSize + 1;
 
@@ -376,38 +197,198 @@ namespace WebEngine.Data.Repositories
 
 		#region Private methods
 
-		private async Task<int> GetProductsCount(int categoryId)
+		private ProductSqlQueries GetSqlQueries(ProductFilter filter)
 		{
-			if (categoryId > DEFAULT_ID)
-			{
-				try
-				{
-					int count = await _context.Products
-						.CountAsync(p => p.CategoryId == categoryId)
-						.ConfigureAwait(false);
+			ProductSqlQueries sql = new ProductSqlQueries();
 
-					return count;
-				}
-				catch
+			int propertiesCount = filter.Properties != null ? filter.Properties.Count : DEFAULT_ID;
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.Append("(");
+
+			int paramIndex = 0;
+
+			sql.ProductParameters = new SqlParameter[propertiesCount * 2 + 2];
+			sql.CountParameters = new SqlParameter[propertiesCount * 2];
+
+			if (propertiesCount > DEFAULT_ID)
+			{
+				int lastIndex = propertiesCount - 1;
+
+				for (int i = 0; i < propertiesCount; i++)
 				{
-					return DEFAULT_ID;
+					if (filter.Properties[i].IsRange)
+					{
+					}
+					else
+					{
+						sql.ProductParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].PropertyId,
+							SqlDbType = SqlDbType.Int,
+							Direction = ParameterDirection.Input
+						};
+
+						sql.CountParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].PropertyId,
+							SqlDbType = SqlDbType.Int,
+							Direction = ParameterDirection.Input
+						};
+
+						sb.Append(QueryStrings.ProductQuery);
+						sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
+						paramIndex++;
+
+						sql.ProductParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].Value,
+							SqlDbType = SqlDbType.NVarChar,
+							Direction = ParameterDirection.Input
+						};
+
+						sql.CountParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].Value,
+							SqlDbType = SqlDbType.NVarChar,
+							Direction = ParameterDirection.Input
+						};
+
+						sb.Append($" AND pp.Value = @param{paramIndex}");
+						paramIndex++;
+					}
+
+					if (i != lastIndex)
+					{
+						sb.Append(QueryStrings.Intersect);
+					}
+				}
+			}
+			else
+			{
+				sb.Append(QueryStrings.ProductsWithoutProperties);
+				sb.Append($" WHERE p.CategoryId = {filter.CategoryId}");
+			}
+
+			sql.CountSqlQuery =$"select count(result.Id) as ProductCount from " + sb.ToString() +") as result";
+
+			sql.ProductParameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.CurrentPage);
+
+			paramIndex++;
+
+			sql.ProductParameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
+
+			sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex - 1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
+
+			sql.ProductSqlQuery = sb.ToString();
+
+			return sql;
+		}
+
+		private async Task<IList<Product>> GetProductsAsync(string query, SqlParameter[] parameters)
+		{
+			List<Product> products = new List<Product>();
+
+			using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+			{
+				using (SqlCommand cmd = sqlConnection.CreateCommand())
+				{
+					cmd.CommandText = query;
+					cmd.Parameters.AddRange(parameters);
+					cmd.CommandTimeout = 30;
+					cmd.CommandType = CommandType.Text;
+
+					try
+					{
+						await sqlConnection.OpenAsync();
+
+						SqlDataReader reader = cmd.ExecuteReader();
+
+						while (await reader.ReadAsync())
+						{
+							products.Add(new Product()
+							{
+								Id = (int)reader["Id"],
+								Name = (string)reader["Name"],
+								ShortInfo = (string)reader["ShortInfo"],
+								Company = new Company()
+								{
+									Name = (string)reader["CompanyName"]
+								},
+								Category = new Category()
+								{
+									Name = (string)reader["CategoryName"]
+								}
+							});
+						}
+
+						reader.Dispose();
+					}
+					catch
+					{
+						return null;
+					}
 				}
 			}
 
-			return DEFAULT_ID;
+			return products;
 		}
 
-/* select count(result.Id) as ProductCount from
-(SELECT p.Id, p.Name, p.ShortInfo, c.Name FROM ProductToProperty as pp
-INNER JOIN Products as p on pp.ProductId = p.Id
-INNER JOIN Categories as c on p.CategoryId = c.Id
-WHERE pp.PropertyId = 6 AND p.CategoryId = 1 AND CONVERT(float, pp.Value) > 5.1)
-INTERSECT SELECT p.Id, p.Name, p.ShortInfo, c.Name FROM ProductToProperty as pp 
-INNER JOIN Products as p on pp.ProductId = p.Id 
-INNER JOIN Categories as c on p.CategoryId = c.Id
-WHERE pp.PropertyId = 4 AND p.CategoryId = 1 AND pp.Value = '11')
-as result */
+
+		private async Task<int> GetTotalPages(string query, SqlParameter[] parameters)
+		{
+			using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+			{
+				using (SqlCommand cmd = sqlConnection.CreateCommand())
+				{
+					cmd.CommandText = query;
+
+					if (parameters.Count() > DEFAULT_ID)
+					{
+						cmd.Parameters.AddRange(parameters);
+					}
+
+					cmd.CommandTimeout = 30;
+					cmd.CommandType = CommandType.Text;
+
+					try
+					{
+						await sqlConnection.OpenAsync();
+
+						SqlDataReader reader = cmd.ExecuteReader();
+
+						await reader.ReadAsync();
+
+						int count = (int)reader[0];
+
+						reader.Dispose();
+
+						return count;
+					}
+					catch
+					{
+						return DEFAULT_ID;
+					}
+				}
+			}
+		}
 
 		#endregion
+	}
+
+	internal class ProductSqlQueries
+	{
+		public SqlParameter[] ProductParameters { get; set; }
+
+		public SqlParameter[] CountParameters { get; set; }
+
+		public string ProductSqlQuery { get; set; }
+
+		public string CountSqlQuery { get; set; }
 	}
 }

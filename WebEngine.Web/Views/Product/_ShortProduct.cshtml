@@ -1,30 +1,32 @@
 ﻿@model WebEngine.Web.ViewModels.Product.ProductPageView
-
-@foreach (var product in Model.Products)
-{
-	<div class="col-sm-4">
-		<div class="product-image-wrapper">
-			<div class="single-products">
-				<div class="productinfo text-center">
-					@*<img src="~/images/No_image.png" alt="" />*@
-					<h2>@product.CompanyName @product.Name</h2>
-					<p>@product.ShortInfo</p>
-					@*<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>*@
+<div id="view">
+	@foreach (var product in Model.Products)
+	{
+		<div class="col-sm-4">
+			<div class="product-image-wrapper">
+				<div class="single-products">
+					<div class="productinfo text-center">
+						@*<img src="~/images/No_image.png" alt="" />*@
+						<h2>@product.CompanyName @product.Name</h2>
+						<p>@product.ShortInfo</p>
+						@*<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>*@
+					</div>
+				</div>
+				<div class="choose">
+					<ul class="nav nav-pills nav-justified">
+						@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
+						<li>
+							<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
+								<i class="fa fa-plus-square"></i>More...
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-			<div class="choose">
-				<ul class="nav nav-pills nav-justified">
-					@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
-					<li>
-						<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
-							<i class="fa fa-plus-square"></i>More...
-						</a>
-					</li>
-				</ul>
-			</div>
 		</div>
-	</div>
-}
+	}
 
-@Html.Hidden("totalPages", Model.TotalPages, new { id = "totalPages" })
-@Html.Hidden("currentPage", Model.CurrentPage, new { id = "currentPage" })
+	@Html.Hidden("totalPages", Model.TotalPages, new { id = "totalPages" })
+	@Html.Hidden("currentPage", Model.CurrentPage, new { id = "currentPage" })
+
+</div>

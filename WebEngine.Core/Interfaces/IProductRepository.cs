@@ -31,22 +31,6 @@ namespace WebEngine.Core.Interfaces
 		/// <returns>Return product collection.</returns>
 		//Task<IList<Product>> GetProductsAsync(string category);
 
-		/// <summary>
-		/// Get filtered products.
-		/// </summary>
-		/// <param name="filter">Product filter.</param>
-		/// <returns>Return product collection.</returns>
-		Task<IList<Product>> GetProductsAsync(ProductFilter filter);
-
-		/// <summary>
-		/// Get filtered products.
-		/// </summary>
-		/// <param name="categoryId">Category id.</param>
-		/// <param name="currentPage">Current page number.</param>
-		/// <param name="pageSize">Page size</param>
-		/// <returns>Return product collection.</returns>
-		Task<IList<Product>> GetProductsAsync(int categoryId, int currentPage, int pageSize);
-
 		Task<ProductPage> GetProductPage(ProductFilter productFilter);
 
 		/// <summary>
