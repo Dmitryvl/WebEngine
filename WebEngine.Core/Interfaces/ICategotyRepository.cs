@@ -40,5 +40,12 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="categoryName">Category name.</param>
 		/// <returns>Return category.</returns>
 		Task<Category> GetCategoryAsync(string categoryName);
+
+		/// <summary>
+		/// Get category by id.
+		/// </summary>
+		/// <param name="categoryId">Category id.</param>
+		/// <returns>Return category.</returns>
+		Task<Category> GetCategoryAsync(int categoryId);
 	}
 }

@@ -27,5 +27,10 @@ namespace WebEngine.Core.PageModels
 		/// Gets or sets total pages.
 		/// </summary>
 		public int TotalPages { get; set; }
+
+		/// <summary>
+		/// Gets or sets category name.
+		/// </summary>
+		public string CategoryName { get; set; }
 	}
 }

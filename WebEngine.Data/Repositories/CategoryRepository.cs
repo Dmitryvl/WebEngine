@@ -54,10 +54,29 @@ namespace WebEngine.Data.Repositories
 
 				return categories;
 			}
-			catch (Exception ex)
+			catch
 			{
 				return null;
 			}
+		}
+
+		/// <summary>
+		/// Get category by id.
+		/// </summary>
+		/// <param name="categoryId">Category id.</param>
+		/// <returns>Return category.</returns>
+		public async Task<Category> GetCategoryAsync(int categoryId)
+		{
+			if (categoryId > DEFAULT_ID)
+			{
+				Category category = await _context.Categories
+					.FirstOrDefaultAsync(c => c.Id == categoryId)
+					.ConfigureAwait(false);
+
+				return category;
+			}
+
+			return null;
 		}
 
 		/// <summary>

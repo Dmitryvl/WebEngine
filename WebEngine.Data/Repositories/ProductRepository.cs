@@ -316,6 +316,7 @@ namespace WebEngine.Data.Repositories
 								Id = (int)reader["Id"],
 								Name = (string)reader["Name"],
 								ShortInfo = (string)reader["ShortInfo"],
+								UrlName = (string)reader["UrlName"],
 								Company = new Company()
 								{
 									Name = (string)reader["CompanyName"]

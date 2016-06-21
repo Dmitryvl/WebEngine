@@ -26,35 +26,6 @@
 	<div class="features_items">
 		<h2 class="title text-center">@Model.CategoryViewName</h2>
 		<div id="view">
-			@foreach (var product in Model.Products)
-			{
-				<div class="col-sm-4">
-					<div class="product-image-wrapper">
-						<div class="single-products">
-							<div class="productinfo text-center">
-								@*<img src="~/images/No_image.png" alt="" />*@
-								<h2>@product.CompanyName @product.Name</h2>
-								<p>@product.ShortInfo</p>
-								@*<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>*@
-							</div>
-						</div>
-						<div class="choose">
-							<ul class="nav nav-pills nav-justified">
-								@*<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>*@
-								<li>
-									<a asp-action="GetProduct" asp-controller="Product" asp-route-category="@Model.CategoryName" asp-route-urlName="@product.UrlName">
-										<i class="fa fa-plus-square"></i>More...
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			}
-
-			@Html.Hidden("totalPages", Model.TotalPages, new { id = "totalPages" })
-			@Html.Hidden("currentPage", Model.CurrentPage, new { id = "currentPage" })
-
 
 		</div>
 	</div>
@@ -89,7 +60,7 @@
 			let elements = @Html.Raw(Json.Serialize(Model.FilterItems.Select(m => new { PropertyId = m.PropertyId, FilterItemType = m.FilterItemType })));
 
 			let pag = $('#pagination').simplePaginator({
-				totalPages: totalPages,
+				totalPages: 1,
 				maxButtonsVisible: 5,
 				currentPage: 1,
 				firstLabel: 'First',
@@ -103,8 +74,7 @@
 				if(elements[i].FilterItemType == 'DropDownList'){
 
 					$('#'+elements[i].PropertyId).change(function(){
-						let model = GrabFilter(1);
-						Send(model);
+						pag.simplePaginator('changePage', 1);
 					});
 
 				} else if(elements[i].FilterItemType == 'Range'){
@@ -156,6 +126,12 @@
 					alert("I'm sorry. An error occurred while processing your request.");
 				});
 			}
+
+			onSelectPage(1);
+
+
+
+
 		});
 	</script>
 }

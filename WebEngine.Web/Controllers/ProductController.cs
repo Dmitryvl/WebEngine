@@ -34,7 +34,7 @@ namespace WebEngine.Web.Controllers
 
 		private readonly IProductFilterRepository _productFilterRepository;
 
-		private const int PAGE_SIZE = 1;
+		private const int PAGE_SIZE = 5;
 
 		#endregion
 
@@ -57,39 +57,45 @@ namespace WebEngine.Web.Controllers
 		{
 			if (filter != null)
 			{
-				const string any = "any";
+				Category category = await _categoryRepository.GetCategoryAsync(filter.CategoryId);
 
-				ProductFilter productFilter = new ProductFilter();
-				productFilter.CategoryId = filter.CategoryId;
-				productFilter.CurrentPage = filter.CurrentPage;
-				productFilter.PageSize = PAGE_SIZE;
-				productFilter.Properties = filter.Properties
-					.Where(p => p.Id > 0 && !string.IsNullOrEmpty(p.Value) && p.Value != any)
-					.Select(p => new PropertyFilter()
-					{
-						PropertyId = p.Id,
-						Value = p.Value,
-						IsRange = p.IsRange
-					})
-					.ToArray();
-
-				ProductPage page = await _productRepository.GetProductPage(productFilter);
-
-				if (page != null)
+				if (category != null)
 				{
-					ProductPageView view = new ProductPageView();
-					view.CurrentPage = filter.CurrentPage;
-					view.TotalPages = page.TotalPages;
-					view.Products = page.Products.Select(p => new ProductView()
-					{
-						Id = p.Id,
-						Name = p.Name,
-						ShortInfo = p.ShortInfo,
-						UrlName = p.UrlName,
-						CompanyName = p.Company.Name
-					});
+					const string any = "any";
 
-					return PartialView("_ShortProduct", view);
+					ProductFilter productFilter = new ProductFilter();
+					productFilter.CategoryId = filter.CategoryId;
+					productFilter.CurrentPage = filter.CurrentPage;
+					productFilter.PageSize = PAGE_SIZE;
+					productFilter.Properties = filter.Properties
+						.Where(p => p.Id > 0 && !string.IsNullOrEmpty(p.Value) && p.Value != any)
+						.Select(p => new PropertyFilter()
+						{
+							PropertyId = p.Id,
+							Value = p.Value,
+							IsRange = p.IsRange
+						})
+						.ToArray();
+
+					ProductPage page = await _productRepository.GetProductPage(productFilter);
+
+					if (page != null)
+					{
+						ProductPageView view = new ProductPageView();
+						view.CurrentPage = filter.CurrentPage;
+						view.TotalPages = page.TotalPages;
+						view.CategoryName = category.Name;
+						view.Products = page.Products.Select(p => new ProductView()
+						{
+							Id = p.Id,
+							Name = p.Name,
+							ShortInfo = p.ShortInfo,
+							UrlName = p.UrlName,
+							CompanyName = p.Company.Name
+						});
+
+						return PartialView("_ShortProduct", view);
+					}
 				}
 			}
 
