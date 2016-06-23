@@ -28,6 +28,8 @@ namespace WebEngine.Core.PageModels
 		/// </summary>
 		public int TotalPages { get; set; }
 
+		public int ProductCount { get; set; }
+
 		/// <summary>
 		/// Gets or sets category name.
 		/// </summary>

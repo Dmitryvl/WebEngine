@@ -12,7 +12,6 @@ namespace WebEngine.Data.Repositories
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.SqlClient;
-	using System.Linq;
 	using System.Text;
 	using System.Threading.Tasks;
 
@@ -46,15 +45,13 @@ namespace WebEngine.Data.Repositories
 		{
 			if (productFilter != null && productFilter.CategoryId > DEFAULT_ID)
 			{
-				ProductPage page = new ProductPage();
+				Query query = BuildQuery(productFilter);
 
-				ProductSqlQueries sql = GetSqlQueries(productFilter);
+				ProductPage page = await GetProductPageAsync(query.QueryString, query.Parameters);
 
-				page.Products = await GetProductsAsync(sql.ProductSqlQuery, sql.ProductParameters);
-
-				int count = await GetTotalPages(sql.CountSqlQuery, sql.CountParameters);
-
-				page.TotalPages = count % productFilter.PageSize == DEFAULT_ID ? count / productFilter.PageSize : count / productFilter.PageSize + 1;
+				page.TotalPages = page.ProductCount % productFilter.PageSize == DEFAULT_ID
+					? page.ProductCount / productFilter.PageSize
+					: page.ProductCount / productFilter.PageSize + 1;
 
 				return page;
 			}
@@ -66,9 +63,9 @@ namespace WebEngine.Data.Repositories
 
 		#region Private methods
 
-		private ProductSqlQueries GetSqlQueries(ProductFilter filter)
+		private Query BuildQuery(ProductFilter filter)
 		{
-			ProductSqlQueries sql = new ProductSqlQueries();
+			Query query = new Query();
 
 			int propertiesCount = filter.Properties != null ? filter.Properties.Count : DEFAULT_ID;
 
@@ -78,8 +75,7 @@ namespace WebEngine.Data.Repositories
 
 			int paramIndex = 0;
 
-			sql.ProductParameters = new SqlParameter[propertiesCount * 2 + 2];
-			sql.CountParameters = new SqlParameter[propertiesCount * 2];
+			query.Parameters = new SqlParameter[propertiesCount * 2 + 2];
 
 			if (propertiesCount > DEFAULT_ID)
 			{
@@ -89,15 +85,7 @@ namespace WebEngine.Data.Repositories
 				{
 					if (filter.Properties[i].IsRange)
 					{
-						sql.ProductParameters[paramIndex] = new SqlParameter()
-						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].PropertyId,
-							SqlDbType = SqlDbType.Int,
-							Direction = ParameterDirection.Input
-						};
-
-						sql.CountParameters[paramIndex] = new SqlParameter()
+						query.Parameters[paramIndex] = new SqlParameter()
 						{
 							ParameterName = $"@param{paramIndex}",
 							Value = filter.Properties[i].PropertyId,
@@ -111,15 +99,7 @@ namespace WebEngine.Data.Repositories
 
 						paramIndex++;
 
-						sql.ProductParameters[paramIndex] = new SqlParameter()
-						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].Value,
-							SqlDbType = SqlDbType.Float,
-							Direction = ParameterDirection.Input
-						};
-
-						sql.CountParameters[paramIndex] = new SqlParameter()
+						query.Parameters[paramIndex] = new SqlParameter()
 						{
 							ParameterName = $"@param{paramIndex}",
 							Value = filter.Properties[i].Value,
@@ -140,15 +120,7 @@ namespace WebEngine.Data.Repositories
 					}
 					else
 					{
-						sql.ProductParameters[paramIndex] = new SqlParameter()
-						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].PropertyId,
-							SqlDbType = SqlDbType.Int,
-							Direction = ParameterDirection.Input
-						};
-
-						sql.CountParameters[paramIndex] = new SqlParameter()
+						query.Parameters[paramIndex] = new SqlParameter()
 						{
 							ParameterName = $"@param{paramIndex}",
 							Value = filter.Properties[i].PropertyId,
@@ -160,15 +132,7 @@ namespace WebEngine.Data.Repositories
 						sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
 						paramIndex++;
 
-						sql.ProductParameters[paramIndex] = new SqlParameter()
-						{
-							ParameterName = $"@param{paramIndex}",
-							Value = filter.Properties[i].Value,
-							SqlDbType = SqlDbType.NVarChar,
-							Direction = ParameterDirection.Input
-						};
-
-						sql.CountParameters[paramIndex] = new SqlParameter()
+						query.Parameters[paramIndex] = new SqlParameter()
 						{
 							ParameterName = $"@param{paramIndex}",
 							Value = filter.Properties[i].Value,
@@ -192,24 +156,28 @@ namespace WebEngine.Data.Repositories
 				sb.Append($" WHERE p.CategoryId = {filter.CategoryId}");
 			}
 
-			sql.CountSqlQuery = $"select count(result.Id) as ProductCount from " + sb.ToString() + ") as result";
+			string countQueryString = $"SELECT COUNT(result.Id) AS ProductCount FROM " + sb.ToString() + ") AS result";
 
-			sql.ProductParameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.CurrentPage);
+			query.Parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.CurrentPage);
 
 			paramIndex++;
 
-			sql.ProductParameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
+			query.Parameters[paramIndex] = new SqlParameter($"@param{paramIndex}", filter.PageSize);
 
 			sb.Append($") ORDER BY p.Id OFFSET ((@param{paramIndex - 1} - 1) * @param{paramIndex}) ROWS FETCH NEXT @param{paramIndex} ROWS ONLY;");
 
-			sql.ProductSqlQuery = sb.ToString();
+			sb.Append(countQueryString);
 
-			return sql;
+			query.QueryString = sb.ToString();
+
+			return query;
 		}
 
-		private async Task<IList<Product>> GetProductsAsync(string query, SqlParameter[] parameters)
+		private async Task<ProductPage> GetProductPageAsync(string query, SqlParameter[] parameters)
 		{
-			List<Product> products = new List<Product>();
+			ProductPage page = new ProductPage();
+
+			page.Products = new List<Product>();
 
 			using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
 			{
@@ -226,23 +194,32 @@ namespace WebEngine.Data.Repositories
 
 						SqlDataReader reader = cmd.ExecuteReader();
 
-						while (await reader.ReadAsync())
+						if (reader.HasRows)
 						{
-							products.Add(new Product()
+							while (await reader.ReadAsync())
 							{
-								Id = (int)reader["Id"],
-								Name = (string)reader["Name"],
-								ShortInfo = (string)reader["ShortInfo"],
-								UrlName = (string)reader["UrlName"],
-								Company = new Company()
+								page.Products.Add(new Product()
 								{
-									Name = (string)reader["CompanyName"]
-								},
-								Category = new Category()
-								{
-									Name = (string)reader["CategoryName"]
-								}
-							});
+									Id = (int)reader["Id"],
+									Name = (string)reader["Name"],
+									ShortInfo = (string)reader["ShortInfo"],
+									UrlName = (string)reader["UrlName"],
+									Company = new Company()
+									{
+										Name = (string)reader["CompanyName"]
+									},
+									Category = new Category()
+									{
+										Name = (string)reader["CategoryName"]
+									}
+								});
+							}
+
+							await reader.NextResultAsync();
+
+							await reader.ReadAsync();
+
+							page.ProductCount = (int)reader["ProductCount"];
 						}
 
 						reader.Dispose();
@@ -254,59 +231,16 @@ namespace WebEngine.Data.Repositories
 				}
 			}
 
-			return products;
-		}
-
-
-		private async Task<int> GetTotalPages(string query, SqlParameter[] parameters)
-		{
-			using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
-			{
-				using (SqlCommand cmd = sqlConnection.CreateCommand())
-				{
-					cmd.CommandText = query;
-
-					if (parameters.Count() > DEFAULT_ID)
-					{
-						cmd.Parameters.AddRange(parameters);
-					}
-
-					cmd.CommandTimeout = 30;
-					cmd.CommandType = CommandType.Text;
-
-					try
-					{
-						await sqlConnection.OpenAsync();
-
-						SqlDataReader reader = cmd.ExecuteReader();
-
-						await reader.ReadAsync();
-
-						int count = (int)reader[0];
-
-						reader.Dispose();
-
-						return count;
-					}
-					catch
-					{
-						return DEFAULT_ID;
-					}
-				}
-			}
+			return page;
 		}
 
 		#endregion
 	}
 
-	internal class ProductSqlQueries
+	internal struct Query
 	{
-		public SqlParameter[] ProductParameters { get; set; }
+		public SqlParameter[] Parameters { get; set; }
 
-		public SqlParameter[] CountParameters { get; set; }
-
-		public string ProductSqlQuery { get; set; }
-
-		public string CountSqlQuery { get; set; }
+		public string QueryString { get; set; }
 	}
 }
