@@ -34,6 +34,8 @@ namespace WebEngine.Web.Controllers
 
 		private readonly IProductFilterRepository _productFilterRepository;
 
+		private readonly IProductPageRepository _productPageRepository;
+
 		private const int PAGE_SIZE = 5;
 
 		#endregion
@@ -43,11 +45,13 @@ namespace WebEngine.Web.Controllers
 		public ProductController(
 			IProductRepository productRepository,
 			ICategotyRepository categoryRepository,
-			IProductFilterRepository productFilterRepository)
+			IProductFilterRepository productFilterRepository,
+			IProductPageRepository productPageRepository)
 		{
 			_productRepository = productRepository;
 			_categoryRepository = categoryRepository;
 			_productFilterRepository = productFilterRepository;
+			_productPageRepository = productPageRepository;
 		}
 
 		#endregion
@@ -78,7 +82,7 @@ namespace WebEngine.Web.Controllers
 						})
 						.ToArray();
 
-					ProductPage page = await _productRepository.GetProductPage(productFilter);
+					ProductPage page = await _productPageRepository.GetProductPage(productFilter);
 
 					if (page != null)
 					{
@@ -121,7 +125,7 @@ namespace WebEngine.Web.Controllers
 						PageSize = PAGE_SIZE
 					};
 
-					ProductPage productPage = await _productRepository.GetProductPage(productFilter);
+					ProductPage productPage = await _productPageRepository.GetProductPage(productFilter);
 
 					if (productPage != null)
 					{

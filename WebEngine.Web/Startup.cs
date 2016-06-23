@@ -67,6 +67,7 @@ namespace WebEngine.Web
 			services.AddTransient<IProductRepository, ProductRepository>();
 			services.AddTransient<ICategotyRepository, CategoryRepository>();
 			services.AddTransient<IProductFilterRepository, ProductFilterRepository>();
+			services.AddTransient<IProductPageRepository, ProductPageRepository>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

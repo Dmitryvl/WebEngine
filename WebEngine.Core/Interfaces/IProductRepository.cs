@@ -31,8 +31,6 @@ namespace WebEngine.Core.Interfaces
 		/// <returns>Return product collection.</returns>
 		//Task<IList<Product>> GetProductsAsync(string category);
 
-		Task<ProductPage> GetProductPage(ProductFilter productFilter);
-
 		/// <summary>
 		/// Get product by product id.
 		/// </summary>
