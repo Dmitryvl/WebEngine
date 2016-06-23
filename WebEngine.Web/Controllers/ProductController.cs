@@ -73,7 +73,8 @@ namespace WebEngine.Web.Controllers
 						{
 							PropertyId = p.Id,
 							Value = p.Value,
-							IsRange = p.IsRange
+							IsRange = p.IsRange,
+							Operation = p.Operator
 						})
 						.ToArray();
 

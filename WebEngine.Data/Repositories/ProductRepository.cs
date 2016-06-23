@@ -220,6 +220,54 @@ namespace WebEngine.Data.Repositories
 				{
 					if (filter.Properties[i].IsRange)
 					{
+						sql.ProductParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].PropertyId,
+							SqlDbType = SqlDbType.Int,
+							Direction = ParameterDirection.Input
+						};
+
+						sql.CountParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].PropertyId,
+							SqlDbType = SqlDbType.Int,
+							Direction = ParameterDirection.Input
+						};
+
+						sb.Append(QueryStrings.ProductQuery);
+
+						sb.Append($" WHERE pp.PropertyId = @param{paramIndex} AND p.CategoryId = {filter.CategoryId}");
+
+						paramIndex++;
+
+						sql.ProductParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].Value,
+							SqlDbType = SqlDbType.Float,
+							Direction = ParameterDirection.Input
+						};
+
+						sql.CountParameters[paramIndex] = new SqlParameter()
+						{
+							ParameterName = $"@param{paramIndex}",
+							Value = filter.Properties[i].Value,
+							SqlDbType = SqlDbType.Float,
+							Direction = ParameterDirection.Input
+						};
+
+						if (filter.Properties[i].Operation == '<')
+						{
+							sb.Append($" AND @param{paramIndex} >= Convert(float, pp.Value)");
+						}
+						else if (filter.Properties[i].Operation == '>')
+						{
+							sb.Append($" AND @param{paramIndex} <= Convert(float, pp.Value)");
+						}
+
+						paramIndex++;
 					}
 					else
 					{
@@ -330,7 +378,7 @@ namespace WebEngine.Data.Repositories
 
 						reader.Dispose();
 					}
-					catch
+					catch (Exception ex)
 					{
 						return null;
 					}
