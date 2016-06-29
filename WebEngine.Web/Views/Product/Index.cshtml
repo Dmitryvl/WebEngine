@@ -115,6 +115,8 @@
 			}
 
 			function onSelectPage (page) {
+				//saveHistory(document.location, page);
+
 				let model = GrabFilter(page);
 				Send(model);
 			}
@@ -140,9 +142,14 @@
 
 			onSelectPage(1);
 
+			//function saveHistory(url, page) {
+			//	let u = url.origin + url.pathname +'#page='+page;
+			//	window.history.pushState(null, null, u);
+			//}
 
-
-
+			//$(window).bind('popstate', function () {
+			//	document.location.href = location.pathname;
+			//});
 		});
 	</script>
 }

@@ -44,8 +44,8 @@
 			"version": "1.0.0-preview2-final",
 			"type": "build"
 		},
-		"WebEngine.Core": "1.0.0-*",
-		"WebEngine.Data": "1.0.0-*"
+		"WebEngine.Core": "1.0.0",
+		"WebEngine.Data": "1.0.0"
 	},
 
 	"tools": {
