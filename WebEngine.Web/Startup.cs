@@ -15,7 +15,7 @@ namespace WebEngine.Web
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.Extensions.Logging;
-
+	using Newtonsoft.Json.Serialization;
 	using WebEngine.Core.Config;
 	using WebEngine.Core.Interfaces;
 	using WebEngine.Data;
@@ -53,7 +53,8 @@ namespace WebEngine.Web
 			services.AddDbContext<WebEngineContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-			services.AddMvc();
+			services.AddMvc()
+				.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
 			services.AddOptions();
 
