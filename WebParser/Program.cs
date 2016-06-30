@@ -20,9 +20,9 @@ namespace WebEngine.Bot
 			UrlParser urlParser = new UrlParser();
 			ProductParser productParser = new ProductParser();
 
-			string url = "http://catalog.onliner.by/mobile/motorola/motoxplay16b";
+			string url = "#";
 
-			string baseUrl = "http://catalog.onliner.by/mobile?page=1";
+			string baseUrl = "#";
 
 			IList<string> urls = Task.Run(() => urlParser.GetUrls(baseUrl, 1)).Result;
 
