@@ -20,7 +20,7 @@ namespace WebEngine.Bot
 			UrlParser urlParser = new UrlParser();
 			ProductParser productParser = new ProductParser();
 
-			string url = "#";
+			string url = "http://catalog.onliner.by/mobile/motorola/motoxplay16b";
 
 			string baseUrl = "http://catalog.onliner.by/mobile?page=1";
 

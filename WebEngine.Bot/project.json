@@ -5,22 +5,11 @@
 	},
 
 	"dependencies": {
-		"Microsoft.NETCore.App": {
-			"type": "platform",
-			"version": "1.0.0"
-		},
-		"WebEngine.Data": "1.0.0",
-		"WebEngine.Core": "1.0.0",
-		"AngleSharp": "0.9.6"
+		"AngleSharp": "0.9.6",
+		"AngleSharp.Scripting.JavaScript": "0.4.0"
 	},
 
 	"frameworks": {
-		"netcoreapp1.0": {
-			"imports": [
-				"dotnet5.6",
-				"dnxcore50",
-				"portable-net45+win8"
-			]
-		}
+		"net461": {}
 	}
 }
