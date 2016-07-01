@@ -24,7 +24,7 @@ namespace WebEngine.Bot
 
 			string baseUrl = "#";
 
-			IList<string> urls = Task.Run(() => urlParser.GetUrls(baseUrl, 1)).Result;
+			IList<string> urls = urlParser.GetUrls(baseUrl, 66);
 
 
 			//ProductModel product = Task.Run(() => productParser.GetProduct(url)).Result;

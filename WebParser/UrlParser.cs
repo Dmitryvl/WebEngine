@@ -1,29 +1,50 @@
-﻿
-using AngleSharp;
-using AngleSharp.Dom;
-using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Threading;
 
 namespace WebEngine.Bot
 {
 	public class UrlParser
 	{
-		public const string _productsSelector = "div#schema-products div.schema-product__group";
 
-		public async Task<IList<string>> GetUrls(string baseUrl, int pageCount)
+		public IList<string> GetUrls(string baseUrl, int pageCount)
 		{
 			IList<string> urls = new List<string>();
 
-			IConfiguration config = Configuration.Default.WithJavaScript().WithCss();
+			for (int i = pageCount; i > 0; i--)
+			{
+				string url = baseUrl + "&page=" + i;
 
-			IDocument document = await BrowsingContext.New(config).OpenAsync(baseUrl);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
-			Console.WriteLine(document.DocumentElement.OuterHtml);
+				request.Method = "GET";
+				request.Accept = "application/json";
 
-			IHtmlCollection<IElement> products = document.QuerySelectorAll(_productsSelector);
+				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+				StreamReader reader = new StreamReader(response.GetResponseStream());
+				StringBuilder output = new StringBuilder();
+				output.Append(reader.ReadToEnd());
 
+				response.Close();
 
+				string result = output.ToString();
+
+				JObject obj = JObject.Parse(result);
+
+				JArray products = (JArray)obj["products"];
+
+				int productsCount = products.Count;
+
+				for (int index = 0; index < productsCount; index++)
+				{
+					urls.Add(products[index]["html_url"].ToString());
+				}
+
+				Thread.Sleep(1000);
+			}
 
 			return urls;
 		}
