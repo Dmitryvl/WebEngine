@@ -40,11 +40,6 @@ namespace WebEngine.Core.Entities
 		public string ShortInfo { get; set; }
 
 		/// <summary>
-		/// Gets or sets company identifier.
-		/// </summary>
-		public int CompanyId { get; set; }
-
-		/// <summary>
 		/// Gets or sets category id.
 		/// </summary>
 		public int CategoryId { get; set; }
@@ -57,11 +52,6 @@ namespace WebEngine.Core.Entities
 		#endregion
 
 		#region Navigation properties
-
-		/// <summary>
-		/// Gets or sets company.
-		/// </summary>
-		public virtual Company Company { get; set; }
 
 		/// <summary>
 		/// Gets or sets category.

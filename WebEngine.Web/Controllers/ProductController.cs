@@ -95,8 +95,7 @@ namespace WebEngine.Web.Controllers
 							Id = p.Id,
 							Name = p.Name,
 							ShortInfo = p.ShortInfo,
-							UrlName = p.UrlName,
-							CompanyName = p.Company.Name
+							UrlName = p.UrlName
 						});
 
 						return PartialView("_ShortProduct", view);
@@ -146,7 +145,6 @@ namespace WebEngine.Web.Controllers
 								Id = p.Id,
 								Name = p.Name,
 								ShortInfo = p.ShortInfo,
-								CompanyName = p.Company.Name,
 								UrlName = p.UrlName
 							});
 						}
@@ -212,7 +210,6 @@ namespace WebEngine.Web.Controllers
 
 			productView.ProductId = product.Id;
 			productView.ProductName = product.Name;
-			productView.CompanyName = product.Company.Name;
 
 			productView.Properties = product.ProductToProperty
 				.Select(s => new ProductPropertyView()

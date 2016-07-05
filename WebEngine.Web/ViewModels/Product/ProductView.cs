@@ -28,11 +28,6 @@ namespace WebEngine.Web.ViewModels.Product
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets or sets product company name.
-		/// </summary>
-		public string CompanyName { get; set; }
-
-		/// <summary>
 		/// Gets or sets short info about product.
 		/// </summary>
 		public string ShortInfo { get; set; }

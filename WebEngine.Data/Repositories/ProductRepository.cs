@@ -82,7 +82,6 @@ namespace WebEngine.Data.Repositories
 			{
 				Product smartPhone = await _context.Products
 					.Where(s => s.Id == productId)
-					.Include(s => s.Company)
 					.Include(s => s.ProductToProperty)
 					.ThenInclude(sp => sp.Property)
 					.ThenInclude(b => b.BaseProperty)
@@ -112,14 +111,8 @@ namespace WebEngine.Data.Repositories
 						Id = GetValue(p.Id),
 						Name = GetValue(p.Name),
 						CategoryId = GetValue(p.CategoryId),
-						CompanyId = GetValue(p.CompanyId),
 						ShortInfo = GetValue(p.ShortInfo),
 						UrlName = GetValue(p.UrlName),
-						Company = new Company()
-						{
-							Id = GetValue(p.Company.Id),
-							Name = GetValue(p.Company.Name)
-						}
 					})
 					.FirstOrDefaultAsync()
 					.ConfigureAwait(false);

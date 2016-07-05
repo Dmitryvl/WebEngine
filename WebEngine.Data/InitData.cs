@@ -97,14 +97,6 @@ namespace WebEngine.Data
 						new Store() { Name = "Store", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
 					};
 
-					Company[] companies = new Company[]
-					{
-						new Company() { Name = "Apple", IsActive = true },
-						new Company() { Name = "Samsung", IsActive = true },
-						new Company() { Name = "Meizu", IsActive = true },
-						new Company() { Name = "Sony", IsActive = true },
-					};
-
 					Category[] categories = new Category[]
 					{
 						new Category() { Name = "smartphones", ViewName = "SmartPhones view name", IsActive = true },
@@ -129,14 +121,14 @@ namespace WebEngine.Data
 
 					Product[] products = new Product[]
 					{
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5", UrlName = "iphone5", IsActive = true, ShortInfo = "4, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 5s", UrlName = "iphone5s", IsActive = true, ShortInfo = "5, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6", UrlName = "iphone6", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[0], Category = categories[0], Name = "iPhone 6s", UrlName = "iphone6s", IsActive = true, ShortInfo = "5.15, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s6", UrlName = "galaxys6", IsActive = true, ShortInfo = "5.7, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[1], Category = categories[0], Name = "Galaxy s7", UrlName = "galaxys7", IsActive = true, ShortInfo = "5.5, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[2], Category = categories[0], Name = "mx5", UrlName = "mx5", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
-						new Product() { Company = companies[3], Category = categories[0], Name = "z6", UrlName = "z6", IsActive = true, ShortInfo = "5.2, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "iPhone 5", UrlName = "iphone5", IsActive = true, ShortInfo = "4, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "iPhone 5s", UrlName = "iphone5s", IsActive = true, ShortInfo = "5, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "iPhone 6", UrlName = "iphone6", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "iPhone 6s", UrlName = "iphone6s", IsActive = true, ShortInfo = "5.15, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "Galaxy s6", UrlName = "galaxys6", IsActive = true, ShortInfo = "5.7, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "Galaxy s7", UrlName = "galaxys7", IsActive = true, ShortInfo = "5.5, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "mx5", UrlName = "mx5", IsActive = true, ShortInfo = "5.1, 111x111, 12 Мg, IPS" },
+						new Product() { Category = categories[0], Name = "z6", UrlName = "z6", IsActive = true, ShortInfo = "5.2, 111x111, 12 Мg, IPS" },
 					};
 
 					ProductToProperty[] ptp = new ProductToProperty[]
@@ -173,7 +165,6 @@ namespace WebEngine.Data
 					db.Roles.AddRange(roles);
 					db.Users.AddRange(users);
 					db.Stores.AddRange(stores);
-					db.Companies.AddRange(companies);
 					db.Categories.AddRange(categories);
 					db.BaseProperties.AddRange(productBaseProperty);
 					db.Properties.AddRange(properties);

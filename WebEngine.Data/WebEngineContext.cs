@@ -65,11 +65,6 @@ namespace WebEngine.Data
 		public DbSet<City> Cities { get; set; }
 
 		/// <summary>
-		/// Gets or sets companies.
-		/// </summary>
-		public DbSet<Company> Companies { get; set; }
-
-		/// <summary>
 		/// Gets or sets categories.
 		/// </summary>
 		public DbSet<Category> Categories { get; set; }
@@ -154,9 +149,6 @@ namespace WebEngine.Data
 			builder.Entity<City>().HasKey(c => c.Id);
 			builder.Entity<City>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 
-			builder.Entity<Company>().HasKey(c => c.Id);
-			builder.Entity<Company>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
-
 			builder.Entity<Category>().HasKey(c => c.Id);
 			builder.Entity<Category>().Property(c => c.Name).IsRequired().HasMaxLength(stringLength);
 			builder.Entity<Category>().Property(c => c.ViewName).IsRequired().HasMaxLength(stringLength);
@@ -224,13 +216,6 @@ namespace WebEngine.Data
 				.HasOne(s => s.DataType)
 				.WithMany(c => c.Properties)
 				.HasForeignKey(s => s.DataTypeId)
-				.IsRequired()
-				.OnDelete(DeleteBehavior.Restrict);
-
-			builder.Entity<Product>()
-				.HasOne(s => s.Company)
-				.WithMany(c => c.Products)
-				.HasForeignKey(s => s.CompanyId)
 				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 

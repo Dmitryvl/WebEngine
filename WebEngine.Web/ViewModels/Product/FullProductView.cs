@@ -21,8 +21,6 @@ namespace WebEngine.Web.ViewModels.Product
 
 		public string ProductName { get; set; }
 
-		public string CompanyName { get; set; }
-
 		public IList<ProductPropertyView> Properties { get; set; }
 	}
 }
