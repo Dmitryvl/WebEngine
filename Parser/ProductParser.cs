@@ -1,9 +1,9 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
 using System.Threading.Tasks;
-using WebEngine.Bot.Models;
+using Parser.Models;
 
-namespace WebEngine.Bot
+namespace Parser
 {
 	public class ProductParser
 	{

@@ -4,8 +4,9 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace WebEngine.Bot
+namespace Parser
 {
 	public class UrlParser
 	{
@@ -23,12 +24,12 @@ namespace WebEngine.Bot
 				request.Method = "GET";
 				request.Accept = "application/json";
 
-				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+				WebResponse response = Task.Run(() => request.GetResponseAsync()).Result;
 				StreamReader reader = new StreamReader(response.GetResponseStream());
 				StringBuilder output = new StringBuilder();
 				output.Append(reader.ReadToEnd());
 
-				response.Close();
+				response.Dispose();
 
 				string result = output.ToString();
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebEngine.Bot.Models
+namespace Parser.Models
 {
 	public class Table
 	{
