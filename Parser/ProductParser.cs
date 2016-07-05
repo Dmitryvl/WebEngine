@@ -19,19 +19,13 @@ namespace Parser
 
 		private const string _productTitle = "h2.catalog-masthead__title";
 
-		public async Task<ProductModel> GetProduct(string url)
+		public async Task<ProductModel> GetProduct(ProductModel product)
 		{
-			if (!string.IsNullOrEmpty(url))
+			if (product != null)
 			{
-				ProductModel product = new ProductModel();
-
 				IConfiguration config = Configuration.Default.WithDefaultLoader();
 
-				IDocument document = await BrowsingContext.New(config).OpenAsync(url);
-
-				IElement name = document.QuerySelector(_productTitle);
-
-				product.Name = name.TextContent.Trim();
+				IDocument document = await BrowsingContext.New(config).OpenAsync(product.Url);
 
 				IHtmlCollection<IElement> tbodies = document.QuerySelectorAll(_tableSelector);
 

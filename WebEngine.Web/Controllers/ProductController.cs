@@ -36,7 +36,7 @@ namespace WebEngine.Web.Controllers
 
 		private readonly IProductPageRepository _productPageRepository;
 
-		private const int PAGE_SIZE = 5;
+		private const int PAGE_SIZE = 30;
 
 		#endregion
 

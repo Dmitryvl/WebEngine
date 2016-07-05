@@ -111,12 +111,12 @@ namespace WebEngine.Data
 
 					Property[] properties = new Property[]
 					{
-						new Property() { Name = "Screen size", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new Property() { Name = "Display resolution", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new Property() { Name = "Quantity of points of a matrix",IsPreview = true, IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new Property() { Name = "Built-in camera", IsActive = true, IsPreview = false, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new Property() { Name = "Technology of the screen", IsActive = true, IsPreview = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
-						new Property() { Name = "Amount of colors of the screen", IsActive = true, IsPreview = false, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
+						new Property() { Name = "Screen size", IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Display resolution", IsActive = true,  BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Quantity of points of a matrix", IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Built-in camera", IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Technology of the screen",  BaseProperty = productBaseProperty[0], DataType = dataTypes[1] },
+						new Property() { Name = "Amount of colors of the screen", IsActive = true, BaseProperty = productBaseProperty[0], DataType = dataTypes[1] }
 					};
 
 					Product[] products = new Product[]
