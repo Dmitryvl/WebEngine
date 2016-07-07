@@ -115,7 +115,7 @@ namespace WebEngine.Web
 					template: "{controller}/{id?}");
 			});
 
-			//InitData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
+			InitData.InitializeDatabaseAsync(app.ApplicationServices).Wait();
 		}
 
 		#endregion

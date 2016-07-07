@@ -15,9 +15,8 @@ namespace WebEngine.Data.Repositories
 	using System.Text;
 	using System.Threading.Tasks;
 
-	using Microsoft.Extensions.Options;
+	using Microsoft.Extensions.Logging;
 
-	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Filters;
 	using WebEngine.Core.Interfaces;
@@ -29,11 +28,11 @@ namespace WebEngine.Data.Repositories
 	/// <summary>
 	/// <see cref="ProductPageRepository"/> class.
 	/// </summary>
-	public class ProductPageRepository : BaseRepository, IProductPageRepository
+	public class ProductPageRepository : BaseRepository<ProductPageRepository>, IProductPageRepository
 	{
 		#region Constructors
 
-		public ProductPageRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public ProductPageRepository(IServiceProvider services) : base(services)
 		{
 		}
 
@@ -47,7 +46,7 @@ namespace WebEngine.Data.Repositories
 			{
 				Query query = BuildQuery(productFilter);
 
-				ProductPage page = await GetProductPageAsync(query.QueryString, query.Parameters);
+				ProductPage page = await GetProductPageAsync(query.QueryString, query.Parameters).ConfigureAwait(false);
 
 				page.TotalPages = page.ProductCount % productFilter.PageSize == DEFAULT_ID
 					? page.ProductCount / productFilter.PageSize
@@ -222,6 +221,8 @@ namespace WebEngine.Data.Repositories
 					}
 					catch (Exception ex)
 					{
+						_logger.LogError(ex.Message);
+
 						return null;
 					}
 				}

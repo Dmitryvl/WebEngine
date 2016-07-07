@@ -156,7 +156,7 @@ namespace WebEngine.Web.Controllers
 								PropertyId = i.PropertyId,
 								FilterItemType = i.FilterItemType,
 								PropertyName = i.Property.Name,
-								FilterItemValues = i.ProductFilterItemValues.Select(v => v.Value)
+								FilterItemValues = i.ProductFilterItemValues != null ? i.ProductFilterItemValues.Select(v => v.Value) : null
 							});
 						}
 
@@ -210,6 +210,15 @@ namespace WebEngine.Web.Controllers
 
 			productView.ProductId = product.Id;
 			productView.ProductName = product.Name;
+
+			//productView.BaseProperties = product.ProductToProperty
+			//	.Select(s => new ProductBaseProperty()
+			//	{
+			//		Id = s.Property.BaseProperty.Id,
+			//		Name = s.Property.BaseProperty.Name
+			//	})
+			//	.Distinct()
+			//	.ToArray();
 
 			productView.Properties = product.ProductToProperty
 				.Select(s => new ProductPropertyView()

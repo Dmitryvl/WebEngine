@@ -167,6 +167,9 @@ namespace WebEngine.Data
 			builder.Entity<Product>().Property(s => s.UrlName).IsRequired().HasMaxLength(stringLength);
 			builder.Entity<Product>().Property(s => s.ShortInfo).HasMaxLength(stringLength);
 
+			builder.Entity<ProductOffer>().HasKey(o => o.Id);
+			builder.Entity<ProductOffer>().Property(o => o.Message).HasMaxLength(stringLength);
+
 			builder.Entity<ProductFilterItem>().HasKey(p => p.Id);
 			builder.Entity<ProductFilterItem>().Property(p => p.FilterItemType).IsRequired().HasMaxLength(stringLength);
 
@@ -229,9 +232,6 @@ namespace WebEngine.Data
 			builder.Entity<Product>()
 				.HasMany(s => s.ProductToProperty)
 				.WithOne(p => p.Product);
-
-			builder.Entity<ProductOffer>()
-				.HasKey(s => new { s.StoreId, s.ProductId });
 
 			builder.Entity<ProductOffer>()
 				.HasOne(s => s.Store)

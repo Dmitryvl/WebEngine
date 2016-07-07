@@ -13,9 +13,7 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Options;
 
-	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
 
@@ -24,7 +22,7 @@ namespace WebEngine.Data.Repositories
 	/// <summary>
 	/// <see cref="ProductRepository"/> class.
 	/// </summary>
-	public class ProductRepository : BaseRepository, IProductRepository
+	public class ProductRepository : BaseRepository<ProductRepository>, IProductRepository
 	{
 		#region Constructors
 
@@ -33,7 +31,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="services">IServiceProvider services.</param>
 		/// <param name="config">Application config.</param>
-		public ProductRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public ProductRepository(IServiceProvider services) : base(services)
 		{
 		}
 

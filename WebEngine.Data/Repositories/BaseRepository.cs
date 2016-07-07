@@ -14,13 +14,14 @@ namespace WebEngine.Data.Repositories
 	using Microsoft.Extensions.Options;
 
 	using WebEngine.Core.Config;
+	using Microsoft.Extensions.Logging;
 
 	#endregion
 
 	/// <summary>
 	/// <see cref="BaseRepository"/> class.
 	/// </summary>
-	public abstract class BaseRepository
+	public abstract class BaseRepository<T> : IDisposable where T : class
 	{
 		#region Protected fields
 
@@ -39,6 +40,11 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		protected readonly string _connectionString;
 
+		/// <summary>
+		/// The logger.
+		/// </summary>
+		protected readonly ILogger<T> _logger;
+
 		#endregion
 
 		#region Public methods
@@ -47,10 +53,18 @@ namespace WebEngine.Data.Repositories
 		/// Initializes a new instance of the <see cref="BaseRepository" /> class.
 		/// </summary>
 		/// <param name="services">Service provider.</param>
-		public BaseRepository(IServiceProvider services, IOptions<AppConfig> config)
+		public BaseRepository(IServiceProvider services)
 		{
 			_context = services.GetService<WebEngineContext>();
-			_connectionString = config.Value.ConnectionString;
+
+			IOptions<AppConfig> config = services.GetService<IOptions<AppConfig>>();
+
+			if (config != null)
+			{
+				_connectionString = config.Value.ConnectionString;
+			}
+
+			_logger = services.GetService<ILogger<T>>();
 		}
 
 		/// <summary>

@@ -34,6 +34,8 @@ namespace WebEngine.Core.Entities
 		/// </summary>
 		public bool IsActive { get; set; }
 
+		public int CategoryId { get; set; }
+
 		#endregion
 
 		#region Navigation properties
@@ -42,6 +44,8 @@ namespace WebEngine.Core.Entities
 		/// Gets or sets properties.
 		/// </summary>
 		public virtual ICollection<Property> Properties { get; set; }
+
+		public virtual Category Category { get; set; }
 
 		#endregion
 	}

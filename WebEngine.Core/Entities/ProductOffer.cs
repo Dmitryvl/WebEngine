@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+
 namespace WebEngine.Core.Entities
 {
 	#region Usings
@@ -16,6 +18,11 @@ namespace WebEngine.Core.Entities
 	public class ProductOffer
 	{
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets id.
+		/// </summary>
+		public int Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets store identifier.
@@ -36,6 +43,11 @@ namespace WebEngine.Core.Entities
 		/// Gets or sets a value indicating whether offer is active.
 		/// </summary>
 		public bool IsActive { get; set; }
+
+		/// <summary>
+		/// Offer date.
+		/// </summary>
+		public DateTimeOffset Date { get; set; }
 
 		#endregion
 

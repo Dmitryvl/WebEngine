@@ -81,7 +81,7 @@ namespace WebEngine.Data
 						new User()
 						{
 							Name = "test",
-							Email = "test@test.ru",
+							Email = "t2@t2.ru",
 							IsActive = true,
 							Password = "ada9c31f4cf484113b7fdddbae539ad9295415b92b8b7f95c05649f57c648596",
 							PasswordSalt = "9297",
@@ -106,7 +106,7 @@ namespace WebEngine.Data
 
 					BaseProperty[] productBaseProperty = new BaseProperty[]
 					{
-						new BaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true }
+						new BaseProperty() { Name = "SmartPhoneBaseProperty", IsActive = true, Category = categories[0] }
 					};
 
 					Property[] properties = new Property[]
@@ -143,7 +143,7 @@ namespace WebEngine.Data
 
 					ProductOffer[] productOffers = new ProductOffer[]
 					{
-						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message" }
+						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message", Date = DateTimeOffset.Now }
 					};
 
 					ProductFilterItem[] productFilterItems = new ProductFilterItem[]

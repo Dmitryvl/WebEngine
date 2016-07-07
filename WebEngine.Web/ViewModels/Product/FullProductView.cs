@@ -22,5 +22,7 @@ namespace WebEngine.Web.ViewModels.Product
 		public string ProductName { get; set; }
 
 		public IList<ProductPropertyView> Properties { get; set; }
+
+		public IList<ProductBaseProperty> BaseProperties { get; set; }
 	}
 }

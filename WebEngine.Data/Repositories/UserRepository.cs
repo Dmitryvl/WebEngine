@@ -13,19 +13,18 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Options;
 
-	using WebEngine.Core.Config;
 	using WebEngine.Core.Crypto;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
+	using Microsoft.Extensions.Logging;
 
 	#endregion
 
 	/// <summary>
 	/// <see cref="UserRepository"/> class.
 	/// </summary>
-	public class UserRepository : BaseRepository, IUserRepository
+	public class UserRepository : BaseRepository<UserRepository>, IUserRepository
 	{
 		#region Constructors
 
@@ -34,7 +33,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="services">IServiceProvider services.</param>
 		/// <param name="config">Application config.</param>
-		public UserRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public UserRepository(IServiceProvider services) : base(services)
 		{
 		}
 
@@ -51,32 +50,43 @@ namespace WebEngine.Data.Repositories
 		{
 			if (user != null)
 			{
-				User dbUser = await _context.Users
-					.FirstOrDefaultAsync(u => u.Name == user.Name || u.Email == user.Email)
-					.ConfigureAwait(false);
-
-				if (dbUser == null)
+				try
 				{
-					int defaultRoleId = await GetDefaultRoleIdAsync().ConfigureAwait(false);
+					User dbUser = await _context.Users
+						.FirstOrDefaultAsync(u => u.Name == user.Name || u.Email == user.Email)
+						.ConfigureAwait(false);
 
-					if (defaultRoleId > DEFAULT_ID)
+					if (dbUser == null)
 					{
-						user.PasswordSalt = GetPasswordSalt();
-						user.Password = PasswordHash.GetSha256Hash(user.Password, user.PasswordSalt);
-						user.RegisterDate = DateTimeOffset.Now;
-						user.IsActive = false;
-						user.IsDeleted = false;
-						user.EmailKey = Guid.NewGuid();
-						user.RoleId = defaultRoleId;
+						int defaultRoleId = await GetDefaultRoleIdAsync().ConfigureAwait(false);
 
-						_context.Users.Add(user);
+						if (defaultRoleId > DEFAULT_ID)
+						{
+							user.PasswordSalt = GetPasswordSalt();
+							user.Password = PasswordHash.GetSha256Hash(user.Password, user.PasswordSalt);
+							user.RegisterDate = DateTimeOffset.Now;
+							user.IsActive = false;
+							user.IsDeleted = false;
+							user.EmailKey = Guid.NewGuid();
+							user.RoleId = defaultRoleId;
 
-						await _context.SaveChangesAsync().ConfigureAwait(false);
+							_context.Users.Add(user);
 
-						return true;
+							await _context.SaveChangesAsync().ConfigureAwait(false);
+
+							return true;
+						}
 					}
 				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
+				}
 			}
+
+			_logger.LogWarning("AddUserAsync: user is null");
 
 			return false;
 		}
@@ -90,21 +100,32 @@ namespace WebEngine.Data.Repositories
 		{
 			if (userId > DEFAULT_ID)
 			{
-				User user = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == userId)
-					.ConfigureAwait(false);
-
-				if (user != null)
+				try
 				{
-					user.IsDeleted = true;
+					User user = await _context.Users
+						.FirstOrDefaultAsync(u => u.Id == userId)
+						.ConfigureAwait(false);
 
-					_context.Entry(user).State = EntityState.Modified;
+					if (user != null)
+					{
+						user.IsDeleted = true;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Entry(user).State = EntityState.Modified;
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("DeleteUserAsync: userId <= 0");
 
 			return false;
 		}
@@ -118,11 +139,21 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userEmail))
 			{
-				return await _context.Users
-					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Email == userEmail)
-					.ConfigureAwait(false);
+				try
+				{
+					return await _context.Users
+						.FirstOrDefaultAsync(u => u.Email == userEmail)
+						.ConfigureAwait(false);
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetUserByEmailAsync: userEmail is null or empty!");
 
 			return null;
 		}
@@ -136,13 +167,23 @@ namespace WebEngine.Data.Repositories
 		{
 			if (userId > DEFAULT_ID)
 			{
-				User user = await _context.Users
-					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Id == userId)
-					.ConfigureAwait(false);
+				try
+				{
+					User user = await _context.Users
+						.FirstOrDefaultAsync(u => u.Id == userId)
+						.ConfigureAwait(false);
 
-				return user;
+					return user;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetUserByIdAsync: userId <= 0");
 
 			return null;
 		}
@@ -156,38 +197,48 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
-				User user = await _context.Users
-					.AsNoTracking()
-					.Where(u => u.Name == userName && u.IsActive == true && u.IsDeleted == false)
-					.Select(u => new User()
-					{
-						Id = u.Id,
-						Name = u.Name,
-						Email = u.Email,
-						Password = u.Password,
-						PasswordSalt = u.PasswordSalt,
-						RegisterDate = u.RegisterDate,
-						Role = u.Role,
-					})
-					.FirstOrDefaultAsync()
-					.ConfigureAwait(false);
-
-				if (user != null)
+				try
 				{
-					user.Stores = await _context.Stores
-						.Where(s => s.UserId == user.Id)
-						.Select(s => new Store()
+					User user = await _context.Users
+						.Where(u => u.Name == userName && u.IsActive == true && u.IsDeleted == false)
+						.Select(u => new User()
 						{
-							Id = s.Id,
-							Name = s.Name,
-							CreationDate = s.CreationDate
+							Id = u.Id,
+							Name = u.Name,
+							Email = u.Email,
+							Password = u.Password,
+							PasswordSalt = u.PasswordSalt,
+							RegisterDate = u.RegisterDate,
+							Role = u.Role,
 						})
-						.ToArrayAsync()
+						.FirstOrDefaultAsync()
 						.ConfigureAwait(false);
-				}
 
-				return user;
+					if (user != null)
+					{
+						user.Stores = await _context.Stores
+							.Where(s => s.UserId == user.Id)
+							.Select(s => new Store()
+							{
+								Id = s.Id,
+								Name = s.Name,
+								CreationDate = s.CreationDate
+							})
+							.ToArrayAsync()
+							.ConfigureAwait(false);
+					}
+
+					return user;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetUserByNameAsync: userName is null or empty!");
 
 			return null;
 		}
@@ -201,21 +252,36 @@ namespace WebEngine.Data.Repositories
 		{
 			if (user != null)
 			{
-				User dbUser = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == user.Id)
-					.ConfigureAwait(false);
-
-				if (dbUser != null)
+				try
 				{
-					dbUser.Name = user.Name;
+					User dbUser = await _context.Users
+						.FirstOrDefaultAsync(u => u.Id == user.Id)
+						.ConfigureAwait(false);
 
-					_context.Entry(dbUser).State = EntityState.Modified;
+					if (dbUser != null)
+					{
+						dbUser.Name = user.Name;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Entry(dbUser).State = EntityState.Modified;
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+
+					_logger.LogWarning("UpdateUserAsync: dbUser is null");
+
+					return false;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("UpdateUserAsync: user is null");
 
 			return false;
 		}
@@ -230,26 +296,41 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userEmail) && !string.IsNullOrEmpty(password))
 			{
-				User user = await _context.Users
-					.AsNoTracking()
-					.Where(u => u.Email == userEmail && u.IsActive == true && u.IsDeleted == false)
-					.Select(u => new User()
-					{
-						Id = u.Id,
-						Name = u.Name,
-						Email = u.Email,
-						Password = u.Password,
-						PasswordSalt = u.PasswordSalt,
-						Role = u.Role
-					})
-					.FirstOrDefaultAsync()
-					.ConfigureAwait(false);
-
-				if (user != null && user.Password == PasswordHash.GetSha256Hash(password, user.PasswordSalt))
+				try
 				{
-					return user;
+					User user = await _context.Users
+						.AsNoTracking()
+						.Where(u => u.Email == userEmail && u.IsActive == true && u.IsDeleted == false)
+						.Select(u => new User()
+						{
+							Id = u.Id,
+							Name = u.Name,
+							Email = u.Email,
+							Password = u.Password,
+							PasswordSalt = u.PasswordSalt,
+							Role = u.Role
+						})
+						.FirstOrDefaultAsync()
+						.ConfigureAwait(false);
+
+					if (user != null && user.Password == PasswordHash.GetSha256Hash(password, user.PasswordSalt))
+					{
+						return user;
+					}
+
+					_logger.LogWarning("GetValidUserAsync: dbUser is null");
+
+					return null;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
 				}
 			}
+
+			_logger.LogWarning("GetValidUserAsync: userEmail is null or empty OR password is null or empty!");
 
 			return null;
 		}
@@ -264,22 +345,37 @@ namespace WebEngine.Data.Repositories
 		{
 			if (userId > DEFAULT_ID && emailKey != Guid.Empty)
 			{
-				User user = await _context.Users
-					.FirstOrDefaultAsync(u => u.Id == userId && u.EmailKey == emailKey)
-					.ConfigureAwait(false);
-
-				if (user != null)
+				try
 				{
-					user.IsActive = true;
-					user.EmailKey = null;
+					User user = await _context.Users
+						.FirstOrDefaultAsync(u => u.Id == userId && u.EmailKey == emailKey)
+						.ConfigureAwait(false);
 
-					_context.Entry(user).State = EntityState.Modified;
+					if (user != null)
+					{
+						user.IsActive = true;
+						user.EmailKey = null;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Entry(user).State = EntityState.Modified;
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+
+					_logger.LogWarning("UserActivationAsync: userId <= 0 OR user is null!");
+
+					return false;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("UserActivationAsync: userId <= 0 OR emailKey is default!");
 
 			return false;
 		}
@@ -293,16 +389,27 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(userName))
 			{
-				User user = await _context.Users
-					.AsNoTracking()
-					.FirstOrDefaultAsync(u => u.Name == userName)
-					.ConfigureAwait(false);
-
-				if (user != null)
+				try
 				{
-					return user.Id;
+					User user = await _context.Users
+						.AsNoTracking()
+						.FirstOrDefaultAsync(u => u.Name == userName)
+						.ConfigureAwait(false);
+
+					if (user != null)
+					{
+						return user.Id;
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return DEFAULT_ID;
 				}
 			}
+
+			_logger.LogWarning("GetUserIdByUserNameAsync: userName is null or empty!");
 
 			return DEFAULT_ID;
 		}
@@ -332,17 +439,28 @@ namespace WebEngine.Data.Repositories
 		{
 			const string defaultRoleName = "user";
 
-			Role role = await _context.Roles
-				.AsNoTracking()
-				.FirstOrDefaultAsync(r => r.Name == defaultRoleName)
-				.ConfigureAwait(false);
-
-			if (role != null)
+			try
 			{
-				return role.Id;
-			}
+				Role role = await _context.Roles
+					.AsNoTracking()
+					.FirstOrDefaultAsync(r => r.Name == defaultRoleName)
+					.ConfigureAwait(false);
 
-			return DEFAULT_ID;
+				if (role != null)
+				{
+					return role.Id;
+				}
+
+				_logger.LogWarning("GetDefaultRoleIdAsync: role is not exist!");
+
+				return DEFAULT_ID;
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.Message);
+
+				return DEFAULT_ID;
+			}
 		}
 
 		#endregion

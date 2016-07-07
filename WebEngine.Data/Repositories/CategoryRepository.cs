@@ -11,19 +11,18 @@ namespace WebEngine.Data.Repositories
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	using Microsoft.Extensions.Options;
 	using Microsoft.EntityFrameworkCore;
 
-	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
+	using Microsoft.Extensions.Logging;
 
 	#endregion
 
 	/// <summary>
 	/// <see cref="CategoryRepository"/> class.
 	/// </summary>
-	public class CategoryRepository : BaseRepository, ICategotyRepository
+	public class CategoryRepository : BaseRepository<CategoryRepository>, ICategotyRepository
 	{
 		#region Constructors
 
@@ -32,7 +31,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="services">IServiceProvider services.</param>
 		/// <param name="config">Application config.</param>
-		public CategoryRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public CategoryRepository(IServiceProvider services) : base(services)
 		{
 		}
 
@@ -54,8 +53,10 @@ namespace WebEngine.Data.Repositories
 
 				return categories;
 			}
-			catch
+			catch (Exception ex)
 			{
+				_logger.LogError(ex.Message);
+
 				return null;
 			}
 		}
@@ -69,12 +70,23 @@ namespace WebEngine.Data.Repositories
 		{
 			if (categoryId > DEFAULT_ID)
 			{
-				Category category = await _context.Categories
-					.FirstOrDefaultAsync(c => c.Id == categoryId)
-					.ConfigureAwait(false);
+				try
+				{
+					Category category = await _context.Categories
+						.FirstOrDefaultAsync(c => c.Id == categoryId)
+						.ConfigureAwait(false);
 
-				return category;
+					return category;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetCategoryAsync: categoryId <= 0");
 
 			return null;
 		}
@@ -96,11 +108,15 @@ namespace WebEngine.Data.Repositories
 
 					return category;
 				}
-				catch
+				catch (Exception ex)
 				{
+					_logger.LogError(ex.Message);
+
 					return null;
 				}
 			}
+
+			_logger.LogWarning("GetCategoryAsync: categoryName is null or empty!");
 
 			return null;
 		}
@@ -114,15 +130,26 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(categoryName))
 			{
-				Category category = await _context.Categories
-					.FirstOrDefaultAsync(c => c.Name == categoryName)
-					.ConfigureAwait(false);
-
-				if (category != null)
+				try
 				{
-					return true;
+					Category category = await _context.Categories
+						.FirstOrDefaultAsync(c => c.Name == categoryName)
+						.ConfigureAwait(false);
+
+					if (category != null)
+					{
+						return true;
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("IsExistAsync: categoryName is null or empty!");
 
 			return false;
 		}

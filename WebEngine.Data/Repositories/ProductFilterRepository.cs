@@ -13,19 +13,18 @@ namespace WebEngine.Data.Repositories
 	using System.Linq;
 	using System.Threading.Tasks;
 
-	using Core.Config;
 	using Core.Entities;
 	using Core.Interfaces;
 
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Options;
+	using Microsoft.Extensions.Logging;
 
 	#endregion
 
 	/// <summary>
 	/// <see cref="ProductFilterRepository"/> class.
 	/// </summary>
-	public class ProductFilterRepository : BaseRepository, IProductFilterRepository
+	public class ProductFilterRepository : BaseRepository<ProductFilterRepository>, IProductFilterRepository
 	{
 		#region Constructors
 
@@ -34,7 +33,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="services">IServiceProvider services.</param>
 		/// <param name="config">Application config.</param>
-		public ProductFilterRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public ProductFilterRepository(IServiceProvider services) : base(services)
 		{
 		}
 
@@ -83,7 +82,7 @@ namespace WebEngine.Data.Repositories
 							.ToArrayAsync()
 							.ConfigureAwait(false);
 
-						if (itemValues != null && itemValues.Count > DEFAULT_ID)
+						if (itemValues.Count > DEFAULT_ID)
 						{
 							for (int i = 0; i < items.Count; i++)
 							{
@@ -97,11 +96,15 @@ namespace WebEngine.Data.Repositories
 
 					return items;
 				}
-				catch
+				catch (Exception ex)
 				{
+					_logger.LogError(ex.Message);
+
 					return null;
 				}
 			}
+
+			_logger.LogWarning("GetProductFilterItems: categoryId <= 0");
 
 			return null;
 		}

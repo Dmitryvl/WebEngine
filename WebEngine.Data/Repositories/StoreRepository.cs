@@ -12,18 +12,17 @@ namespace WebEngine.Data.Repositories
 	using System.Threading.Tasks;
 
 	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Options;
 
-	using WebEngine.Core.Config;
 	using WebEngine.Core.Entities;
 	using WebEngine.Core.Interfaces;
+	using Microsoft.Extensions.Logging;
 
 	#endregion
 
 	/// <summary>
 	/// <see cref="StoreRepository"/> class.
 	/// </summary>
-	public class StoreRepository : BaseRepository, IStoreRepository
+	public class StoreRepository : BaseRepository<StoreRepository>, IStoreRepository
 	{
 		#region Constructors
 
@@ -32,7 +31,7 @@ namespace WebEngine.Data.Repositories
 		/// </summary>
 		/// <param name="services">IServiceProvider services.</param>
 		/// <param name="config">Application config.</param>
-		public StoreRepository(IServiceProvider services, IOptions<AppConfig> config) : base(services, config)
+		public StoreRepository(IServiceProvider services) : base(services)
 		{
 		}
 
@@ -49,23 +48,38 @@ namespace WebEngine.Data.Repositories
 		{
 			if (store != null && store.UserId > DEFAULT_ID)
 			{
-				Store dbStore = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId)
-					.ConfigureAwait(false);
-
-				if (dbStore == null)
+				try
 				{
-					store.IsActive = false;
-					store.IsDeleted = false;
-					store.CreationDate = DateTimeOffset.Now;
+					Store dbStore = await _context.Stores
+						.FirstOrDefaultAsync(s => s.Name == store.Name || s.UserId == store.UserId)
+						.ConfigureAwait(false);
 
-					_context.Stores.Add(store);
+					if (dbStore == null)
+					{
+						store.IsActive = false;
+						store.IsDeleted = false;
+						store.CreationDate = DateTimeOffset.Now;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Stores.Add(store);
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+
+					_logger.LogWarning("AddStoreAsync: store is exist!");
+
+					return false;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("AddStoreAsync: store is null OR userId <= 0");
 
 			return false;
 		}
@@ -79,22 +93,33 @@ namespace WebEngine.Data.Repositories
 		{
 			if (storeId > DEFAULT_ID)
 			{
-				Store store = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Id == storeId)
-					.ConfigureAwait(false);
-
-				if (store != null)
+				try
 				{
-					store.IsActive = false;
-					store.IsDeleted = true;
+					Store store = await _context.Stores
+						.FirstOrDefaultAsync(s => s.Id == storeId)
+						.ConfigureAwait(false);
 
-					_context.Entry(store).State = EntityState.Modified;
+					if (store != null)
+					{
+						store.IsActive = false;
+						store.IsDeleted = true;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Entry(store).State = EntityState.Modified;
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("DeleteStoreAsync: storeId <= 0");
 
 			return false;
 		}
@@ -108,12 +133,23 @@ namespace WebEngine.Data.Repositories
 		{
 			if (storeId > DEFAULT_ID)
 			{
-				Store store = await _context.Stores
-					.FirstOrDefaultAsync(s=>s.Id == storeId)
-					.ConfigureAwait(false);
+				try
+				{
+					Store store = await _context.Stores
+						.FirstOrDefaultAsync(s => s.Id == storeId)
+						.ConfigureAwait(false);
 
-				return store;
+					return store;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetStoreByIdAsync: storeId <= 0");
 
 			return null;
 		}
@@ -127,12 +163,23 @@ namespace WebEngine.Data.Repositories
 		{
 			if (!string.IsNullOrEmpty(storeName))
 			{
-				Store store = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Name == storeName)
-					.ConfigureAwait(false);
+				try
+				{
+					Store store = await _context.Stores
+						.FirstOrDefaultAsync(s => s.Name == storeName)
+						.ConfigureAwait(false);
 
-				return store;
+					return store;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
 			}
+
+			_logger.LogWarning("GetStoreByNameAsync: storeName is null or empty!");
 
 			return null;
 		}
@@ -146,21 +193,32 @@ namespace WebEngine.Data.Repositories
 		{
 			if (store != null)
 			{
-				Store dbStore = await _context.Stores
-					.FirstOrDefaultAsync(s => s.Id == store.Id)
-					.ConfigureAwait(false);
-
-				if (dbStore != null)
+				try
 				{
-					dbStore.Name = store.Name;
+					Store dbStore = await _context.Stores
+						.FirstOrDefaultAsync(s => s.Id == store.Id)
+						.ConfigureAwait(false);
 
-					_context.Entry(store).State = EntityState.Modified;
+					if (dbStore != null)
+					{
+						dbStore.Name = store.Name;
 
-					await _context.SaveChangesAsync().ConfigureAwait(false);
+						_context.Entry(store).State = EntityState.Modified;
 
-					return true;
+						await _context.SaveChangesAsync().ConfigureAwait(false);
+
+						return true;
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return false;
 				}
 			}
+
+			_logger.LogWarning("UpdateStoreAsync: store is null!");
 
 			return false;
 		}
