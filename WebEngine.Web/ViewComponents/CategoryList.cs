@@ -25,7 +25,7 @@ namespace WebEngine.Web.ViewComponents
 	/// </summary>
 	public class CategoryList : ViewComponent
 	{
-		private ICategotyRepository _categoryRepository;
+		private readonly ICategotyRepository _categoryRepository;
 
 		public CategoryList(ICategotyRepository categoryRepository)
 		{

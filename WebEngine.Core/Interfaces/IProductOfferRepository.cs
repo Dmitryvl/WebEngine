@@ -21,10 +21,10 @@ namespace WebEngine.Core.Interfaces
 	/// </summary>
 	public interface IProductOfferRepository : IDisposable
 	{
-		Task<bool> SaveProductOffer(ProductOffer productOffer);
+		Task<bool> SaveProductOfferAsync(ProductOffer productOffer);
 
-		Task<IList<ProductOffer>> GetProductOffers(int productId);
+		Task<IList<ProductOffer>> GetProductOffersAsync(int productId);
 
-		Task<bool> InactiveProductOffer(int productOfferId);
+		Task<bool> InactiveProductOfferAsync(int productOfferId);
 	}
 }

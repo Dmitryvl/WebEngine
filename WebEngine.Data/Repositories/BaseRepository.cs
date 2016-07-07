@@ -82,7 +82,7 @@ namespace WebEngine.Data.Repositories
 
 		#region Protected methods
 
-		protected int GetValue(int? param)
+		protected static int GetValue(int? param)
 		{
 			if (param != null)
 			{
@@ -92,7 +92,7 @@ namespace WebEngine.Data.Repositories
 			return DEFAULT_ID;
 		}
 
-		protected string GetValue(string param)
+		protected static string GetValue(string param)
 		{
 			if (param != null)
 			{
@@ -102,7 +102,7 @@ namespace WebEngine.Data.Repositories
 			return string.Empty;
 		}
 
-		protected float GetValue(float? param)
+		protected static float GetValue(float? param)
 		{
 			if (param != null)
 			{
@@ -112,7 +112,7 @@ namespace WebEngine.Data.Repositories
 			return 0f;
 		}
 
-		protected DateTimeOffset GetValue(DateTimeOffset? param)
+		protected static DateTimeOffset GetValue(DateTimeOffset? param)
 		{
 			if (param != null)
 			{
@@ -122,7 +122,7 @@ namespace WebEngine.Data.Repositories
 			return new DateTimeOffset();
 		}
 
-		protected bool GetValue(bool? param)
+		protected static bool GetValue(bool? param)
 		{
 			if (param != null)
 			{

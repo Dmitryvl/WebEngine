@@ -5,21 +5,16 @@
 		</copyright>
 	-----------------------------------------------------------------------
 *@
-@model IEnumerable<WebEngine.Web.ViewModels.Category.CategoryView>
+@model IEnumerable<WebEngine.Web.ViewModels.ProductOffer.ProductOfferView>
 
-<h2>Categories</h2>
 
-<div class="panel-group category-products" id="accordian">
 	@foreach (var item in Model)
 	{
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-					<a asp-action="Index" asp-controller="Product" asp-route-category="@item.Name">
-						@item.Name
-					</a>
+					@item.Message
 				</h4>
 			</div>
 		</div>
 	}
-</div>

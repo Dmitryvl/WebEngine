@@ -31,7 +31,7 @@ namespace WebEngine.Data.Repositories
 		{
 		}
 
-		public async Task<IList<ProductOffer>> GetProductOffers(int productId)
+		public async Task<IList<ProductOffer>> GetProductOffersAsync(int productId)
 		{
 			if (productId > DEFAULT_ID)
 			{
@@ -41,10 +41,15 @@ namespace WebEngine.Data.Repositories
 						.Where(o => o.IsActive == true)
 						.Select(o => new ProductOffer()
 						{
-							ProductId = o.ProductId,
-							StoreId = o.StoreId,
-							Message = o.Message,
-							IsActive = o.IsActive
+							ProductId = GetValue(o.ProductId),
+							StoreId = GetValue(o.StoreId),
+							Message = GetValue(o.Message),
+							IsActive = GetValue(o.IsActive),
+							Store = new Store()
+							{
+								Id = GetValue(o.Store.Id),
+								Name = GetValue(o.Store.Name)
+							}
 						})
 						.ToArrayAsync()
 						.ConfigureAwait(false);
@@ -64,7 +69,7 @@ namespace WebEngine.Data.Repositories
 			return null;
 		}
 
-		public async Task<bool> InactiveProductOffer(int productOfferId)
+		public async Task<bool> InactiveProductOfferAsync(int productOfferId)
 		{
 			if (productOfferId > DEFAULT_ID)
 			{
@@ -98,7 +103,7 @@ namespace WebEngine.Data.Repositories
 			return false;
 		}
 
-		public async Task<bool> SaveProductOffer(ProductOffer productOffer)
+		public async Task<bool> SaveProductOfferAsync(ProductOffer productOffer)
 		{
 			if (productOffer != null)
 			{

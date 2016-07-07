@@ -1,6 +1,6 @@
 ﻿@*
 	-----------------------------------------------------------------------
-		<copyright file="Profile.cs" author="Dzmitry Prakapenka">
+		<copyright file="Product.cshtml" author="Dzmitry Prakapenka">
 			All rights reserved.
 		</copyright>
 	-----------------------------------------------------------------------
@@ -16,7 +16,7 @@
 <div class="col-sm-9 padding-right">
 	<div class="features_items">
 		<h2 class="title text-center">@Model.ProductName</h2>
-		<div class="product-details">
+		<div class="product-details col-sm-9">
 			<!--product-details-->
 			<div class="col-sm-4">
 				<div class="view-product">
@@ -51,9 +51,8 @@
 						<i class="fa fa-angle-right"></i>
 					</a>
 				</div>
-
 			</div>
-			<div class="col-sm-7">
+			<div class="col-sm-5">
 				<div class="product-information">
 					<!--/product-information-->
 					<img src="images/product-details/new.jpg" class="newarrival" alt="" />
@@ -64,17 +63,18 @@
 					</span>
 				</div><!--/product-information-->
 			</div>
+			<table class="table table-bordered">
+				@foreach (ProductPropertyView property in Model.Properties)
+				{
+					<tr>
+						<td>@property.PropertyName</td>
+						<td>@property.Value @property.SizeValue</td>
+					</tr>
+				}
+			</table>
 		</div><!--/product-details-->
-
-
-		<table class="table table-bordered">
-			@foreach (ProductPropertyView property in Model.Properties)
-			{
-				<tr>
-					<td>@property.PropertyName</td>
-					<td>@property.Value @property.SizeValue</td>
-				</tr>
-			}
-		</table>
+		<div class="col-sm-3">
+			@await Component.InvokeAsync("OfferComponent", new { productId = Model.ProductId })
+		</div>
 	</div>
 </div>
