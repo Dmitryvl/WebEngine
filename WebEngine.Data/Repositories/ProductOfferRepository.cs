@@ -38,19 +38,22 @@ namespace WebEngine.Data.Repositories
 				try
 				{
 					IList<ProductOffer> offers = await _context.ProductOffers
-						.Where(o => o.IsActive == true)
+						.Where(o => o.ProductId == productId && o.IsActive == true)
 						.Select(o => new ProductOffer()
 						{
+							Id = GetValue(o.Id),
 							ProductId = GetValue(o.ProductId),
 							StoreId = GetValue(o.StoreId),
 							Message = GetValue(o.Message),
 							IsActive = GetValue(o.IsActive),
+							Date = GetValue(o.Date),
 							Store = new Store()
 							{
 								Id = GetValue(o.Store.Id),
 								Name = GetValue(o.Store.Name)
 							}
 						})
+						.OrderByDescending(o => o.Date).Take(7)
 						.ToArrayAsync()
 						.ConfigureAwait(false);
 
@@ -118,7 +121,7 @@ namespace WebEngine.Data.Repositories
 						if (offer != null)
 						{
 							offer.Message = offer.Message;
-							offer.Date = DateTimeOffset.Now;
+							offer.Date = DateTime.UtcNow;
 
 							_context.Entry(offer).State = EntityState.Modified;
 

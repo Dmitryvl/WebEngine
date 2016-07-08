@@ -24,6 +24,6 @@ namespace WebEngine.Web.ViewModels.Store
 
 		public string StoreName { get; set; }
 
-		public DateTimeOffset CreationDate { get; set; }
+		public DateTime CreationDate { get; set; }
 	}
 }

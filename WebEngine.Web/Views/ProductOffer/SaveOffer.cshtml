@@ -1,0 +1,38 @@
+﻿@*
+	-----------------------------------------------------------------------
+		<copyright file="AddOffer.cshtml" author="Dzmitry Prakapenka">
+			All rights reserved.
+		</copyright>
+	-----------------------------------------------------------------------
+*@
+@model WebEngine.Web.ViewModels.ProductOffer.SaveOfferView
+
+@{
+	ViewData["Title"] = "Log in";
+}
+<div id="form">
+	<div class="col-md-5 col-md-offset-3">
+		<div class="login-form">
+
+			<form asp-controller="ProductOffer" asp-action="SaveOffer" method="post">
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+				@Html.TextAreaFor(model => model.Message)
+
+				<span asp-validation-for="Message" class="text-danger"></span>
+
+				@Html.HiddenFor(model => model.ProductId)
+
+				@Html.HiddenFor(model => model.StoreId)
+
+				<button type="submit" class="btn btn-default">Save</button>
+
+			</form>
+
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -76,7 +76,7 @@ namespace WebEngine.Data
 							Role = roles[0],
 							IsDeleted = false,
 							EmailKey = Guid.NewGuid(),
-							RegisterDate = DateTimeOffset.Now
+							RegisterDate = DateTime.UtcNow
 						},
 						new User()
 						{
@@ -88,13 +88,13 @@ namespace WebEngine.Data
 							Role = roles[1],
 							IsDeleted = false,
 							EmailKey = Guid.NewGuid(),
-							RegisterDate = DateTimeOffset.Now
+							RegisterDate = DateTime.UtcNow
 						},
 					};
 
 					Store[] stores = new Store[]
 					{
-						new Store() { Name = "Store", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTimeOffset.Now }
+						new Store() { Name = "Store", User = users[0], IsActive = true, IsDeleted = false, CreationDate = DateTime.UtcNow }
 					};
 
 					Category[] categories = new Category[]
@@ -143,7 +143,7 @@ namespace WebEngine.Data
 
 					ProductOffer[] productOffers = new ProductOffer[]
 					{
-						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message", Date = DateTimeOffset.Now }
+						new ProductOffer() { Store = stores[0], Product = products[0], IsActive= true, Message = "message", Date = DateTime.UtcNow }
 					};
 
 					ProductFilterItem[] productFilterItems = new ProductFilterItem[]

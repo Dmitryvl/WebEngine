@@ -659,7 +659,7 @@ ul.sub-menu {
 }
 
 .left-sidebar h2, .brands_products h2 {
-	color: #15968C;
+	color: #696763;
 	font-family: 'Roboto', sans-serif;
 	font-size: 18px;
 	font-weight: 700;
@@ -834,7 +834,7 @@ h2.title:before {
 
 
 h2.title {
-	color: #15968C;
+	color: #696763;
 	font-family: 'Roboto', sans-serif;
 	font-size: 18px;
 	font-weight: 700;
@@ -862,7 +862,7 @@ h2.title {
 }
 
 .productinfo h2 {
-	color: #15968C;
+	color: #696763;
 	font-family: 'Roboto', sans-serif;
 	font-size: 24px;
 	font-weight: 700;
@@ -1080,12 +1080,6 @@ h2.title {
 			color: #fff;
 		}
 
-
-
-/*************************
-*******Product Details CSS******
-**************************/
-
 .product-details {
 	overflow: hidden;
 }
@@ -1104,10 +1098,7 @@ h2.title {
 .product-details {
 	margin-bottom: 40px;
 	overflow: hidden;
-	margin-top: 10px;
 }
-
-
 
 .view-product {
 	position: relative;

@@ -54,5 +54,7 @@ namespace WebEngine.Core.Interfaces
 		/// <param name="storeName">Store name.</param>
 		/// <returns>Return store.</returns>
 		Task<Store> GetStoreByNameAsync(string storeName);
+
+		Task<Store> GetStoreForUser(string userName);
 	}
 }

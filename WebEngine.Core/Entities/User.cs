@@ -58,7 +58,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Gets or sets register date.
 		/// </summary>
-		public DateTimeOffset RegisterDate { get; set; }
+		public DateTime RegisterDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether user is active.

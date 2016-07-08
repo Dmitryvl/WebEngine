@@ -17,14 +17,13 @@
 	<div class="features_items">
 		<h2 class="title text-center">@Model.ProductName</h2>
 		<div class="product-details col-sm-9">
-			<!--product-details-->
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<div class="view-product">
 					@*<img src="images/product-details/1.jpg" alt="" />*@
 					<h3>ZOOM</h3>
 				</div>
 				<div id="similar-product" class="carousel slide" data-ride="carousel">
-					<!-- Wrapper for slides -->
+
 					<div class="carousel-inner">
 						@*<div class="item active">
 								<a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
@@ -43,7 +42,6 @@
 							</div>*@
 					</div>
 
-					<!-- Controls -->
 					<a class="left item-control" href="#similar-product" data-slide="prev">
 						<i class="fa fa-angle-left"></i>
 					</a>
@@ -52,28 +50,28 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-6">
 				<div class="product-information">
-					<!--/product-information-->
-					<img src="images/product-details/new.jpg" class="newarrival" alt="" />
-					<h2></h2>
-					<p>Web ID: 1089772</p>
-					<span>
-						info
-					</span>
-				</div><!--/product-information-->
+					@Model.ProductName
+				</div>
 			</div>
-			<table class="table table-bordered">
-				@foreach (ProductPropertyView property in Model.Properties)
-				{
-					<tr>
-						<td>@property.PropertyName</td>
-						<td>@property.Value @property.SizeValue</td>
-					</tr>
-				}
-			</table>
-		</div><!--/product-details-->
+
+			<div class="col-sm-12">
+				<br />
+				<table class="table table-bordered">
+					@foreach (ProductPropertyView property in Model.Properties)
+					{
+						<tr>
+							<td>@property.PropertyName</td>
+							<td>@property.Value @property.SizeValue</td>
+						</tr>
+					}
+				</table>
+			</div>
+		</div>
 		<div class="col-sm-3">
+			<a asp-action="SaveOffer" asp-controller="ProductOffer" asp-route-productId="@Model.ProductId">Add Offer</a>
+
 			@await Component.InvokeAsync("OfferComponent", new { productId = Model.ProductId })
 		</div>
 	</div>

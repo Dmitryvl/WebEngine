@@ -58,7 +58,7 @@ namespace WebEngine.Data.Repositories
 					{
 						store.IsActive = false;
 						store.IsDeleted = false;
-						store.CreationDate = DateTimeOffset.Now;
+						store.CreationDate = DateTime.UtcNow;
 
 						_context.Stores.Add(store);
 
@@ -180,6 +180,31 @@ namespace WebEngine.Data.Repositories
 			}
 
 			_logger.LogWarning("GetStoreByNameAsync: storeName is null or empty!");
+
+			return null;
+		}
+
+		public async Task<Store> GetStoreForUser(string userName)
+		{
+			if (!string.IsNullOrEmpty(userName))
+			{
+				try
+				{
+					Store store = await _context.Stores
+						.FirstOrDefaultAsync(s=>s.User.Name == userName)
+						.ConfigureAwait(false);
+
+					return store;
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError(ex.Message);
+
+					return null;
+				}
+			}
+
+			_logger.LogWarning("GetStoreForUser: userName is null or empty!");
 
 			return null;
 		}

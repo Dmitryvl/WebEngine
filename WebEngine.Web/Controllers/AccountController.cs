@@ -55,7 +55,7 @@ namespace WebEngine.Web.Controllers
 
 		public async Task<IActionResult> Profile()
 		{
-			User user = await _userRepository.GetUserByNameAsync(User.Identity.Name);
+			User user = await _userRepository.GetUserByNameAsync(HttpContext.User.Identity.Name);
 
 			if (user != null)
 			{
@@ -141,7 +141,7 @@ namespace WebEngine.Web.Controllers
 				{
 					await Authenticate(user.Name, user.Role.Name);
 
-					return RedirectToAction("Index", "Home");
+					return Redirect(returnUrl);
 				}
 			}
 

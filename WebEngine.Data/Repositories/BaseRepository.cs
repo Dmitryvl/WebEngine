@@ -112,14 +112,14 @@ namespace WebEngine.Data.Repositories
 			return 0f;
 		}
 
-		protected static DateTimeOffset GetValue(DateTimeOffset? param)
+		protected static DateTime GetValue(DateTime? param)
 		{
 			if (param != null)
 			{
 				return param.Value;
 			}
 
-			return new DateTimeOffset();
+			return new DateTime();
 		}
 
 		protected static bool GetValue(bool? param)

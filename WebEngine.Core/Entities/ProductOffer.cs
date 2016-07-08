@@ -47,7 +47,7 @@ namespace WebEngine.Core.Entities
 		/// <summary>
 		/// Offer date.
 		/// </summary>
-		public DateTimeOffset Date { get; set; }
+		public DateTime Date { get; set; }
 
 		#endregion
 

@@ -42,7 +42,7 @@ namespace WebEngine.Web.ViewModels.Account
 		/// <summary>
 		/// Gets or sets register date.
 		/// </summary>
-		public DateTimeOffset RegisterDate { get; set; }
+		public DateTime RegisterDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets user stores.

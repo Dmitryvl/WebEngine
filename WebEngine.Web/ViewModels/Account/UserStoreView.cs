@@ -30,7 +30,7 @@ namespace WebEngine.Web.ViewModels.Account
 		/// <summary>
 		/// Gets or sets creation date.
 		/// </summary>
-		public DateTimeOffset CreationDate { get; set; }
+		public DateTime CreationDate { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether store is active.

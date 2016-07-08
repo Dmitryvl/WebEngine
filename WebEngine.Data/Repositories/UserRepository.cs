@@ -64,7 +64,7 @@ namespace WebEngine.Data.Repositories
 						{
 							user.PasswordSalt = GetPasswordSalt();
 							user.Password = PasswordHash.GetSha256Hash(user.Password, user.PasswordSalt);
-							user.RegisterDate = DateTimeOffset.Now;
+							user.RegisterDate = DateTime.UtcNow;
 							user.IsActive = false;
 							user.IsDeleted = false;
 							user.EmailKey = Guid.NewGuid();

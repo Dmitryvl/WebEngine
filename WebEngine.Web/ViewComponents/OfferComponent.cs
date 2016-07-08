@@ -42,6 +42,7 @@ namespace WebEngine.Web.ViewComponents
 					IEnumerable<ProductOfferView> viewModel = offers.Select(o => new ProductOfferView()
 					{
 						Id = o.Id,
+						Date = o.Date,
 						ProductId = o.ProductId,
 						StoreId = o.StoreId,
 						StoreName = o.Store.Name,

@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ProductOfferView.cs" author="Dzmitry Prakapenka">
+// <copyright file="SaveOfferView.cs" author="Dzmitry Prakapenka">
 //     All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -17,20 +17,14 @@ namespace WebEngine.Web.ViewModels.ProductOffer
 	#endregion
 
 	/// <summary>
-	/// <see cref="ProductOfferView"/> class.
+	/// <see cref="SaveOfferView"/> class.
 	/// </summary>
-	public class ProductOfferView
+	public class SaveOfferView
 	{
-		public int Id { get; set; }
-
 		public int ProductId { get; set; }
 
 		public int StoreId { get; set; }
 
-		public string StoreName { get; set; }
-
 		public string Message { get; set; }
-
-		public DateTime Date { get; set; }
 	}
 }
